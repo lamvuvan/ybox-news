@@ -3,17 +3,16 @@ package io.github.lamvv.yboxnews.util;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.github.lamvv.yboxnews.R;
+import io.github.lamvv.yboxnews.constant.Constant;
 import io.github.lamvv.yboxnews.iml.GetArticlesTaskCompleteListener;
 import io.github.lamvv.yboxnews.model.Article;
 
@@ -27,7 +26,7 @@ public class GetArticlesTask extends AsyncTask<String, Void, List<Article>> {
     private GetArticlesTaskCompleteListener<List<Article>> mCallback;
     private ProgressDialog dialog;
 
-    public GetArticlesTask(Context context, GetArticlesTaskCompleteListener<List<Article>> callback){
+    public GetArticlesTask(Context context, GetArticlesTaskCompleteListener<List<Article>> callback) {
         this.mContext = context;
         this.mCallback = callback;
     }
@@ -42,22 +41,30 @@ public class GetArticlesTask extends AsyncTask<String, Void, List<Article>> {
 
     @Override
     protected List<Article> doInBackground(String... params) {
+        String jsonStr = ServiceHandler.serviceHandler(params[0]);
         List<Article> list = new ArrayList<>();
-        try {
-            Document doc = Jsoup.connect(params[0]).get();
-            Elements elements = doc.select("div.col-md-11 a");//chọn thẻ chứa link
-            for(int i = 0; i < elements.size(); i++){
-                Element e = elements.get(i);//lấy các thẻ a chứa article
-//                Elements img = e.select("img");
-//                String title = e.attr("title");
-//                String image = img.attr("src");
-//                Log.e("lamvv", "title: " + title);
-//                Log.e("lamvv", "image: " + image);
-                String link = e.attr("href");
-                Log.e("lamvv", "link: " + link);
+        if (jsonStr != null) {
+
+            try {
+                JSONObject jsonObj = new JSONObject(jsonStr);
+                JSONArray dataArr = jsonObj.getJSONArray(Constant.KEY_DATA);
+                for (int i = 0; i < dataArr.length(); i++) {
+                    JSONObject item = dataArr.getJSONObject(i);
+                    String image = item.getString(Constant.KEY_IMAGE);
+                    String category = item.getString(Constant.KEY_CATEGORY);
+                    String title = item.getString(Constant.KEY_TITLE);
+                    JSONObject objContent = item.getJSONObject(Constant.KEY_CONTENT);
+                    String rawContent = objContent.getString(Constant.KEY_RAW);
+                    JSONObject objTime = item.getJSONObject(Constant.KEY_TIMESTAMPS);
+                    String pubDate = objTime.getString(Constant.KEY_UPDATEDAT);
+                    JSONObject objLink = item.getJSONObject(Constant.KEY_LINKS);
+                    String detail = objLink.getString(Constant.KEY_DETAIL);
+                    list.add(new Article(title, rawContent, detail, image, category, pubDate));
+                }
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
-        }catch(Exception e){
-            e.printStackTrace();
         }
         return list;
     }

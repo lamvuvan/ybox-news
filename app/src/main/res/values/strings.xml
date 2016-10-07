@@ -2,5 +2,5 @@
     <string name="app_name">Ybox News</string>
 
     <string name="title_dialog">Please wait!</string>
-    <string name="message_dialog">Loading ...</string>
+    <string name="message_dialog">Loading data ...</string>
 </resources>
