@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Ybox News</string>
 
+    <string name="facebook_app_id">310999175932215</string>
+
     <string name="title_dialog">Please wait!</string>
     <string name="message_dialog">Loading data ...</string>
+    <string name="share_content">Share</string>
 </resources>

@@ -6,25 +6,44 @@ package io.github.lamvv.yboxnews.model;
 
 public class Article {
 
-    private String title;
-    private String content;
-    private String link;
     private String image;
     private String category;
+    private String title;
+    private String content;
+    private String view;
+    private String detail;
     private String pubDate;
     private String nextPageUrl;
 
     public Article() {
     }
 
-    public Article(String title, String content, String link, String image, String category, String pubDate, String nextPageUrl) {
-        this.title = title;
-        this.content = content;
-        this.link = link;
+    public Article(String image, String category, String title, String content, String view, String detail,
+                   String pubDate, String nextPageUrl) {
         this.image = image;
         this.category = category;
+        this.title = title;
+        this.content = content;
+        this.view = view;
+        this.detail = detail;
         this.pubDate = pubDate;
         this.nextPageUrl = nextPageUrl;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getTitle() {
@@ -43,28 +62,20 @@ public class Article {
         this.content = content;
     }
 
-    public String getLink() {
-        return link;
+    public String getView() {
+        return view;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public void setView(String view) {
+        this.view = view;
     }
 
-    public String getImage() {
-        return image;
+    public String getDetail() {
+        return detail;
     }
 
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 
     public String getPubDate() {

@@ -16,6 +16,8 @@ public class Constant {
     public static final String KEY_TITLE = "title";
     public static final String KEY_CONTENT = "content";
     public static final String KEY_CONTENT_RAW = "raw";
+    public static final String KEY_STATS = "stats";
+    public static final String KEY_VIEW = "view";
     public static final String KEY_TIMESTAMPS = "timestamps";
     public static final String KEY_TIMESTAMPS_UPDATEDAT = "updatedAt";
     public static final String KEY_LINKS = "links";

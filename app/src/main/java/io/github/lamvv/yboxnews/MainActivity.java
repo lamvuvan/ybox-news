@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -33,6 +35,9 @@ public class MainActivity extends AppCompatActivity implements GetArticlesTaskCo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
+
         initImageLoader(this);
         getComponent();
         mList = new ArrayList<>();
@@ -44,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements GetArticlesTaskCo
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Article article = mList.get(position);
                 Intent intent = new Intent(MainActivity.this, ArticleActivity.class);
-                intent.putExtra("link", article.getLink());
+                intent.putExtra("detail", article.getDetail());
                 startActivity(intent);
             }
         });

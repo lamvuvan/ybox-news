@@ -25,12 +25,12 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
         getComponent();
 
         Bundle bundle = getIntent().getExtras();
-        String link = bundle.getString("link");
+        String detail = bundle.getString("detail");
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setSupportZoom(true);
 
-        launchGetDetailTask(link);
+        launchGetDetailTask(detail);
     }
 
     private void getComponent(){

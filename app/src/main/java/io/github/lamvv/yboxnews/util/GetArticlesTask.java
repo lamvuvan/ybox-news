@@ -57,11 +57,13 @@ public class GetArticlesTask extends AsyncTask<String, Void, List<Article>> {
                     String title = item.getString(Constant.KEY_TITLE);
                     JSONObject objContent = item.getJSONObject(Constant.KEY_CONTENT);
                     String rawContent = objContent.getString(Constant.KEY_CONTENT_RAW);
+                    JSONObject objView = item.getJSONObject(Constant.KEY_STATS);
+                    String view = objView.getString(Constant.KEY_VIEW);
                     JSONObject objTime = item.getJSONObject(Constant.KEY_TIMESTAMPS);
                     String pubDate = objTime.getString(Constant.KEY_TIMESTAMPS_UPDATEDAT);
                     JSONObject objLink = item.getJSONObject(Constant.KEY_LINKS);
                     String detail = objLink.getString(Constant.KEY_LINKS_DETAIL);
-                    list.add(new Article(title, rawContent, detail, image, category, pubDate, nextPageUrl));
+                    list.add(new Article(image, category, title, rawContent, view, detail, pubDate, nextPageUrl));
                 }
             } catch (JSONException e) {
                 // TODO Auto-generated catch block

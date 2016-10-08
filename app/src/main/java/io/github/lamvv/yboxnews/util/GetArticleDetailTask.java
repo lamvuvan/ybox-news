@@ -3,7 +3,6 @@ package io.github.lamvv.yboxnews.util;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -44,27 +43,30 @@ public class GetArticleDetailTask extends AsyncTask<String, Void, String> {
 //        StringBuilder detail = null;
         try {
             Document doc = Jsoup.connect(params[0]).timeout(10000).get();
-//            Log.e("lamvv", "doc: " +doc.toString());
             Elements article = doc.select("div.article-detail div");
-//            Log.e("lamvv", "article: " + article);
             Elements title = article.select("strong.text-title");
-//            Log.e("lamvv", "title: " + title);
             Elements create = doc.select("div.col-md-11 span.create-at");
-//            Log.e("lamvv", "create: " + create);
             String pubDate = create.attr("data-create");
-//            Log.e("lamvv", "pubDate: " + pubDate);
-            Elements content = doc.select("div.text-content");
-            Log.e("lamvv", "content " + content);
-            doc.select("table").remove();
-//            Elements main = doc.select("div.ovh.content ");
+            Elements thumb = doc.select("img.article-cover");
+            String imgThumb = thumb.attr("src");
+            Elements content = doc.select("div.text-content.ybox-article");
+//            doc.select("table").remove();
+            String cont = content.html();
+            Elements views = doc.select("div.col-md-12 div.col-md-8 span.article-vote");
+            String viewCount = null;
+            if(views.select("i") != null){
+                viewCount = views.text();
+            }
+
 //            detail.append("<h2 style = \" color: red \">" + title.text() + "</h2>");
 //            detail.append("<font size=\" 1.2em \" style = \" color: #005500 \"><em>" + pubDate + "</em></font>");
 //            detail.append("<p style = \" color: #111111 \"><b>" + "<font size=\" 4em \" >" + content.text() + "</font></b></p>");
 //            detail.append("<font size=\" 4em \" >"+  main.toString() + "</font>");
 
             detail += "<h2 style = \" color: red \">" + title.text() + "</h2>";
-            detail += "<font size=\" 1.2em \" style = \" color: #005500 \"><em>" + pubDate + "</em></font>";
-            detail += "<p style = \" color: #111111 \"><b>" + "<font size=\" 4em \" >" + content.text() + "</font></b></p>";
+            detail += "<font size=\" 1.2em \" style = \" color: #005500 \"><em>" + pubDate + ", " + viewCount +  "</em></font>";
+            detail += "<img src = \"" + imgThumb + "\"" + "/>";
+            detail += "<p style = \" color: #111111 \"><b>" + "<font size=\" 4em \" >" + cont.toString() + "</font></b></p>";
 //            detail += "<font size=\" 4em \" >"+  main.toString() + "</font>";
         } catch (IOException e) {
             e.printStackTrace();

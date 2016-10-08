@@ -1,6 +1,7 @@
 package io.github.lamvv.yboxnews.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareButton;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
@@ -66,15 +69,23 @@ public class ArticleAdapter extends BaseAdapter {
         Article item = mList.get(position);
         ImageLoader imageLoader = ImageLoader.getInstance();
         imageLoader.displayImage(item.getImage(), holder.ivImage);
+        ShareLinkContent shareLinkContent = new ShareLinkContent.Builder()
+                .setContentTitle(item.getTitle())
+                .setImageUrl(Uri.parse(item.getImage()))
+                .setContentUrl(Uri.parse(item.getDetail()))
+                .build();
+        holder.btnShareFacebook.setShareContent(shareLinkContent);
         return view;
     }
 
     class ViewHolder{
 
         private ImageView ivImage;
+        private ShareButton btnShareFacebook;
 
         public ViewHolder(View view){
             ivImage = (ImageView)view.findViewById(R.id.ivImage);
+            btnShareFacebook = (ShareButton)view.findViewById(R.id.btnShareFacebook);
         }
     }
 }
