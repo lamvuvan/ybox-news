@@ -1,9 +1,11 @@
 package io.github.lamvv.yboxnews;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -31,13 +33,21 @@ public class MainActivity extends AppCompatActivity implements GetArticlesTaskCo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getComponent();
-
         initImageLoader(this);
-
+        getComponent();
         mList = new ArrayList<>();
 
         launchTask(Constant.URL);
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Article article = mList.get(position);
+                Intent intent = new Intent(MainActivity.this, ArticleActivity.class);
+                intent.putExtra("link", article.getLink());
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -62,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements GetArticlesTaskCo
         }
         mAdapter = new ArticleAdapter(this, mList);
         mListView.setAdapter(mAdapter);
-        Log.e("lamvv", "size: " + mList.size());
     }
 
     private void launchTask(String url){

@@ -9,20 +9,22 @@ public class Article {
     private String title;
     private String content;
     private String link;
-    private String img;
+    private String image;
     private String category;
     private String pubDate;
+    private String nextPageUrl;
 
     public Article() {
     }
 
-    public Article(String title, String content, String link, String img, String category, String pubDate) {
+    public Article(String title, String content, String link, String image, String category, String pubDate, String nextPageUrl) {
         this.title = title;
         this.content = content;
         this.link = link;
-        this.img = img;
+        this.image = image;
         this.category = category;
         this.pubDate = pubDate;
+        this.nextPageUrl = nextPageUrl;
     }
 
     public String getTitle() {
@@ -49,12 +51,12 @@ public class Article {
         this.link = link;
     }
 
-    public String getImg() {
-        return img;
+    public String getImage() {
+        return image;
     }
 
-    public void setImg(String img) {
-        this.img = img;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getCategory() {
@@ -71,5 +73,13 @@ public class Article {
 
     public void setPubDate(String pubDate) {
         this.pubDate = pubDate;
+    }
+
+    public String getNextPageUrl() {
+        return nextPageUrl;
+    }
+
+    public void setNextPageUrl(String nextPageUrl) {
+        this.nextPageUrl = nextPageUrl;
     }
 }

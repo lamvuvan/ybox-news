@@ -37,6 +37,7 @@ public class GetArticlesTask extends AsyncTask<String, Void, List<Article>> {
         dialog = new ProgressDialog(mContext);
         dialog.setTitle(mContext.getResources().getString(R.string.title_dialog));
         dialog.setMessage(mContext.getResources().getString(R.string.message_dialog));
+        dialog.show();
     }
 
     @Override
@@ -47,6 +48,7 @@ public class GetArticlesTask extends AsyncTask<String, Void, List<Article>> {
 
             try {
                 JSONObject jsonObj = new JSONObject(jsonStr);
+                String nextPageUrl = jsonObj.getString(Constant.KEY_NEXTPAGEURL);
                 JSONArray dataArr = jsonObj.getJSONArray(Constant.KEY_DATA);
                 for (int i = 0; i < dataArr.length(); i++) {
                     JSONObject item = dataArr.getJSONObject(i);
@@ -54,12 +56,12 @@ public class GetArticlesTask extends AsyncTask<String, Void, List<Article>> {
                     String category = item.getString(Constant.KEY_CATEGORY);
                     String title = item.getString(Constant.KEY_TITLE);
                     JSONObject objContent = item.getJSONObject(Constant.KEY_CONTENT);
-                    String rawContent = objContent.getString(Constant.KEY_RAW);
+                    String rawContent = objContent.getString(Constant.KEY_CONTENT_RAW);
                     JSONObject objTime = item.getJSONObject(Constant.KEY_TIMESTAMPS);
-                    String pubDate = objTime.getString(Constant.KEY_UPDATEDAT);
+                    String pubDate = objTime.getString(Constant.KEY_TIMESTAMPS_UPDATEDAT);
                     JSONObject objLink = item.getJSONObject(Constant.KEY_LINKS);
-                    String detail = objLink.getString(Constant.KEY_DETAIL);
-                    list.add(new Article(title, rawContent, detail, image, category, pubDate));
+                    String detail = objLink.getString(Constant.KEY_LINKS_DETAIL);
+                    list.add(new Article(title, rawContent, detail, image, category, pubDate, nextPageUrl));
                 }
             } catch (JSONException e) {
                 // TODO Auto-generated catch block

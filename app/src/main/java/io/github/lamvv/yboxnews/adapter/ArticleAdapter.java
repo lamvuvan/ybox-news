@@ -65,7 +65,7 @@ public class ArticleAdapter extends BaseAdapter {
         view.setLayoutParams(layoutParams);
         Article item = mList.get(position);
         ImageLoader imageLoader = ImageLoader.getInstance();
-        imageLoader.displayImage(item.getImg(), holder.ivImage);
+        imageLoader.displayImage(item.getImage(), holder.ivImage);
         return view;
     }
 
