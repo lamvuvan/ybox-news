@@ -48,7 +48,6 @@ public class GetArticlesTask extends AsyncTask<String, Void, List<Article>> {
 
             try {
                 JSONObject jsonObj = new JSONObject(jsonStr);
-                String nextPageUrl = jsonObj.getString(Constant.KEY_NEXTPAGEURL);
                 JSONArray dataArr = jsonObj.getJSONArray(Constant.KEY_DATA);
                 for (int i = 0; i < dataArr.length(); i++) {
                     JSONObject item = dataArr.getJSONObject(i);
@@ -63,7 +62,7 @@ public class GetArticlesTask extends AsyncTask<String, Void, List<Article>> {
                     String pubDate = objTime.getString(Constant.KEY_TIMESTAMPS_UPDATEDAT);
                     JSONObject objLink = item.getJSONObject(Constant.KEY_LINKS);
                     String detail = objLink.getString(Constant.KEY_LINKS_DETAIL);
-                    list.add(new Article(image, category, title, rawContent, view, detail, pubDate, nextPageUrl));
+//                    list.add(new Article(image, category, title, rawContent, view, detail, pubDate));
                 }
             } catch (JSONException e) {
                 // TODO Auto-generated catch block

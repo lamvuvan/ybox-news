@@ -6,4 +6,10 @@
     <string name="title_dialog">Please wait!</string>
     <string name="message_dialog">Loading data ...</string>
     <string name="share_content">Share</string>
+    
+    <string name="home">Home</string>
+    <string name="recruitment">Recruitment</string>
+    <string name="scholarship">Scholarship</string>
+    <string name="event">Event</string>
+    <string name="skill">Skill</string>
 </resources>

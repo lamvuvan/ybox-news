@@ -1,4 +1,4 @@
-package io.github.lamvv.yboxnews;
+package io.github.lamvv.yboxnews.view.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
+import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.iml.GetArticleDetailTaskCompleteListener;
 import io.github.lamvv.yboxnews.util.GetArticleDetailTask;
 

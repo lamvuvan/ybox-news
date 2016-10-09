@@ -1,33 +1,46 @@
 package io.github.lamvv.yboxnews.model;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
 /**
  * Created by lamvu on 10/7/2016.
  */
 
-public class Article {
+public class Article implements Serializable {
 
+    @SerializedName("image")
     private String image;
+    @SerializedName("category")
     private String category;
+    @SerializedName("title")
     private String title;
-    private String content;
-    private String view;
-    private String detail;
-    private String pubDate;
-    private String nextPageUrl;
+    @SerializedName("content")
+    private Content content;
+    @SerializedName("stats")
+    private Stats stats;
+    @SerializedName("timestamps")
+    private Timestamps timestamps;
+    @SerializedName("links")
+    private Links links;
+    private String type;
 
     public Article() {
     }
 
-    public Article(String image, String category, String title, String content, String view, String detail,
-                   String pubDate, String nextPageUrl) {
+    public Article(String type){
+        this.type = type;
+    }
+
+    public Article(String image, String category, String title, Content content, Stats stats, Timestamps timestamps, Links links) {
         this.image = image;
         this.category = category;
         this.title = title;
         this.content = content;
-        this.view = view;
-        this.detail = detail;
-        this.pubDate = pubDate;
-        this.nextPageUrl = nextPageUrl;
+        this.stats = stats;
+        this.timestamps = timestamps;
+        this.links = links;
     }
 
     public String getImage() {
@@ -54,43 +67,40 @@ public class Article {
         this.title = title;
     }
 
-    public String getContent() {
+    public Content getContent() {
         return content;
     }
 
-    public void setContent(String content) {
+    public void setContent(Content content) {
         this.content = content;
     }
 
-    public String getView() {
-        return view;
+    public Stats getStats() {
+        return stats;
     }
 
-    public void setView(String view) {
-        this.view = view;
+    public void setStats(Stats stats) {
+        this.stats = stats;
     }
 
-    public String getDetail() {
-        return detail;
+    public Timestamps getTimestamps() {
+        return timestamps;
     }
 
-    public void setDetail(String detail) {
-        this.detail = detail;
+    public void setTimestamps(Timestamps timestamps) {
+        this.timestamps = timestamps;
     }
 
-    public String getPubDate() {
-        return pubDate;
+    public Links getLinks() {
+        return links;
     }
 
-    public void setPubDate(String pubDate) {
-        this.pubDate = pubDate;
+    public void setLinks(Links links) {
+        this.links = links;
     }
 
-    public String getNextPageUrl() {
-        return nextPageUrl;
+    public String getType() {
+        return type;
     }
 
-    public void setNextPageUrl(String nextPageUrl) {
-        this.nextPageUrl = nextPageUrl;
-    }
 }

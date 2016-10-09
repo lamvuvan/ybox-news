@@ -72,7 +72,7 @@ public class ArticleAdapter extends BaseAdapter {
         ShareLinkContent shareLinkContent = new ShareLinkContent.Builder()
                 .setContentTitle(item.getTitle())
                 .setImageUrl(Uri.parse(item.getImage()))
-                .setContentUrl(Uri.parse(item.getDetail()))
+//                .setContentUrl(Uri.parse(item.getDetail()))
                 .build();
         holder.btnShareFacebook.setShareContent(shareLinkContent);
         return view;
