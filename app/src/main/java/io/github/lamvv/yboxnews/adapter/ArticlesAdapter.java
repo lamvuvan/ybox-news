@@ -15,7 +15,6 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import io.github.lamvv.yboxnews.R;
-import io.github.lamvv.yboxnews.constant.Constant;
 import io.github.lamvv.yboxnews.model.Article;
 
 /**
@@ -23,6 +22,9 @@ import io.github.lamvv.yboxnews.model.Article;
  */
 
 public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    public static final int TYPE_ARTICLE = 0;
+    public static final int TYPE_LOAD = 1;
 
     private Context mContext;
     private List<Article> mList;
@@ -38,7 +40,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        if(viewType == Constant.TYPE_ARTICLE){
+        if(viewType == TYPE_ARTICLE){
             return new ArticleHolder(inflater.inflate(R.layout.item_article, parent, false));
         }else{
             return new LoadHolder(inflater.inflate(R.layout.item_load, parent, false));
@@ -51,7 +53,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             isLoading = true;
             loadMoreListener.onLoadMore();
         }
-        if(getItemViewType(position) == Constant.TYPE_ARTICLE){
+        if(getItemViewType(position) == TYPE_ARTICLE){
             ((ArticleHolder)holder).bindData(mList.get(position));
         }
     }
@@ -59,9 +61,9 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public int getItemViewType(int position) {
         if(mList.get(position).getType().equals("fil")){
-            return Constant.TYPE_ARTICLE;
+            return TYPE_ARTICLE;
         }else{
-            return Constant.TYPE_LOAD;
+            return TYPE_LOAD;
         }
     }
 
@@ -105,7 +107,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         isMoreDataAvailable = moreDataAvailable;
     }
 
-    /* notifyDataSetChanged is final method so we can't override it
+    /** notifyDataSetChanged is final method so we can't override it
          call adapter.notifyDataChanged(); after update the list
     */
     public void notifyDataChanged(){

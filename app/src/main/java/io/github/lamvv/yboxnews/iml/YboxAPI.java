@@ -25,4 +25,10 @@ public interface YboxAPI {
 
     @GET("search?category=skill&page")
     Call<ArticleList> getSkillArticle(@Query("page") int page);
+
+    @GET("search?category=face&page")
+    Call<ArticleList> getFaceArticle(@Query("page") int page);
+
+    @GET("search?category=competition&page")
+    Call<ArticleList> getCompetitionArticle(@Query("page") int page);
 }

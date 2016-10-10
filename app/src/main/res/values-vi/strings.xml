@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Tin tức Ybox</string>
+
+    <string name="facebook_app_id">310999175932215</string>
+
+    <string name="title_dialog">Vui lòng chờ!</string>
+    <string name="message_dialog">Đang tải dữ liệu ...</string>
+    <string name="share_content">Chia sẻ</string>
+
+    <string name="home">Trang chủ</string>
+    <string name="recruitment">Tuyển dụng</string>
+    <string name="scholarship">Học bổng</string>
+    <string name="event">Sự kiện</string>
+    <string name="skill">Kỹ năng</string>
+    <string name="face">Gương mặt</string>
+    <string name="competition">Cuộc thi</string>
+</resources>

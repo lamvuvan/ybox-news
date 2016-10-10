@@ -58,6 +58,12 @@ public class ViewPagerFragment extends Fragment {
 		mTabs.add(new TabPagerItem(getString(R.string.skill),
 				SkillFragment.newInstance(getString(R.string.skill)),
 				R.drawable.ic_more));
+		mTabs.add(new TabPagerItem(getString(R.string.face),
+				FaceFragment.newInstance(getString(R.string.face)),
+				R.drawable.ic_more));
+		mTabs.add(new TabPagerItem(getString(R.string.competition),
+				CompetitionFragment.newInstance(getString(R.string.competition)),
+				R.drawable.ic_more));
 	}
 
 	@Override

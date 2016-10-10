@@ -8,8 +8,6 @@ public class Constant {
 
     public static final String BASE_URL = "http://www.ybox.vn/";
 
-    public static final String BASE_URL_NEW = "http://ybox.vn/search?page=1&article_type=new";
-
     public static final String KEY_DATA = "data";
     public static final String KEY_IMAGE = "image";
     public static final String KEY_CATEGORY = "category";
@@ -22,8 +20,5 @@ public class Constant {
     public static final String KEY_TIMESTAMPS_UPDATEDAT = "updatedAt";
     public static final String KEY_LINKS = "links";
     public static final String KEY_LINKS_DETAIL = "detail";
-
-    public static final int TYPE_ARTICLE = 0;
-    public static final int TYPE_LOAD = 1;
 
 }
