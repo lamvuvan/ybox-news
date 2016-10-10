@@ -26,7 +26,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,8 +99,11 @@ public class MainFragment extends Fragment {
 				mRecyclerView.post(new Runnable() {
 					@Override
 					public void run() {
-						int index = articles.size() - 1;
-						loadMore(index);
+//						int index = articles.size() - 1;
+						int page = articles.size()/10;
+						page += 1;
+						Log.e("lamvv", "page " + page);
+						loadMore(page);
 					}
 				});
 			}
@@ -115,8 +117,8 @@ public class MainFragment extends Fragment {
 		load(1);
 	}
 
-	private void load(int index){
-		Call<ArticleList> call = api.getArticle(index);
+	private void load(int page){
+		Call<ArticleList> call = api.getArticle(page);
 		call.enqueue(new Callback<ArticleList>() {
 			@Override
 			public void onResponse(Call<ArticleList> call, Response<ArticleList> response) {
@@ -135,13 +137,13 @@ public class MainFragment extends Fragment {
 		});
 	}
 
-	private void loadMore(int index){
+	private void loadMore(int page){
 
 		//add loading progress view
 		articles.add(new Article("load"));
 		adapter.notifyItemInserted(articles.size()-1);
 
-		Call<ArticleList> call = api.getArticle(index);
+		Call<ArticleList> call = api.getArticle(page);
 		call.enqueue(new Callback<ArticleList>() {
 			@Override
 			public void onResponse(Call<ArticleList> call, Response<ArticleList> response) {
@@ -157,18 +159,18 @@ public class MainFragment extends Fragment {
 					}else{//result size 0 means there is no more data available at server
 						adapter.setMoreDataAvailable(false);
 						//telling adapter to stop calling load more as no more server data available
-						Toast.makeText(mContext,"No More Data Available",Toast.LENGTH_LONG).show();
+//						Toast.makeText(mContext,"No More Data Available",Toast.LENGTH_LONG).show();
 					}
 					adapter.notifyDataChanged();
 					//should call the custom method adapter.notifyDataChanged here to get the correct loading status
 				}else{
-					Log.e("lamvv"," Load More Response Error "+String.valueOf(response.code()));
+//					Log.e("lamvv"," Load More Response Error "+String.valueOf(response.code()));
 				}
 			}
 
 			@Override
 			public void onFailure(Call<ArticleList> call, Throwable t) {
-				Log.e("lamvv"," Load More Response Error "+t.getMessage());
+//				Log.e("lamvv"," Load More Response Error "+t.getMessage());
 			}
 		});
 	}

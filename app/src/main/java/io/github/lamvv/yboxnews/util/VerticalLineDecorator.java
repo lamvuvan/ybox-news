@@ -8,6 +8,7 @@ import android.view.View;
  * Created by sab99r
  */
 public class VerticalLineDecorator extends RecyclerView.ItemDecoration {
+
     private int space=0;
 
     public VerticalLineDecorator(int space) {

@@ -11,6 +11,18 @@ import retrofit2.http.Query;
 
 public interface YboxAPI {
 
-    @GET("search?page=")
-    Call<ArticleList> getArticle(@Query("index") int index);
+    @GET("search?page")
+    Call<ArticleList> getArticle(@Query("page") int page);
+
+    @GET("search?category=recruitment&page")
+    Call<ArticleList> getRecruitmentArticle(@Query("page") int page);
+
+    @GET("search?category=scholarship&page")
+    Call<ArticleList> getScholarshipArticle(@Query("page") int page);
+
+    @GET("search?category=event&page")
+    Call<ArticleList> getEventArticle(@Query("page") int page);
+
+    @GET("search?category=skill&page")
+    Call<ArticleList> getSkillArticle(@Query("page") int page);
 }

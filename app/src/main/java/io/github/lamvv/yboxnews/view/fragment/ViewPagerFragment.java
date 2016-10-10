@@ -47,16 +47,16 @@ public class ViewPagerFragment extends Fragment {
 				MainFragment.newInstance(getString(R.string.home)),
 				R.drawable.topchart));
 		mTabs.add(new TabPagerItem(getString(R.string.recruitment),
-				MainFragment.newInstance(getString(R.string.recruitment)),
+				RecruitmentFragment.newInstance(getString(R.string.recruitment)),
 				R.drawable.popular));
 		mTabs.add(new TabPagerItem(getString(R.string.scholarship),
-				MainFragment.newInstance(getString(R.string.scholarship)),
+				ScholarshipFragment.newInstance(getString(R.string.scholarship)),
 				R.drawable.playlist));
 		mTabs.add(new TabPagerItem(getString(R.string.event),
-				MainFragment.newInstance(getString(R.string.event)),
+				EventFragment.newInstance(getString(R.string.event)),
 				R.drawable.star));
 		mTabs.add(new TabPagerItem(getString(R.string.skill),
-				MainFragment.newInstance(getString(R.string.skill)),
+				SkillFragment.newInstance(getString(R.string.skill)),
 				R.drawable.ic_more));
 	}
 
