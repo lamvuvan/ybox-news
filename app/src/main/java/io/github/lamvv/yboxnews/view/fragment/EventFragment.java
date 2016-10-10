@@ -1,12 +1,13 @@
 package io.github.lamvv.yboxnews.view.fragment;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,8 @@ public class EventFragment extends Fragment {
     ArticlesAdapter adapter;
     Context mContext;
     YboxAPI api;
+
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     private static final String TEXT_FRAGMENT = "TEXT_FRAGMENT";
 
@@ -74,12 +77,17 @@ public class EventFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mRecyclerView = (RecyclerView)view.findViewById(R.id.recyclerView);
+        mSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipeRefreshLayout);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         setHasOptionsMenu(true);
+
+        mSwipeRefreshLayout.setColorSchemeColors(Color.parseColor("#ff0000"), Color.parseColor("#00ff00"),
+                Color.parseColor("#0000ff"), Color.parseColor("#f234ab"));
+        mSwipeRefreshLayout.setOnRefreshListener(onRefreshListener);
 
         adapter.setLoadMoreListener(new ArticlesAdapter.OnLoadMoreListener() {
             @Override
@@ -90,7 +98,6 @@ public class EventFragment extends Fragment {
 //						int index = articles.size() - 1;
                         int page = articles.size()/10;
                         page += 1;
-                        Log.e("lamvv", "page " + page);
                         loadMore(page);
                     }
                 });
@@ -114,13 +121,13 @@ public class EventFragment extends Fragment {
                     articles.addAll(response.body().articles);
                     adapter.notifyDataChanged();
                 }else{
-                    Log.e("lamvv"," Response Error "+String.valueOf(response.code()));
+//                    Log.e("lamvv"," Response Error "+String.valueOf(response.code()));
                 }
             }
 
             @Override
             public void onFailure(Call<ArticleList> call, Throwable t) {
-                Log.e("lamvv"," Response Error "+t.getMessage());
+//                Log.e("lamvv"," Response Error "+t.getMessage());
             }
         });
     }
@@ -143,7 +150,6 @@ public class EventFragment extends Fragment {
                     if(result.size()>0){
                         //add loaded data
                         articles.addAll(result);
-                        Log.e("lamvv", "size " + articles.size());
                     }else{//result size 0 means there is no more data available at server
                         adapter.setMoreDataAvailable(false);
                         //telling adapter to stop calling load more as no more server data available
@@ -162,4 +168,17 @@ public class EventFragment extends Fragment {
             }
         });
     }
+
+    private SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+            mSwipeRefreshLayout.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    load(1);
+                }
+            }, 1000);
+        }
+    };
 }

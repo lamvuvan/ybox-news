@@ -7,12 +7,6 @@
     android:orientation="vertical"
     tools:context="io.github.lamvv.yboxnews.view.activity.MainActivity">
 
-    <!--<android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorBackground">
-    </android.support.v7.widget.RecyclerView>-->
     <android.support.v7.widget.Toolbar
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
