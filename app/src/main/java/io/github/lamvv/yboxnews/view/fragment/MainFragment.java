@@ -33,7 +33,9 @@ import java.util.List;
 
 import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.adapter.ArticlesAdapter;
+import io.github.lamvv.yboxnews.controller.FragmentController;
 import io.github.lamvv.yboxnews.iml.YboxAPI;
+import io.github.lamvv.yboxnews.listener.RecyclerTouchListener;
 import io.github.lamvv.yboxnews.model.Article;
 import io.github.lamvv.yboxnews.model.ArticleList;
 import io.github.lamvv.yboxnews.util.ServiceGenerator;
@@ -42,6 +44,8 @@ import io.github.lamvv.yboxnews.view.activity.MainActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class MainFragment extends Fragment {
 
@@ -97,10 +101,16 @@ public class MainFragment extends Fragment {
 		super.onActivityCreated(savedInstanceState);
 		setHasOptionsMenu(true);
 
+		/*
+		 * onRefreshLayout
+		 */
 		mSwipeRefreshLayout.setColorSchemeColors(Color.parseColor("#ff0000"), Color.parseColor("#00ff00"),
 				Color.parseColor("#0000ff"), Color.parseColor("#f234ab"));
 		mSwipeRefreshLayout.setOnRefreshListener(onRefreshListener);
 
+		/*
+		 * onLoadMore
+		 */
 		adapter.setLoadMoreListener(new ArticlesAdapter.OnLoadMoreListener() {
 			@Override
 			public void onLoadMore() {
@@ -119,6 +129,26 @@ public class MainFragment extends Fragment {
 		mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
 		mRecyclerView.addItemDecoration(new VerticalLineDecorator(2));
 		mRecyclerView.setAdapter(adapter);
+
+		/*
+		 * onItemClickListener
+		 */
+		mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
+			@Override
+			public void onClick(View view, int position) {
+				Article article = articles.get(position);
+				Bundle args = new Bundle();
+				args.putString("detail", article.getLinks().getDetail());
+				Fragment two = ArticleFragment.newInstance("Article");
+				two.setArguments(args);
+				FragmentController.replaceWithAddToBackStackAnimation(getActivity(), two, ArticleFragment.class.toString());
+			}
+
+			@Override
+			public void onLongClick(View view, int position) {
+
+			}
+		}));
 
 		api = ServiceGenerator.createService(YboxAPI.class);
 		load(1);
@@ -181,6 +211,9 @@ public class MainFragment extends Fragment {
 		});
 	}
 
+	/**
+	 * handle refresh
+	 */
 	private SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
 		@Override
 		public void onRefresh() {

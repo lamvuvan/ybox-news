@@ -72,7 +72,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return mList.size();
     }
 
-    static class ArticleHolder extends RecyclerView.ViewHolder{
+    static class ArticleHolder extends RecyclerView.ViewHolder {
 
         ImageView ivImage;
         ShareButton btnShareFacebook;

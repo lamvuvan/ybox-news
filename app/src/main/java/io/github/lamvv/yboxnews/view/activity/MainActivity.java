@@ -15,7 +15,7 @@ import io.github.lamvv.yboxnews.view.fragment.ViewPagerFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Toolbar mToolbar;
+    Toolbar mToolbar;
     protected int typeHomeMenu;
 
     @Override
@@ -89,4 +89,5 @@ public class MainActivity extends AppCompatActivity {
         config.tasksProcessingOrder(QueueProcessingType.LIFO);
         ImageLoader.getInstance().init(config.build());
     }*/
+
 }

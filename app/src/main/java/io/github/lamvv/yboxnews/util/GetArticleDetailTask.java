@@ -10,7 +10,6 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 
-import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.iml.GetArticleDetailTaskCompleteListener;
 
 /**
@@ -28,14 +27,14 @@ public class GetArticleDetailTask extends AsyncTask<String, Void, String> {
         this.mCallback = callback;
     }
 
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        dialog = new ProgressDialog(mContext);
-        dialog.setTitle(mContext.getResources().getString(R.string.title_dialog));
-        dialog.setMessage(mContext.getResources().getString(R.string.message_dialog));
-        dialog.show();
-    }
+//    @Override
+//    protected void onPreExecute() {
+//        super.onPreExecute();
+//        dialog = new ProgressDialog(mContext.getApplicationContext());
+//        dialog.setTitle(mContext.getApplicationContext().getResources().getString(R.string.title_dialog));
+//        dialog.setMessage(mContext.getApplicationContext().getResources().getString(R.string.message_dialog));
+//        dialog.show();
+//    }
 
     @Override
     protected String doInBackground(String... params) {
@@ -77,9 +76,9 @@ public class GetArticleDetailTask extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
-        if(dialog.isShowing()){
-            dialog.dismiss();
-        }
+//        if(dialog.isShowing()){
+//            dialog.dismiss();
+//        }
         mCallback.onGetDetailTaskComplete(s);
     }
 }
