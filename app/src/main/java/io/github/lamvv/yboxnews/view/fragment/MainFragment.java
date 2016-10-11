@@ -16,16 +16,15 @@
 package io.github.lamvv.yboxnews.view.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 
 import java.util.ArrayList;
@@ -33,7 +32,6 @@ import java.util.List;
 
 import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.adapter.ArticlesAdapter;
-import io.github.lamvv.yboxnews.controller.FragmentController;
 import io.github.lamvv.yboxnews.iml.YboxAPI;
 import io.github.lamvv.yboxnews.listener.RecyclerTouchListener;
 import io.github.lamvv.yboxnews.model.Article;
@@ -41,6 +39,7 @@ import io.github.lamvv.yboxnews.model.ArticleList;
 import io.github.lamvv.yboxnews.util.BaseFragment;
 import io.github.lamvv.yboxnews.util.ServiceGenerator;
 import io.github.lamvv.yboxnews.util.VerticalLineDecorator;
+import io.github.lamvv.yboxnews.view.activity.ArticleActivity;
 import io.github.lamvv.yboxnews.view.activity.MainActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -80,8 +79,8 @@ public class MainFragment extends BaseFragment {
 			containerView = inflate.inflate(R.layout.fragment_main, null);
 			containerView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 			articles = new ArrayList<>();
-			adapter = new ArticlesAdapter(getActivity(), articles);
 		}
+		adapter = new ArticlesAdapter(getActivity(), articles);
 	}
 
 
@@ -130,6 +129,40 @@ public class MainFragment extends BaseFragment {
 				Color.parseColor("#0000ff"), Color.parseColor("#f234ab"));
 		mSwipeRefreshLayout.setOnRefreshListener(onRefreshListener);
 
+
+//		ViewGroup.LayoutParams params = mRecyclerView.getLayoutParams();
+//		params.height = 100;
+//		mRecyclerView.setLayoutParams(params);
+		mRecyclerView.setHasFixedSize(true);
+		mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+		mRecyclerView.addItemDecoration(new VerticalLineDecorator(2));
+		mRecyclerView.setAdapter(adapter);
+		api = ServiceGenerator.createService(YboxAPI.class);
+		load(1);
+
+		/*
+		 * onItemClickListener
+		 */
+		mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
+			@Override
+			public void onClick(View view, int position) {
+				Article article = articles.get(position);
+				/*Bundle args = new Bundle();
+				args.putString("detail", article.getLinks().getDetail());
+				Fragment two = ArticleFragment.newInstance("Article");
+				two.setArguments(args);
+				FragmentController.replaceWithAddToBackStackAnimation(getActivity(), two, ArticleFragment.class.getName());*/
+				Intent intent = new Intent(getActivity(), ArticleActivity.class);
+				intent.putExtra("detail", article.getLinks().getDetail());
+				startActivity(intent);
+			}
+
+			@Override
+			public void onLongClick(View view, int position) {
+
+			}
+		}));
+
 		/*
 		 * onLoadMore
 		 */
@@ -148,34 +181,6 @@ public class MainFragment extends BaseFragment {
 			}
 		});
 
-		ViewGroup.LayoutParams params = mRecyclerView.getLayoutParams();
-		params.height = 100;
-		mRecyclerView.setLayoutParams(params);
-		mRecyclerView.setHasFixedSize(true);
-		mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-		mRecyclerView.addItemDecoration(new VerticalLineDecorator(2));
-		mRecyclerView.setAdapter(adapter);
-
-		/*
-		 * onItemClickListener
-		 */
-		mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
-			@Override
-			public void onClick(View view, int position) {
-				Article article = articles.get(position);
-				Bundle args = new Bundle();
-				args.putString("detail", article.getLinks().getDetail());
-				Fragment two = ArticleFragment.newInstance("Article");
-				two.setArguments(args);
-				FragmentController.replaceWithAddToBackStackAnimation(getActivity(), two, ArticleFragment.class.getName());
-			}
-
-			@Override
-			public void onLongClick(View view, int position) {
-
-			}
-		}));
-
 		/*mRecyclerView.setOnScrollListener(new HidingScrollListener() {
 			@Override
 			public void onHide() {
@@ -187,8 +192,7 @@ public class MainFragment extends BaseFragment {
 			}
 		});*/
 
-		api = ServiceGenerator.createService(YboxAPI.class);
-		load(1);
+
 	}
 
 	private void load(int page){

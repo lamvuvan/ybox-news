@@ -17,6 +17,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".view.activity.ArticleActivity" android:theme="@style/nLiveoDrawer"/>
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
         <provider android:authorities="com.facebook.app.FacebookContentProvider310999175932215"
             android:name="com.facebook.FacebookContentProvider"
