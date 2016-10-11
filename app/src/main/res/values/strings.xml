@@ -6,6 +6,16 @@
     <string name="title_dialog">Please wait!</string>
     <string name="message_dialog">Loading data ...</string>
     <string name="share_content">Share</string>
+
+    <string name="share_app">Share app</string>
+    <string name="share_facebook">Share Facebook</string>
+    <string name="share_twitter">Share Twitter</string>
+    <string name="rate_app">Rate app</string>
+    <string name="other_app">Other app</string>
+
+    <string name="get_app">Get it on Google Play</string>
+    <string name="name_app">Tin tức Ybox</string>
+    <string name="hashtag">#TinTucYbox</string>
     
     <string name="home">Home</string>
     <string name="recruitment">Recruitment</string>
@@ -14,4 +24,6 @@
     <string name="skill">Skill</string>
     <string name="face">Face</string>
     <string name="competition">Competition</string>
+
+    <string name="detail">Detail</string>
 </resources>

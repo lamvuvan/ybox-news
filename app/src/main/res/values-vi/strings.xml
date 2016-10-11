@@ -8,6 +8,12 @@
     <string name="message_dialog">Đang tải dữ liệu ...</string>
     <string name="share_content">Chia sẻ</string>
 
+    <string name="share_app">Chia sẻ ứng dụng</string>
+    <string name="rate_app">Đánh giá ứng dụng</string>
+    <string name="get_app">Tải xuống từ Google Play</string>
+    <string name="name_app">Tin tức Ybox</string>
+    <string name="hashtag">#TinTucYbox</string>
+
     <string name="home">Trang chủ</string>
     <string name="recruitment">Tuyển dụng</string>
     <string name="scholarship">Học bổng</string>

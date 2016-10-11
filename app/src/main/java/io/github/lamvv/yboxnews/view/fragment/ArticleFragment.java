@@ -1,5 +1,6 @@
 package io.github.lamvv.yboxnews.view.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.webkit.WebView;
 import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.iml.GetArticleDetailTaskCompleteListener;
 import io.github.lamvv.yboxnews.util.GetArticleDetailTask;
+import io.github.lamvv.yboxnews.view.activity.MainActivity;
 
 /**
  * Created by lamvu on 10/11/2016.
@@ -30,6 +32,12 @@ public class ArticleFragment extends Fragment implements GetArticleDetailTaskCom
         mBundle.putString(TEXT_FRAGMENT, text);
         mFragment.setArguments(mBundle);
         return mFragment;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Context mContext = (MainActivity) getActivity();
     }
 
     @Override

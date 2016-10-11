@@ -37,13 +37,13 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class SkillFragment extends Fragment {
 
-    List<Article> articles;
-    RecyclerView mRecyclerView;
-    ArticlesAdapter adapter;
+    private List<Article> articles;
+    private RecyclerView mRecyclerView;
+    private ArticlesAdapter adapter;
+    private YboxAPI api;
     Context mContext;
-    YboxAPI api;
 
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private static final String TEXT_FRAGMENT = "TEXT_FRAGMENT";
 

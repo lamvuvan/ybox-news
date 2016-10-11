@@ -23,6 +23,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,16 +47,20 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
+import static io.github.lamvv.yboxnews.R.id.recyclerView;
 
 public class MainFragment extends Fragment {
 
-	List<Article> articles;
-	RecyclerView mRecyclerView;
-	ArticlesAdapter adapter;
+	private List<Article> articles;
+	private RecyclerView mRecyclerView;
+	private ArticlesAdapter adapter;
 	Context mContext;
-	YboxAPI api;
+	private YboxAPI api;
 
-	SwipeRefreshLayout mSwipeRefreshLayout;
+	private SwipeRefreshLayout mSwipeRefreshLayout;
+
+	Toolbar mToolbar;
+	MainActivity mainActivity;
 
 	private static final String TEXT_FRAGMENT = "TEXT_FRAGMENT";
 
@@ -83,17 +88,29 @@ public class MainFragment extends Fragment {
 	}
 
 	@Override
+	public void onAttach(Context context) {
+		super.onAttach(context);
+		if (context instanceof MainActivity) {
+			this.mainActivity = (MainActivity) context;
+		}
+	}
+
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 		rootView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+//		AppCompatActivity activity = (AppCompatActivity) getActivity();
+//		activity.setSupportActionBar(mToolbar);
+//		activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		return rootView;
 	}
 
 	@Override
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		mRecyclerView = (RecyclerView)view.findViewById(R.id.recyclerView);
+		mRecyclerView = (RecyclerView)view.findViewById(recyclerView);
 		mSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipeRefreshLayout);
+//		mToolbar = (Toolbar)view.findViewById(R.id.toolbar);
 	}
 
 	@Override
@@ -149,6 +166,17 @@ public class MainFragment extends Fragment {
 
 			}
 		}));
+
+		/*mRecyclerView.setOnScrollListener(new HidingScrollListener() {
+			@Override
+			public void onHide() {
+				mToolbar.animate().translationY(-mToolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+			}
+			@Override
+			public void onShow() {
+				mToolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+			}
+		});*/
 
 		api = ServiceGenerator.createService(YboxAPI.class);
 		load(1);
