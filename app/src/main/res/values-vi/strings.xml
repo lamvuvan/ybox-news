@@ -10,6 +10,8 @@
 
     <string name="share_app">Chia sẻ ứng dụng</string>
     <string name="rate_app">Đánh giá ứng dụng</string>
+    <string name="other_app">Ứng dụng khác</string>
+
     <string name="get_app">Tải xuống từ Google Play</string>
     <string name="name_app">Tin tức Ybox</string>
     <string name="hashtag">#TinTucYbox</string>
@@ -21,4 +23,5 @@
     <string name="skill">Kỹ năng</string>
     <string name="face">Gương mặt</string>
     <string name="competition">Cuộc thi</string>
+
 </resources>

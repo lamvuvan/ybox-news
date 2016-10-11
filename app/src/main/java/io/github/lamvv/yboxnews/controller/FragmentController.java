@@ -16,13 +16,11 @@ public class FragmentController {
 		mFragmentManager.beginTransaction().replace(R.id.container, mFragment).commit();
 	}
 
-
 	public static void replaceWithAddToBackStack(Context mContext, Fragment mFragment, String nameClass) {
 		FragmentManager mFragmentManager = ((FragmentActivity) mContext).getSupportFragmentManager();
 		mFragmentManager.beginTransaction().replace(R.id.container, mFragment, nameClass).addToBackStack(nameClass)
 				.commit();
 	}
-
 
 	public static void replaceWithAddToBackStackAnimation(Context mContext, Fragment mFragment, String nameClass) {
 		FragmentTransaction ft = ((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction();
@@ -34,12 +32,10 @@ public class FragmentController {
 
 	}
 
-
 	public static void replaceWithPopAllBackStack(Context mContext, Fragment mFragment) {
 		((FragmentActivity) mContext).getSupportFragmentManager().popBackStack(null,
 				FragmentManager.POP_BACK_STACK_INCLUSIVE);
 		((FragmentActivity) mContext).getSupportFragmentManager().beginTransaction().replace(R.id.container, mFragment)
 				.commit();
 	}
-
 }

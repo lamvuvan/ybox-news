@@ -24,7 +24,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
@@ -39,6 +38,7 @@ import io.github.lamvv.yboxnews.iml.YboxAPI;
 import io.github.lamvv.yboxnews.listener.RecyclerTouchListener;
 import io.github.lamvv.yboxnews.model.Article;
 import io.github.lamvv.yboxnews.model.ArticleList;
+import io.github.lamvv.yboxnews.util.BaseFragment;
 import io.github.lamvv.yboxnews.util.ServiceGenerator;
 import io.github.lamvv.yboxnews.util.VerticalLineDecorator;
 import io.github.lamvv.yboxnews.view.activity.MainActivity;
@@ -49,7 +49,7 @@ import retrofit2.Response;
 import static com.facebook.FacebookSdk.getApplicationContext;
 import static io.github.lamvv.yboxnews.R.id.recyclerView;
 
-public class MainFragment extends Fragment {
+public class MainFragment extends BaseFragment {
 
 	private List<Article> articles;
 	private RecyclerView mRecyclerView;
@@ -76,8 +76,12 @@ public class MainFragment extends Fragment {
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		articles = new ArrayList<>();
-		adapter = new ArticlesAdapter(getActivity(), articles);
+		if (containerView == null) {
+			containerView = inflate.inflate(R.layout.fragment_main, null);
+			containerView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+			articles = new ArrayList<>();
+			adapter = new ArticlesAdapter(getActivity(), articles);
+		}
 	}
 
 
@@ -98,19 +102,17 @@ public class MainFragment extends Fragment {
 		}
 	}
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-		rootView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-//		AppCompatActivity activity = (AppCompatActivity) getActivity();
-//		activity.setSupportActionBar(mToolbar);
-//		activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		return rootView;
-	}
+//	@Override
+//	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+//		View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+//		rootView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+//		return rootView;
+//	}
 
 	@Override
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+		setHasOptionsMenu(true);
 		mRecyclerView = (RecyclerView)view.findViewById(recyclerView);
 		mSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipeRefreshLayout);
 //		mToolbar = (Toolbar)view.findViewById(R.id.toolbar);
@@ -145,6 +147,10 @@ public class MainFragment extends Fragment {
 				});
 			}
 		});
+
+		ViewGroup.LayoutParams params = mRecyclerView.getLayoutParams();
+		params.height = 100;
+		mRecyclerView.setLayoutParams(params);
 		mRecyclerView.setHasFixedSize(true);
 		mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
 		mRecyclerView.addItemDecoration(new VerticalLineDecorator(2));
@@ -161,7 +167,7 @@ public class MainFragment extends Fragment {
 				args.putString("detail", article.getLinks().getDetail());
 				Fragment two = ArticleFragment.newInstance("Article");
 				two.setArguments(args);
-				FragmentController.replaceWithAddToBackStackAnimation(getActivity(), two, ArticleFragment.class.toString());
+				FragmentController.replaceWithAddToBackStackAnimation(getActivity(), two, ArticleFragment.class.getName());
 			}
 
 			@Override

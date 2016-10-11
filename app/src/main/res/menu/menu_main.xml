@@ -8,9 +8,4 @@
         android:orderInCategory="100" app:showAsAction="never" />
     <item android:id="@+id/action_otherapp" android:title="@string/other_app"
         android:orderInCategory="100" />
-    <!--<item
-        android:id="@+id/menu_add"
-        android:icon="@drawable/"
-        app:showAsAction="ifRoom"
-        android:title="@string/share_app"/>-->
 </menu>

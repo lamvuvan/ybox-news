@@ -3,7 +3,7 @@ package io.github.lamvv.yboxnews.view.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +20,7 @@ import io.github.lamvv.yboxnews.view.activity.MainActivity;
  * Created by lamvu on 10/11/2016.
  */
 
-public class ArticleFragment extends Fragment implements GetArticleDetailTaskCompleteListener<String> {
+public class ArticleFragment extends DialogFragment implements GetArticleDetailTaskCompleteListener<String> {
 
     WebView mWebView;
     String detail;
@@ -74,7 +74,6 @@ public class ArticleFragment extends Fragment implements GetArticleDetailTaskCom
         super.onViewCreated(view, savedInstanceState);
 
         mWebView = (WebView)view.findViewById(R.id.wvArticle);
-
     }
 
     @Override
@@ -84,7 +83,6 @@ public class ArticleFragment extends Fragment implements GetArticleDetailTaskCom
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setSupportZoom(true);
-
 
         if(detail != null)
             launchGetDetailTask(detail);

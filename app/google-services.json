@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1002650313717",
+    "firebase_url": "https://yboxnews-877b7.firebaseio.com",
+    "project_id": "yboxnews-877b7",
+    "storage_bucket": "yboxnews-877b7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1002650313717:android:6db591a756f4a441",
+        "android_client_info": {
+          "package_name": "io.github.lamvv.yboxnews"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1002650313717-ihdfqf78d5rdv53tmdah0afdr15lfb95.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRG8G9Wocgv45s_K0iM-v6T5juBI7JpB4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

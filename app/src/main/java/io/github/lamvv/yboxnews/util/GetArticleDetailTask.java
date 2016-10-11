@@ -27,14 +27,14 @@ public class GetArticleDetailTask extends AsyncTask<String, Void, String> {
         this.mCallback = callback;
     }
 
-//    @Override
-//    protected void onPreExecute() {
-//        super.onPreExecute();
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
 //        dialog = new ProgressDialog(mContext.getApplicationContext());
 //        dialog.setTitle(mContext.getApplicationContext().getResources().getString(R.string.title_dialog));
 //        dialog.setMessage(mContext.getApplicationContext().getResources().getString(R.string.message_dialog));
 //        dialog.show();
-//    }
+    }
 
     @Override
     protected String doInBackground(String... params) {

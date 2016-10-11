@@ -79,7 +79,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ImageView ivImage;
         TextView tvTitle;
         TextView tvContent;
-        TextView tvUpdatedt;
+        TextView tvUpdatedAt;
         ShareButton btnShareFacebook;
 
         public ArticleHolder(View itemView) {
@@ -87,7 +87,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             ivImage = (ImageView)itemView.findViewById(R.id.image);
             tvTitle = (TextView)itemView.findViewById(R.id.title);
             tvContent = (TextView)itemView.findViewById(R.id.content);
-            tvUpdatedt = (TextView)itemView.findViewById(R.id.updatedAt);
+            tvUpdatedAt = (TextView)itemView.findViewById(R.id.updatedAt);
             btnShareFacebook = (ShareButton)itemView.findViewById(R.id.btnShareFacebook);
         }
 
@@ -105,7 +105,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             } else {
                 tvContent.setText(Html.fromHtml(article.getContent().getRaw().toString()));
             }
-            tvUpdatedt.setText(article.getTimestamps().getUpdatedAt().toString());
+            tvUpdatedAt.setText(article.getTimestamps().getUpdatedAt().toString());
 
             ShareLinkContent shareLinkContent = new ShareLinkContent.Builder()
                     .setContentTitle(article.getTitle())
