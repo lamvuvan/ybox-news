@@ -20,6 +20,7 @@ import android.view.View;
 
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.google.android.gms.ads.MobileAds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        /**
+         * init ads
+         */
+        MobileAds.initialize(getApplicationContext(), "ca-app-pub-2929884577019186~3751265151");
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         this.setSupportActionBar(mToolbar);
@@ -103,15 +109,14 @@ public class MainActivity extends AppCompatActivity {
                         intent.setAction(Intent.ACTION_SEND);
                         intent.setType("text/plain");
                         if(packageName.contains("twitter")) {
-                            intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.app_name));
-                            intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.get_app) + " " +
+                            intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.app_name) + " " + resources.getString(R.string.get_app) + " " +
                                     BuildConfig.PLAY_STORE_APP_URL + BuildConfig.APP_PACKAGE_NAME);
                         } else if(packageName.contains("facebook")) {
                             // Warning: Facebook IGNORES our text. They say "These fields are intended for users to express themselves. Pre-filling these fields erodes the authenticity of the user voice."
                             // One workaround is to use the Facebook SDK to post, but that doesn't allow the user to choose how they want to share. We can also make a custom landing page, and the link
                             // will show the <meta content ="..."> text from that page with our link in Facebook.
-                            intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.app_name));
-                            intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.get_app) + " " +
+                            intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.app_name) + " " +
+                                    resources.getString(R.string.get_app) + " " +
                                     BuildConfig.PLAY_STORE_APP_URL + BuildConfig.APP_PACKAGE_NAME);
                         } else if(packageName.contains("mms")) {
                             intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.app_name) + " " +
