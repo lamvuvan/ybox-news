@@ -42,6 +42,7 @@ public class CompetitionFragment extends Fragment {
     private ArticlesAdapter adapter;
     private YboxAPI api;
     Context mContext;
+    MainActivity mainActivity;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -68,6 +69,17 @@ public class CompetitionFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Context mContext = (MainActivity) getActivity();
+//        ActionBar actionBar = ((MainActivity) mContext).getSupportActionBar();
+//        actionBar.setSubtitle("Ybox " + mContext.getResources().getString(R.string.competition));
+        ((MainActivity) mContext).setTypeHomeMenu(0);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof MainActivity) {
+            this.mainActivity = (MainActivity) context;
+        }
     }
 
     @Override

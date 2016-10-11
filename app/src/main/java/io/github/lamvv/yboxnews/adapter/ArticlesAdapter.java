@@ -3,10 +3,12 @@ package io.github.lamvv.yboxnews.adapter;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareButton;
@@ -75,18 +77,36 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     static class ArticleHolder extends RecyclerView.ViewHolder {
 
         ImageView ivImage;
+        TextView tvTitle;
+        TextView tvContent;
+        TextView tvUpdatedt;
         ShareButton btnShareFacebook;
 
         public ArticleHolder(View itemView) {
             super(itemView);
-            ivImage = (ImageView)itemView.findViewById(R.id.ivImage);
+            ivImage = (ImageView)itemView.findViewById(R.id.image);
+            tvTitle = (TextView)itemView.findViewById(R.id.title);
+            tvContent = (TextView)itemView.findViewById(R.id.content);
+            tvUpdatedt = (TextView)itemView.findViewById(R.id.updatedAt);
             btnShareFacebook = (ShareButton)itemView.findViewById(R.id.btnShareFacebook);
         }
 
         void bindData(Article article){
 //            ImageLoader imageLoader = ImageLoader.getInstance();
 //            imageLoader.displayImage(article.getImage(), ivImage);
+
             Picasso.with(itemView.getContext()).load(article.getImage()).into(ivImage);
+            tvTitle.setText(article.getTitle().toString());
+            /*
+            Use Html.fromHtml(String) on API Level 23 and older devices, and Html.fromHtml(String, int) on API Level 24+ devices
+             */
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                tvContent.setText(Html.fromHtml(article.getContent().getRaw().toString(), Html.FROM_HTML_MODE_LEGACY));
+            } else {
+                tvContent.setText(Html.fromHtml(article.getContent().getRaw().toString()));
+            }
+            tvUpdatedt.setText(article.getTimestamps().getUpdatedAt().toString());
+
             ShareLinkContent shareLinkContent = new ShareLinkContent.Builder()
                     .setContentTitle(article.getTitle())
                     .setImageUrl(Uri.parse(article.getImage()))

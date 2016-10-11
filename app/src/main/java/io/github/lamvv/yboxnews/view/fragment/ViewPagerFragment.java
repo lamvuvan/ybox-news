@@ -21,6 +21,7 @@ import io.github.lamvv.yboxnews.view.activity.MainActivity;
 
 @SuppressLint("NewApi")
 public class ViewPagerFragment extends Fragment {
+
 	private List<TabPagerItem> mTabs = new ArrayList<>();
 	private Context mContext;
 	private TabLayout mSlidingTabLayout;

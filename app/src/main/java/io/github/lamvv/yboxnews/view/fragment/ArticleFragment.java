@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ public class ArticleFragment extends Fragment implements GetArticleDetailTaskCom
 
     WebView mWebView;
     String detail;
+    MainActivity mainActivity;
 
     private static final String TEXT_FRAGMENT = "TEXT_FRAGMENT";
 
@@ -35,17 +37,28 @@ public class ArticleFragment extends Fragment implements GetArticleDetailTaskCom
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        Context mContext = (MainActivity) getActivity();
-    }
-
-    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Bundle bundle = this.getArguments();
         detail = bundle.getString("detail");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Context mContext = (MainActivity) getActivity();
+        ActionBar actionBar = ((MainActivity) mContext).getSupportActionBar();
+        actionBar.setTitle(mContext.getResources().getString(R.string.app_name));
+        ((MainActivity) mContext).setTypeHomeMenu(1);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof MainActivity) {
+            this.mainActivity = (MainActivity) context;
+        }
     }
 
     @Nullable

@@ -1,26 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="200dp"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:descendantFocusability="blocksDescendants">
 
-    <ImageView
-        android:id="@+id/ivImage"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <com.facebook.share.widget.ShareButton
-        android:id="@+id/btnShareFacebook"
-        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/contentArea"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp">
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/yamaha"
+            android:scaleType="centerCrop" />
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/image"
+            android:text="fhsiadhfe ifhiusda fiu"
+            android:maxLines="3"
+            android:ellipsize="end"
+            android:textColor="#0000FF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:paddingLeft="10dp"/>
+        <TextView
+            android:id="@+id/updatedAt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="2234"
+            android:paddingLeft="10dp"
+            android:paddingBottom="10dp"
+            android:layout_toRightOf="@+id/image"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="center_horizontal"
-        android:layout_centerVertical="true"
-        android:layout_margin="5dp"
-        android:contentDescription="@string/share_content"
-        android:text="@string/share_content"/>
-</LinearLayout>
+        android:id="@+id/contentArea"
+        android:layout_alignParentBottom="true">
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/btnShareFacebook"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textSize="14sp"
+            android:textColor="#333333"
+            android:layout_margin="10dp"
+            android:text="dfewh fsdhfuhewf"/>
+        <com.facebook.share.widget.ShareButton
+            android:id="@+id/btnShareFacebook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dp"
+            android:contentDescription="@string/share_content"
+            android:text="@string/share_content"/>
+    </RelativeLayout>
+</RelativeLayout>

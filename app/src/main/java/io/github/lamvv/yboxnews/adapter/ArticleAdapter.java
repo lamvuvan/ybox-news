@@ -84,7 +84,7 @@ public class ArticleAdapter extends BaseAdapter {
         private ShareButton btnShareFacebook;
 
         public ViewHolder(View view){
-            ivImage = (ImageView)view.findViewById(R.id.ivImage);
+            ivImage = (ImageView)view.findViewById(R.id.image);
             btnShareFacebook = (ShareButton)view.findViewById(R.id.btnShareFacebook);
         }
     }

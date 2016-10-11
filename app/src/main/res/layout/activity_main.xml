@@ -23,7 +23,6 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="false"
         android:orientation="vertical" >
-
         <include layout="@layout/navigation_container" />
     </LinearLayout>
 </LinearLayout>

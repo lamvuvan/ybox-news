@@ -85,6 +85,9 @@ public class MainFragment extends Fragment {
 	public void onResume() {
 		super.onResume();
 		Context mContext = (MainActivity) getActivity();
+//		ActionBar actionBar = ((MainActivity) mContext).getSupportActionBar();
+//		actionBar.setSubtitle("Ybox " + mContext.getResources().getString(R.string.home));
+		((MainActivity) mContext).setTypeHomeMenu(0);
 	}
 
 	@Override

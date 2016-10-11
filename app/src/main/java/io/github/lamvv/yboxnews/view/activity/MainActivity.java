@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         this.setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -79,16 +78,16 @@ public class MainActivity extends AppCompatActivity {
                 Resources resources = getResources();
                 Intent emailIntent = new Intent();
                 emailIntent.setAction(Intent.ACTION_SEND);
-                emailIntent.putExtra(Intent.EXTRA_TEXT, BuildConfig.PLAY_STORE_APP_URL + BuildConfig.APP_PACKAGE_NAME);
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.app_name));
-                emailIntent.setType("message/rfc822");
+//                emailIntent.putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.app_name));
+//                emailIntent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.get_app) + " " +
+//                        BuildConfig.PLAY_STORE_APP_URL + BuildConfig.APP_PACKAGE_NAME);
+//                emailIntent.setType("message/rfc822");
 
                 PackageManager pm = getPackageManager();
                 Intent sendIntent = new Intent(Intent.ACTION_SEND);
                 sendIntent.setType("text/plain");
 
                 Intent openInChooser = Intent.createChooser(emailIntent, resources.getString(R.string.share_app));
-
                 List<ResolveInfo> resInfo = pm.queryIntentActivities(sendIntent, 0);
                 List<LabeledIntent> intentList = new ArrayList<>();
                 for (int i = 0; i < resInfo.size(); i++) {
