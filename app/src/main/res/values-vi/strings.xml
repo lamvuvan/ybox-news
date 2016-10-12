@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="banner_ad_unit_id">ca-app-pub-2929884577019186/5227998354</string>
+    <string name="native_ad_unit_id">ca-app-pub-2929884577019186/6549954355</string>
+    <string name="facebook_app_id">310999175932215</string>
+
     <string name="app_name">Tin tức Ybox</string>
 
     <string name="title_dialog">Vui lòng chờ!</string>
