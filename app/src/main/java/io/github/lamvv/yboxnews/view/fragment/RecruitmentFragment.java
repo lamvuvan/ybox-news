@@ -136,7 +136,7 @@ public class RecruitmentFragment extends Fragment implements ObservableScrollVie
 //                two.setArguments(args);
 //                FragmentController.replaceWithAddToBackStackAnimation(getActivity(), two, ArticleFragment.class.toString());
                 Intent intent = new Intent(getActivity(), ArticleActivity.class);
-                intent.putExtra("detail", article.getLinks().getDetail());
+                intent.putExtra("article", article);
                 startActivity(intent);
             }
 

@@ -19,6 +19,8 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareButton;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
@@ -31,6 +33,7 @@ import java.util.List;
 import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.constant.BuildConfig;
 import io.github.lamvv.yboxnews.iml.GetArticleDetailTaskCompleteListener;
+import io.github.lamvv.yboxnews.model.Article;
 import io.github.lamvv.yboxnews.util.GetArticleDetailTask;
 
 /**
@@ -43,12 +46,15 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
     private Toolbar mToolbar;
     protected int typeHomeMenu;
     private WebView mWebView;
+    private ShareButton btnShareFacebook;
     String detail;
+    Article article;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article);
+        btnShareFacebook = (ShareButton)findViewById(R.id.btnShareFacebook);
 
 
         //banner ads
@@ -68,8 +74,7 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
 
         //get data send from fragments
         Bundle bundle = getIntent().getExtras();
-        detail = bundle.getString("detail");
-
+        article = (Article) bundle.getSerializable("article");
 
         //webView
         mWebView = (WebView) findViewById(R.id.wvArticle);
@@ -79,6 +84,7 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
 
 
         //launch task get detail article
+        detail = article.getLinks().getDetail();
         if(detail != null)
             launchGetDetailTask(detail);
 
@@ -86,6 +92,13 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
         //hiding action bar when scroll
         ObservableScrollView scrollView = (ObservableScrollView) findViewById(R.id.scroll);
         scrollView.setScrollViewCallbacks(this);
+
+        ShareLinkContent shareLinkContent = new ShareLinkContent.Builder()
+                .setContentTitle(article.getTitle())
+                .setImageUrl(Uri.parse(article.getImage()))
+                .setContentUrl(Uri.parse(article.getLinks().getDetail()))
+                .build();
+        btnShareFacebook.setShareContent(shareLinkContent);
 
     }
 

@@ -1,7 +1,6 @@
 package io.github.lamvv.yboxnews.adapter;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -10,9 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.widget.ShareButton;
-import com.google.android.gms.ads.NativeExpressAdView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -28,8 +24,7 @@ import io.github.lamvv.yboxnews.util.CheckConfig;
 public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int TYPE_ARTICLE = 0;
-    private static final int TYPE_NATIVE_EXPRESS_AD_VIEW= 1;
-    private static final int TYPE_LOAD = 2;
+    private static final int TYPE_LOAD = 1;
 
     private Context mContext;
     private List<Object> mList;
@@ -48,17 +43,13 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if(!CheckConfig.isTablet(mContext)) {
             if (viewType == TYPE_ARTICLE) {
                 return new ArticleHolder(inflater.inflate(R.layout.item_article, parent, false));
-            }else if(viewType == TYPE_NATIVE_EXPRESS_AD_VIEW){
-            return new NativeExpressAdViewHolder(inflater.inflate(R.layout.native_express_ad_container, parent, false));
-        } else {
+            } else {
                 return new LoadHolder(inflater.inflate(R.layout.item_load, parent, false));
             }
         } else {
             if (viewType == TYPE_ARTICLE) {
                 return new ArticleHolder(inflater.inflate(R.layout.item_article_tablet, parent, false));
-            }else if(viewType == TYPE_NATIVE_EXPRESS_AD_VIEW){
-            return new ArticleHolder(inflater.inflate(R.layout.native_express_ad_container, parent, false));
-        } else {
+            } else {
                 return new LoadHolder(inflater.inflate(R.layout.item_load, parent, false));
             }
         }
@@ -73,16 +64,6 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if(getItemViewType(position) == TYPE_ARTICLE){
             ((ArticleHolder)holder).bindData((Article)mList.get(position));
         }
-        if(getItemViewType(position) == TYPE_NATIVE_EXPRESS_AD_VIEW){
-            NativeExpressAdViewHolder articleHolder = (NativeExpressAdViewHolder) holder;
-            NativeExpressAdView adView = (NativeExpressAdView) mList.get(position);
-            ViewGroup adCardView = (ViewGroup) articleHolder.itemView;
-            if (adCardView.getChildCount() > 0) {
-                adCardView.removeAllViews();
-            }
-            // Add the Native Express ad to the native express ad view.
-            adCardView.addView(adView);
-        }
     }
 
     @Override
@@ -93,15 +74,6 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }else{
             return TYPE_LOAD;
         }
-        /*if((item instanceof NativeExpressAdView) && (position % Constant.ITEMS_PER_AD == 0)) {
-            return TYPE_NATIVE_EXPRESS_AD_VIEW;
-        } else {
-            if(((Article)item).getType().equals("fil")){
-                return TYPE_ARTICLE;
-            }else{
-                return TYPE_LOAD;
-            }
-        }*/
     }
 
     @Override
@@ -115,7 +87,6 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView tvTitle;
         TextView tvContent;
         TextView tvUpdatedAt;
-        ShareButton btnShareFacebook;
 
         public ArticleHolder(View itemView) {
             super(itemView);
@@ -123,7 +94,6 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             tvTitle = (TextView)itemView.findViewById(R.id.title);
             tvContent = (TextView)itemView.findViewById(R.id.content);
             tvUpdatedAt = (TextView)itemView.findViewById(R.id.updatedAt);
-            btnShareFacebook = (ShareButton)itemView.findViewById(R.id.btnShareFacebook);
         }
 
         void bindData(Article article){
@@ -140,13 +110,6 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 tvContent.setText(Html.fromHtml(article.getContent().getRaw().toString()));
             }
             tvUpdatedAt.setText(article.getTimestamps().getUpdatedAt().toString());
-
-            ShareLinkContent shareLinkContent = new ShareLinkContent.Builder()
-                    .setContentTitle(article.getTitle())
-                    .setImageUrl(Uri.parse(article.getImage()))
-                    .setContentUrl(Uri.parse(article.getLinks().getDetail()))
-                    .build();
-            btnShareFacebook.setShareContent(shareLinkContent);
         }
     }
 
@@ -154,16 +117,6 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         public LoadHolder(View itemView) {
             super(itemView);
-        }
-    }
-
-    /**
-     * The {@link NativeExpressAdViewHolder} class.
-     */
-    static  class NativeExpressAdViewHolder extends RecyclerView.ViewHolder {
-
-        public NativeExpressAdViewHolder(View view) {
-            super(view);
         }
     }
 
