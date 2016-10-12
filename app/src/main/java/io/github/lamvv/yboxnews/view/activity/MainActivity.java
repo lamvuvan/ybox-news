@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /**
+        /*
          * init ads
          */
         MobileAds.initialize(getApplicationContext(), "ca-app-pub-2929884577019186~3751265151");
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         initMainHome();
 
 
-        /**
+        /*
          * init facebook sdk
          */
         FacebookSdk.sdkInitialize(getApplicationContext());
@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * init imageloader lib
+     * init imageLoader lib
      */
     /*public static void initImageLoader(Context context) {
         ImageLoaderConfiguration.Builder config = new ImageLoaderConfiguration.Builder(context);

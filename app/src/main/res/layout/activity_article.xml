@@ -17,7 +17,8 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
-    <ScrollView
+    <com.github.ksoichiro.android.observablescrollview.ObservableScrollView
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -37,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
-    </ScrollView>
+    </com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"

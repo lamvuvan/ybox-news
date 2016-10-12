@@ -13,20 +13,17 @@ public class BaseFragment extends Fragment {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		inflate = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		return containerView;
 	}
 	
 	@Override
 	public void onDestroyView() {
-		// TODO Auto-generated method stub
 		super.onDestroyView();
 		if(containerView != null){
 			try {
@@ -35,7 +32,6 @@ public class BaseFragment extends Fragment {
 					parrent.removeAllViews();
 				}
 			} catch (Exception e) {
-				// TODO: handle exception
 			}
 		}
 	}

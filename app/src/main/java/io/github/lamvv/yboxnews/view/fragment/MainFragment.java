@@ -20,12 +20,22 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
+import android.view.ViewGroup;
+
+import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
+import com.github.ksoichiro.android.observablescrollview.ScrollState;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.NativeExpressAdView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +46,6 @@ import io.github.lamvv.yboxnews.iml.YboxAPI;
 import io.github.lamvv.yboxnews.listener.RecyclerTouchListener;
 import io.github.lamvv.yboxnews.model.Article;
 import io.github.lamvv.yboxnews.model.ArticleList;
-import io.github.lamvv.yboxnews.util.BaseFragment;
 import io.github.lamvv.yboxnews.util.ServiceGenerator;
 import io.github.lamvv.yboxnews.util.VerticalLineDecorator;
 import io.github.lamvv.yboxnews.view.activity.ArticleActivity;
@@ -46,19 +55,20 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
-import static io.github.lamvv.yboxnews.R.id.recyclerView;
+import static io.github.lamvv.yboxnews.constant.Constant.ITEMS_PER_AD;
+import static io.github.lamvv.yboxnews.constant.Constant.NATIVE_EXPRESS_AD_HEIGHT;
 
-public class MainFragment extends BaseFragment {
+public class MainFragment extends Fragment implements ObservableScrollViewCallbacks {
 
-	private List<Article> articles;
-	private RecyclerView mRecyclerView;
+	private List<Object> articles;
+//	private RecyclerView mRecyclerView;
+	private ObservableRecyclerView mRecyclerView;
 	private ArticlesAdapter adapter;
 	Context mContext;
 	private YboxAPI api;
 
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 
-	Toolbar mToolbar;
 	MainActivity mainActivity;
 
 	private static final String TEXT_FRAGMENT = "TEXT_FRAGMENT";
@@ -75,14 +85,10 @@ public class MainFragment extends BaseFragment {
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		if (containerView == null) {
-			containerView = inflate.inflate(R.layout.fragment_main, null);
-			containerView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-			articles = new ArrayList<>();
-		}
+		articles = new ArrayList<>();
 		adapter = new ArticlesAdapter(getActivity(), articles);
-	}
 
+	}
 
 	@Override
 	public void onResume() {
@@ -101,20 +107,20 @@ public class MainFragment extends BaseFragment {
 		}
 	}
 
-//	@Override
-//	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//		View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-//		rootView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-//		return rootView;
-//	}
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+		rootView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+		return rootView;
+	}
 
 	@Override
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		setHasOptionsMenu(true);
-		mRecyclerView = (RecyclerView)view.findViewById(recyclerView);
+//		mRecyclerView = (RecyclerView)view.findViewById(R.id.recyclerView);
+		mRecyclerView = (ObservableRecyclerView)view.findViewById(R.id.recyclerView);
 		mSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipeRefreshLayout);
-//		mToolbar = (Toolbar)view.findViewById(R.id.toolbar);
 	}
 
 	@Override
@@ -131,8 +137,13 @@ public class MainFragment extends BaseFragment {
 
 
 //		ViewGroup.LayoutParams params = mRecyclerView.getLayoutParams();
-//		params.height = 100;
+//		params.height = height;
 //		mRecyclerView.setLayoutParams(params);
+
+//		addNativeExpressAds();
+//		setUpAndLoadNativeExpressAds();
+
+		mRecyclerView.setScrollViewCallbacks(this);
 		mRecyclerView.setHasFixedSize(true);
 		mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
 		mRecyclerView.addItemDecoration(new VerticalLineDecorator(2));
@@ -146,7 +157,7 @@ public class MainFragment extends BaseFragment {
 		mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
 			@Override
 			public void onClick(View view, int position) {
-				Article article = articles.get(position);
+				Article article = (Article) articles.get(position);
 				/*Bundle args = new Bundle();
 				args.putString("detail", article.getLinks().getDetail());
 				Fragment two = ArticleFragment.newInstance("Article");
@@ -180,17 +191,6 @@ public class MainFragment extends BaseFragment {
 				});
 			}
 		});
-
-		/*mRecyclerView.setOnScrollListener(new HidingScrollListener() {
-			@Override
-			public void onHide() {
-				mToolbar.animate().translationY(-mToolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
-			}
-			@Override
-			public void onShow() {
-				mToolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
-			}
-		});*/
 
 
 	}
@@ -267,4 +267,113 @@ public class MainFragment extends BaseFragment {
 			}, 1000);
 		}
 	};
+
+	/**
+	 * Adds Native Express ads to the items list.
+	 */
+	private void addNativeExpressAds() {
+
+		// Loop through the items array and place a new Native Express ad in every ith position in
+		// the items List.
+		for (int i = 0; i <= articles.size(); i += ITEMS_PER_AD) {
+			final NativeExpressAdView adView = new NativeExpressAdView(getApplicationContext());
+			articles.add(i, adView);
+		}
+	}
+
+	/**
+	 * Sets up and loads the Native Express ads.
+	 */
+	private void setUpAndLoadNativeExpressAds() {
+		// Use a Runnable to ensure that the RecyclerView has been laid out before setting the
+		// ad size for the Native Express ad. This allows us to set the Native Express ad's
+		// width to match the full width of the RecyclerView.
+		mRecyclerView.post(new Runnable() {
+			@Override
+			public void run() {
+				final float density = getActivity().getResources().getDisplayMetrics().density;
+				// Set the ad size and ad unit ID for each Native Express ad in the items list.
+				for (int i = 0; i <= articles.size(); i += ITEMS_PER_AD) {
+					final NativeExpressAdView adView = (NativeExpressAdView) articles.get(i);
+					AdSize adSize = new AdSize(
+							(int) (mRecyclerView.getWidth() / density),
+							NATIVE_EXPRESS_AD_HEIGHT);
+					adView.setAdSize(adSize);
+					adView.setAdUnitId(getResources().getString(R.string.native_ad_unit_id));
+				}
+
+				// Load the first Native Express ad in the items list.
+				loadNativeExpressAd(0);
+			}
+		});
+	}
+
+	/**
+	 * Loads the Native Express ads in the items list.
+	 */
+	private void loadNativeExpressAd(final int index) {
+
+		if (index >= articles.size()) {
+			return;
+		}
+
+		Object item = articles.get(index);
+		if (!(item instanceof NativeExpressAdView)) {
+			throw new ClassCastException("Expected item at index " + index + " to be a Native"
+					+ " Express ad.");
+		}
+
+		final NativeExpressAdView adView = (NativeExpressAdView) item;
+
+		// Set an AdListener on the NativeExpressAdView to wait for the previous Native Express ad
+		// to finish loading before loading the next ad in the items list.
+		adView.setAdListener(new AdListener() {
+			@Override
+			public void onAdLoaded() {
+				super.onAdLoaded();
+				// The previous Native Express ad loaded successfully, call this method again to
+				// load the next ad in the items list.
+				loadNativeExpressAd(index + ITEMS_PER_AD);
+			}
+
+			@Override
+			public void onAdFailedToLoad(int errorCode) {
+				// The previous Native Express ad failed to load. Call this method again to load
+				// the next ad in the items list.
+				Log.e("MainActivity", "The previous Native Express ad failed to load. Attempting to"
+						+ " load the next Native Express ad in the items list.");
+				loadNativeExpressAd(index + ITEMS_PER_AD);
+			}
+		});
+
+		// Load the Native Express ad.
+		adView.loadAd(new AdRequest.Builder().build());
+	}
+
+	@Override
+	public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
+
+	}
+
+	@Override
+	public void onDownMotionEvent() {
+
+	}
+
+	@Override
+	public void onUpOrCancelMotionEvent(ScrollState scrollState) {
+		ActionBar ab = mainActivity.getSupportActionBar();
+		if (ab == null) {
+			return;
+		}
+		if (scrollState == ScrollState.UP) {
+			if (ab.isShowing()) {
+				ab.hide();
+			}
+		} else if (scrollState == ScrollState.DOWN) {
+			if (!ab.isShowing()) {
+				ab.show();
+			}
+		}
+	}
 }

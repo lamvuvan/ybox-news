@@ -19,6 +19,9 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
+import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
@@ -34,11 +37,12 @@ import io.github.lamvv.yboxnews.util.GetArticleDetailTask;
  * Created by lamvu on 10/12/2016.
  */
 
-public class ArticleActivity extends AppCompatActivity implements GetArticleDetailTaskCompleteListener<String> {
+public class ArticleActivity extends AppCompatActivity implements GetArticleDetailTaskCompleteListener<String>,
+        ObservableScrollViewCallbacks {
 
-    Toolbar mToolbar;
+    private Toolbar mToolbar;
     protected int typeHomeMenu;
-    WebView mWebView;
+    private WebView mWebView;
     String detail;
 
     @Override
@@ -46,13 +50,13 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article);
 
-        /**
-         * banner ads
-         */
+
+        //banner ads
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
+        //toolbar
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         this.setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -62,17 +66,26 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
         }
         setTypeHomeMenu(1);
 
-        mWebView = (WebView)findViewById(R.id.wvArticle);
-
+        //get data send from fragments
         Bundle bundle = getIntent().getExtras();
         detail = bundle.getString("detail");
 
+
+        //webView
+        mWebView = (WebView) findViewById(R.id.wvArticle);
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setSupportZoom(true);
 
+
+        //launch task get detail article
         if(detail != null)
             launchGetDetailTask(detail);
+
+
+        //hiding action bar when scroll
+        ObservableScrollView scrollView = (ObservableScrollView) findViewById(R.id.scroll);
+        scrollView.setScrollViewCallbacks(this);
 
     }
 
@@ -209,5 +222,32 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
     private void launchGetDetailTask(String url){
         GetArticleDetailTask getArticleDetailTask = new GetArticleDetailTask(this, this);
         getArticleDetailTask.execute(url);
+    }
+
+    @Override
+    public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
+
+    }
+
+    @Override
+    public void onDownMotionEvent() {
+
+    }
+
+    @Override
+    public void onUpOrCancelMotionEvent(ScrollState scrollState) {
+        ActionBar ab = getSupportActionBar();
+        if (ab == null) {
+            return;
+        }
+        if (scrollState == ScrollState.UP) {
+            if (ab.isShowing()) {
+                ab.hide();
+            }
+        } else if (scrollState == ScrollState.DOWN) {
+            if (!ab.isShowing()) {
+                ab.show();
+            }
+        }
     }
 }

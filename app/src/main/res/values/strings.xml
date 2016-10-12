@@ -3,7 +3,7 @@
     <string name="native_ad_unit_id">ca-app-pub-2929884577019186/6549954355</string>
     <string name="facebook_app_id">310999175932215</string>
 
-    <string name="app_name">Tin tức Ybox</string>
+    <string name="app_name">Ybox News</string>
 
     <string name="title_dialog">Please wait!</string>
     <string name="message_dialog">Loading data ...</string>

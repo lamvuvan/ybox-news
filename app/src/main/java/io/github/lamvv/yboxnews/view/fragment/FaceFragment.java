@@ -7,11 +7,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
+import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
+import com.github.ksoichiro.android.observablescrollview.ScrollState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,10 +40,11 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  * Created by lamvu on 10/11/2016.
  */
 
-public class FaceFragment extends Fragment {
+public class FaceFragment extends Fragment implements ObservableScrollViewCallbacks {
 
-    private List<Article> articles;
-    private RecyclerView mRecyclerView;
+    private List<Object> articles;
+//    private RecyclerView mRecyclerView;
+    private ObservableRecyclerView mRecyclerView;
     private ArticlesAdapter adapter;
     private YboxAPI api;
     Context mContext;
@@ -93,7 +98,8 @@ public class FaceFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mRecyclerView = (RecyclerView)view.findViewById(R.id.recyclerView);
+//        mRecyclerView = (RecyclerView)view.findViewById(R.id.recyclerView);
+        mRecyclerView = (ObservableRecyclerView)view.findViewById(R.id.recyclerView);
         mSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipeRefreshLayout);
     }
 
@@ -109,7 +115,7 @@ public class FaceFragment extends Fragment {
                 Color.parseColor("#0000ff"), Color.parseColor("#f234ab"));
         mSwipeRefreshLayout.setOnRefreshListener(onRefreshListener);
 
-
+        mRecyclerView.setScrollViewCallbacks(this);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
         mRecyclerView.addItemDecoration(new VerticalLineDecorator(2));
@@ -123,7 +129,7 @@ public class FaceFragment extends Fragment {
         mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                Article article = articles.get(position);
+                Article article = (Article) articles.get(position);
 //                Bundle args = new Bundle();
 //                args.putString("detail", article.getLinks().getDetail());
 //                Fragment two = ArticleFragment.newInstance("Article");
@@ -232,4 +238,31 @@ public class FaceFragment extends Fragment {
             }, 1000);
         }
     };
+
+    @Override
+    public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
+
+    }
+
+    @Override
+    public void onDownMotionEvent() {
+
+    }
+
+    @Override
+    public void onUpOrCancelMotionEvent(ScrollState scrollState) {
+        ActionBar ab = mainActivity.getSupportActionBar();
+        if (ab == null) {
+            return;
+        }
+        if (scrollState == ScrollState.UP) {
+            if (ab.isShowing()) {
+                ab.hide();
+            }
+        } else if (scrollState == ScrollState.DOWN) {
+            if (!ab.isShowing()) {
+                ab.show();
+            }
+        }
+    }
 }

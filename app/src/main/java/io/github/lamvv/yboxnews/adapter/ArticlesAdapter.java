@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.model.Article;
+import io.github.lamvv.yboxnews.util.CheckConfig;
 
 /**
  * Created by lamvu on 10/9/2016.
@@ -25,28 +27,56 @@ import io.github.lamvv.yboxnews.model.Article;
 
 public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public static final int TYPE_ARTICLE = 0;
-    public static final int TYPE_LOAD = 1;
+    private static final int TYPE_ARTICLE = 0;
+    private static final int TYPE_LOAD = 1;
+    private static final int TYPE_NATIVE_EXPRESS_AD_VIEW= 2;
 
     private Context mContext;
-    private List<Article> mList;
+    private List<Object> mList;
+    RecyclerView.LayoutParams layoutParams;
 
     public OnLoadMoreListener loadMoreListener;
     boolean isLoading = false, isMoreDataAvailable = true;
 
-    public ArticlesAdapter(Context context, List<Article> list){
+    public ArticlesAdapter(Context context, List<Object> list){
         this.mContext = context;
         this.mList = list;
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+        layoutParams = new RecyclerView.LayoutParams(width, height);
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        if(viewType == TYPE_ARTICLE){
-            return new ArticleHolder(inflater.inflate(R.layout.item_article, parent, false));
-        }else{
-            return new LoadHolder(inflater.inflate(R.layout.item_load, parent, false));
+        if(!CheckConfig.isTablet(mContext)) {
+            if (viewType == TYPE_ARTICLE) {
+                return new ArticleHolder(inflater.inflate(R.layout.item_article, parent, false));
+            }/*else if(viewType == TYPE_NATIVE_EXPRESS_AD_VIEW){
+            return new ArticleHolder(inflater.inflate(R.layout.native_express_ad_container, parent, false));
+        }*/ else {
+                return new LoadHolder(inflater.inflate(R.layout.item_load, parent, false));
+            }
+        } else {
+            if (viewType == TYPE_ARTICLE) {
+                return new ArticleHolder(inflater.inflate(R.layout.item_article_tablet, parent, false));
+            }/*else if(viewType == TYPE_NATIVE_EXPRESS_AD_VIEW){
+            return new ArticleHolder(inflater.inflate(R.layout.native_express_ad_container, parent, false));
+        }*/ else {
+                return new LoadHolder(inflater.inflate(R.layout.item_load, parent, false));
+            }
         }
+        /*switch (viewType){
+            case TYPE_ARTICLE:
+                return new ArticleHolder(inflater.inflate(R.layout.item_article, parent, false));
+            case TYPE_LOAD:
+                return new LoadHolder(inflater.inflate(R.layout.item_load, parent, false));
+            case TYPE_NATIVE_EXPRESS_AD_VIEW:
+
+            default:
+                return new NativeExpressAdViewHolder(inflater.inflate(R.layout.native_express_ad_container, parent, false));
+        }*/
     }
 
     @Override
@@ -56,17 +86,38 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             loadMoreListener.onLoadMore();
         }
         if(getItemViewType(position) == TYPE_ARTICLE){
-            ((ArticleHolder)holder).bindData(mList.get(position));
+            ((ArticleHolder)holder).bindData((Article)mList.get(position));
         }
+        /*if(getItemViewType(position) == TYPE_NATIVE_EXPRESS_AD_VIEW){
+            NativeExpressAdViewHolder articleHolder = (NativeExpressAdViewHolder) holder;
+            NativeExpressAdView adView = (NativeExpressAdView) mList.get(position);
+            ViewGroup adCardView = (ViewGroup) articleHolder.itemView;
+            if (adCardView.getChildCount() > 0) {
+                adCardView.removeAllViews();
+            }
+            // Add the Native Express ad to the native express ad view.
+            adCardView.addView(adView);
+        }*/
     }
 
     @Override
     public int getItemViewType(int position) {
-        if(mList.get(position).getType().equals("fil")){
+        if(((Article)mList.get(position)).getType().equals("fil")){
             return TYPE_ARTICLE;
-        }else{
+        }/*else if(position % Constant.ITEMS_PER_AD == 0){
+            return TYPE_NATIVE_EXPRESS_AD_VIEW;
+        }*/else{
             return TYPE_LOAD;
         }
+        /*if(position % Constant.ITEMS_PER_AD == 0){
+            return TYPE_NATIVE_EXPRESS_AD_VIEW;
+        }else{
+            if(((Article)mList.get(position)).getType().equals("fil")){
+                return TYPE_ARTICLE;
+            }else{
+                return TYPE_LOAD;
+            }
+        }*/
     }
 
     @Override
@@ -81,6 +132,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView tvContent;
         TextView tvUpdatedAt;
         ShareButton btnShareFacebook;
+        RecyclerView.LayoutParams layoutParams;
 
         public ArticleHolder(View itemView) {
             super(itemView);
@@ -120,6 +172,16 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         public LoadHolder(View itemView) {
             super(itemView);
+        }
+    }
+
+    /**
+     * The {@link NativeExpressAdViewHolder} class.
+     */
+    static  class NativeExpressAdViewHolder extends RecyclerView.ViewHolder {
+
+        public NativeExpressAdViewHolder(View view) {
+            super(view);
         }
     }
 
