@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,7 @@ import android.widget.TextView;
 
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareButton;
+import com.google.android.gms.ads.NativeExpressAdView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -28,12 +28,11 @@ import io.github.lamvv.yboxnews.util.CheckConfig;
 public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int TYPE_ARTICLE = 0;
-    private static final int TYPE_LOAD = 1;
-    private static final int TYPE_NATIVE_EXPRESS_AD_VIEW= 2;
+    private static final int TYPE_NATIVE_EXPRESS_AD_VIEW= 1;
+    private static final int TYPE_LOAD = 2;
 
     private Context mContext;
     private List<Object> mList;
-    RecyclerView.LayoutParams layoutParams;
 
     public OnLoadMoreListener loadMoreListener;
     boolean isLoading = false, isMoreDataAvailable = true;
@@ -41,10 +40,6 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public ArticlesAdapter(Context context, List<Object> list){
         this.mContext = context;
         this.mList = list;
-        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        int height = displayMetrics.heightPixels;
-        int width = displayMetrics.widthPixels;
-        layoutParams = new RecyclerView.LayoutParams(width, height);
     }
 
     @Override
@@ -53,30 +48,20 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if(!CheckConfig.isTablet(mContext)) {
             if (viewType == TYPE_ARTICLE) {
                 return new ArticleHolder(inflater.inflate(R.layout.item_article, parent, false));
-            }/*else if(viewType == TYPE_NATIVE_EXPRESS_AD_VIEW){
-            return new ArticleHolder(inflater.inflate(R.layout.native_express_ad_container, parent, false));
-        }*/ else {
+            }else if(viewType == TYPE_NATIVE_EXPRESS_AD_VIEW){
+            return new NativeExpressAdViewHolder(inflater.inflate(R.layout.native_express_ad_container, parent, false));
+        } else {
                 return new LoadHolder(inflater.inflate(R.layout.item_load, parent, false));
             }
         } else {
             if (viewType == TYPE_ARTICLE) {
                 return new ArticleHolder(inflater.inflate(R.layout.item_article_tablet, parent, false));
-            }/*else if(viewType == TYPE_NATIVE_EXPRESS_AD_VIEW){
+            }else if(viewType == TYPE_NATIVE_EXPRESS_AD_VIEW){
             return new ArticleHolder(inflater.inflate(R.layout.native_express_ad_container, parent, false));
-        }*/ else {
+        } else {
                 return new LoadHolder(inflater.inflate(R.layout.item_load, parent, false));
             }
         }
-        /*switch (viewType){
-            case TYPE_ARTICLE:
-                return new ArticleHolder(inflater.inflate(R.layout.item_article, parent, false));
-            case TYPE_LOAD:
-                return new LoadHolder(inflater.inflate(R.layout.item_load, parent, false));
-            case TYPE_NATIVE_EXPRESS_AD_VIEW:
-
-            default:
-                return new NativeExpressAdViewHolder(inflater.inflate(R.layout.native_express_ad_container, parent, false));
-        }*/
     }
 
     @Override
@@ -88,7 +73,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if(getItemViewType(position) == TYPE_ARTICLE){
             ((ArticleHolder)holder).bindData((Article)mList.get(position));
         }
-        /*if(getItemViewType(position) == TYPE_NATIVE_EXPRESS_AD_VIEW){
+        if(getItemViewType(position) == TYPE_NATIVE_EXPRESS_AD_VIEW){
             NativeExpressAdViewHolder articleHolder = (NativeExpressAdViewHolder) holder;
             NativeExpressAdView adView = (NativeExpressAdView) mList.get(position);
             ViewGroup adCardView = (ViewGroup) articleHolder.itemView;
@@ -97,22 +82,21 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
             // Add the Native Express ad to the native express ad view.
             adCardView.addView(adView);
-        }*/
+        }
     }
 
     @Override
     public int getItemViewType(int position) {
-        if(((Article)mList.get(position)).getType().equals("fil")){
-            return TYPE_ARTICLE;
-        }/*else if(position % Constant.ITEMS_PER_AD == 0){
-            return TYPE_NATIVE_EXPRESS_AD_VIEW;
-        }*/else{
+        Object item = mList.get(position);
+        if(((Article)item).getType().equals("fil")){
+                return TYPE_ARTICLE;
+        }else{
             return TYPE_LOAD;
         }
-        /*if(position % Constant.ITEMS_PER_AD == 0){
+        /*if((item instanceof NativeExpressAdView) && (position % Constant.ITEMS_PER_AD == 0)) {
             return TYPE_NATIVE_EXPRESS_AD_VIEW;
-        }else{
-            if(((Article)mList.get(position)).getType().equals("fil")){
+        } else {
+            if(((Article)item).getType().equals("fil")){
                 return TYPE_ARTICLE;
             }else{
                 return TYPE_LOAD;
@@ -132,7 +116,6 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView tvContent;
         TextView tvUpdatedAt;
         ShareButton btnShareFacebook;
-        RecyclerView.LayoutParams layoutParams;
 
         public ArticleHolder(View itemView) {
             super(itemView);
@@ -149,9 +132,8 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             Picasso.with(itemView.getContext()).load(article.getImage()).into(ivImage);
             tvTitle.setText(article.getTitle().toString());
-            /*
-            Use Html.fromHtml(String) on API Level 23 and older devices, and Html.fromHtml(String, int) on API Level 24+ devices
-             */
+
+            //Use Html.fromHtml(String) on API Level 23 and older devices, and Html.fromHtml(String, int) on API Level 24+ devices
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                 tvContent.setText(Html.fromHtml(article.getContent().getRaw().toString(), Html.FROM_HTML_MODE_LEGACY));
             } else {

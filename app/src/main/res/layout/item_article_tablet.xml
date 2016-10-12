@@ -49,21 +49,24 @@
             android:layout_marginLeft="10dp"
             android:contentDescription="@string/share_content"
             android:text="@string/share_content"/>
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/contentArea"
-        android:layout_alignParentBottom="true">
         <TextView
             android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/image"
             android:maxLines="3"
             android:ellipsize="end"
             android:textSize="14sp"
             android:textColor="#333333"
             android:layout_marginTop="10dp"
             android:text="content"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/contentArea"
+        android:layout_alignParentBottom="true">
+
     </RelativeLayout>
 </RelativeLayout>

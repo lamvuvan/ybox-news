@@ -24,7 +24,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,10 +31,6 @@ import android.view.ViewGroup;
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.NativeExpressAdView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,8 +50,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
-import static io.github.lamvv.yboxnews.constant.Constant.ITEMS_PER_AD;
-import static io.github.lamvv.yboxnews.constant.Constant.NATIVE_EXPRESS_AD_HEIGHT;
 
 public class MainFragment extends Fragment implements ObservableScrollViewCallbacks {
 
@@ -135,13 +128,6 @@ public class MainFragment extends Fragment implements ObservableScrollViewCallba
 				Color.parseColor("#0000ff"), Color.parseColor("#f234ab"));
 		mSwipeRefreshLayout.setOnRefreshListener(onRefreshListener);
 
-
-//		ViewGroup.LayoutParams params = mRecyclerView.getLayoutParams();
-//		params.height = height;
-//		mRecyclerView.setLayoutParams(params);
-
-//		addNativeExpressAds();
-//		setUpAndLoadNativeExpressAds();
 
 		mRecyclerView.setScrollViewCallbacks(this);
 		mRecyclerView.setHasFixedSize(true);
@@ -267,88 +253,6 @@ public class MainFragment extends Fragment implements ObservableScrollViewCallba
 			}, 1000);
 		}
 	};
-
-	/**
-	 * Adds Native Express ads to the items list.
-	 */
-	private void addNativeExpressAds() {
-
-		// Loop through the items array and place a new Native Express ad in every ith position in
-		// the items List.
-		for (int i = 0; i <= articles.size(); i += ITEMS_PER_AD) {
-			final NativeExpressAdView adView = new NativeExpressAdView(getApplicationContext());
-			articles.add(i, adView);
-		}
-	}
-
-	/**
-	 * Sets up and loads the Native Express ads.
-	 */
-	private void setUpAndLoadNativeExpressAds() {
-		// Use a Runnable to ensure that the RecyclerView has been laid out before setting the
-		// ad size for the Native Express ad. This allows us to set the Native Express ad's
-		// width to match the full width of the RecyclerView.
-		mRecyclerView.post(new Runnable() {
-			@Override
-			public void run() {
-				final float density = getActivity().getResources().getDisplayMetrics().density;
-				// Set the ad size and ad unit ID for each Native Express ad in the items list.
-				for (int i = 0; i <= articles.size(); i += ITEMS_PER_AD) {
-					final NativeExpressAdView adView = (NativeExpressAdView) articles.get(i);
-					AdSize adSize = new AdSize(
-							(int) (mRecyclerView.getWidth() / density),
-							NATIVE_EXPRESS_AD_HEIGHT);
-					adView.setAdSize(adSize);
-					adView.setAdUnitId(getResources().getString(R.string.native_ad_unit_id));
-				}
-
-				// Load the first Native Express ad in the items list.
-				loadNativeExpressAd(0);
-			}
-		});
-	}
-
-	/**
-	 * Loads the Native Express ads in the items list.
-	 */
-	private void loadNativeExpressAd(final int index) {
-
-		if (index >= articles.size()) {
-			return;
-		}
-
-		Object item = articles.get(index);
-		if (!(item instanceof NativeExpressAdView)) {
-			throw new ClassCastException("Expected item at index " + index + " to be a Native"
-					+ " Express ad.");
-		}
-
-		final NativeExpressAdView adView = (NativeExpressAdView) item;
-
-		// Set an AdListener on the NativeExpressAdView to wait for the previous Native Express ad
-		// to finish loading before loading the next ad in the items list.
-		adView.setAdListener(new AdListener() {
-			@Override
-			public void onAdLoaded() {
-				super.onAdLoaded();
-				// The previous Native Express ad loaded successfully, call this method again to
-				// load the next ad in the items list.
-				loadNativeExpressAd(index + ITEMS_PER_AD);
-			}
-
-			@Override
-			public void onAdFailedToLoad(int errorCode) {
-				// The previous Native Express ad failed to load. Call this method again to load
-				// the next ad in the items list.
-				Log.e("MainActivity", "The previous Native Express ad failed to load. Attempting to"
-						+ " load the next Native Express ad in the items list.");
-				loadNativeExpressAd(index + ITEMS_PER_AD);
-			}
-		});
-
-		// Load the Native Express ad.
-		adView.loadAd(new AdRequest.Builder().build());
-	}
 
 	@Override
 	public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
