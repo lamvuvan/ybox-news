@@ -7,6 +7,7 @@ import android.content.pm.LabeledIntent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -81,6 +82,7 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setSupportZoom(true);
+        mWebView.setBackgroundColor(Color.TRANSPARENT);
 
 
         //launch task get detail article
@@ -124,6 +126,9 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
 
     private void handleItemMenuSelected(int id){
         switch (id){
+            case R.id.action_setting:
+                startActivity(new Intent(ArticleActivity.this, SettingActivity.class));
+                break;
             case R.id.action_share:
                 Resources resources = getResources();
                 Intent emailIntent = new Intent();

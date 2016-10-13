@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/background"
     tools:context="io.github.lamvv.yboxnews.view.activity.ArticleActivity">
 
     <android.support.v7.widget.Toolbar
@@ -22,6 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:background="@color/background"
         android:layout_below="@+id/toolbar"
         android:layout_above="@+id/adView">
 
@@ -30,13 +32,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:background="@color/background"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin">
 
             <WebView
                 android:id="@+id/wvArticle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:background="@color/background"/>
             <com.facebook.share.widget.ShareButton
                 android:id="@+id/btnShareFacebook"
                 android:layout_width="wrap_content"

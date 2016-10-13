@@ -3,15 +3,17 @@
     <string name="native_ad_unit_id">ca-app-pub-2929884577019186/6549954355</string>
     <string name="facebook_app_id">310999175932215</string>
 
-    <string name="app_name">Ybox News</string>
+    <string name="app_name">Ybox</string>
 
     <string name="title_dialog">Please wait!</string>
     <string name="message_dialog">Loading data ...</string>
     <string name="share_content">Share on Facebook</string>
 
+    <string name="setting">Setting</string>
     <string name="share_app">Share app</string>
     <string name="rate_app">Rate app</string>
     <string name="other_app">Other apps</string>
+    <string name="dark">Dark Theme</string>
 
     <string name="get_app">Get it on Google Play</string>
     <string name="name_app">Tin tức Ybox</string>

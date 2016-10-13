@@ -81,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleItemMenuSelected(int id){
         switch (id){
+            case R.id.action_setting:
+                startActivity(new Intent(MainActivity.this, SettingActivity.class));
+                break;
             case R.id.action_share:
                 Resources resources = getResources();
                 Intent emailIntent = new Intent();

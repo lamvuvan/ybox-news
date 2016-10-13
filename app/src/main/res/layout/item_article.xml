@@ -27,7 +27,7 @@
             android:text="title"
             android:maxLines="3"
             android:ellipsize="end"
-            android:textColor="@color/red"
+            android:textColor="@color/textColorPrimary"
             android:textSize="16sp"
             android:textStyle="bold"
             android:paddingLeft="10dp"/>
@@ -36,6 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:textColor="@color/textColorSecondary"
             android:text="2234"
             android:paddingLeft="10dp"
             android:layout_toRightOf="@+id/image"/>
@@ -52,8 +53,8 @@
             android:maxLines="3"
             android:ellipsize="end"
             android:textSize="14sp"
-            android:textColor="#333333"
+            android:textColor="@color/textColorPrimary"
             android:layout_marginTop="10dp"
-            android:text="content"/>
+            android:text="content fdhh reh"/>
     </RelativeLayout>
 </RelativeLayout>
