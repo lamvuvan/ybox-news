@@ -39,8 +39,8 @@ public class GetArticleDetailTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        String detail = "";
-//        StringBuilder detail = null;
+//        String detail = "";
+        StringBuilder detail = new StringBuilder();
         try {
             Document doc = Jsoup.connect(params[0]).timeout(10000).get();
             Elements article = doc.select("div.article-detail div");
@@ -58,20 +58,19 @@ public class GetArticleDetailTask extends AsyncTask<String, Void, String> {
                 viewCount = views.text();
             }
 
-//            detail.append("<h2 style = \" color: red \">" + title.text() + "</h2>");
-//            detail.append("<font size=\" 1.2em \" style = \" color: #005500 \"><em>" + pubDate + "</em></font>");
-//            detail.append("<p style = \" color: #111111 \"><b>" + "<font size=\" 4em \" >" + content.text() + "</font></b></p>");
-//            detail.append("<font size=\" 4em \" >"+  main.toString() + "</font>");
+            detail.append("<h2 style = \" color: #111111 \">" + title.text() + "</h2>");
+            detail.append("<font size=\" 2em \" style = \" color: #005500 \"><em>" + pubDate + ", " + viewCount + "</em></font>");
+            detail.append("<img src = \"" + imgThumb + "\"" + "/>");
+            detail.append("<p style = \" color: #111111 \"><b>" + "<font size=\" 4em \" >" + cont.toString() + "</font></b></p>");
 
-            detail += "<h2 style = \" color: #111111 \">" + title.text() + "</h2>";
-            detail += "<font size=\" 2em \" style = \" color: #005500 \"><em>" + pubDate + ", " + viewCount +  "</em></font>";
-            detail += "<img src = \"" + imgThumb + "\"" + "/>";
-            detail += "<p style = \" color: #111111 \"><b>" + "<font size=\" 4em \" >" + cont.toString() + "</font></b></p>";
-//            detail += "<font size=\" 4em \" >"+  main.toString() + "</font>";
+//            detail += "<h2 style = \" color: #111111 \">" + title.text() + "</h2>";
+//            detail += "<font size=\" 2em \" style = \" color: #005500 \"><em>" + pubDate + ", " + viewCount +  "</em></font>";
+//            detail += "<img src = \"" + imgThumb + "\"" + "/>";
+//            detail += "<p style = \" color: #111111 \"><b>" + "<font size=\" 4em \" >" + cont.toString() + "</font></b></p>";
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return detail;
+        return detail.toString();
     }
 
     @Override

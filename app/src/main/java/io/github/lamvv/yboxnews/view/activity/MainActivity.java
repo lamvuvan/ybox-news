@@ -86,16 +86,17 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.action_share:
                 Resources resources = getResources();
-                Intent emailIntent = new Intent();
-                emailIntent.setAction(Intent.ACTION_SEND);
-//                emailIntent.putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.app_name));
-//                emailIntent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.get_app) + " " +
-//                        BuildConfig.PLAY_STORE_APP_URL + BuildConfig.APP_PACKAGE_NAME);
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+//                emailIntent.setAction(Intent.ACTION_SEND);
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.app_name));
+                emailIntent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.get_app) + " " +
+                        BuildConfig.PLAY_STORE_APP_URL + BuildConfig.APP_PACKAGE_NAME);
 //                emailIntent.setType("message/rfc822");
+                emailIntent.setType("text/plain");
 
                 PackageManager pm = getPackageManager();
                 Intent sendIntent = new Intent(Intent.ACTION_SEND);
-                sendIntent.setType("text/plain");
+                sendIntent.setType("message/rfc822");
 
                 Intent openInChooser = Intent.createChooser(emailIntent, resources.getString(R.string.share_app));
                 List<ResolveInfo> resInfo = pm.queryIntentActivities(sendIntent, 0);
