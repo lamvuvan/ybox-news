@@ -14,6 +14,17 @@
     <string name="rate_app">Rate app</string>
     <string name="other_app">Other apps</string>
     <string name="dark">Dark Theme</string>
+    <string name="about_us">About us</string>
+    <string name="likeapp_clickrate">Like this app? Click to rate it</string>
+    <string name="supportus_byrateapp">Please support us by quickly rating this app</string>
+    <string name="invite_frieng">Invite this app to friends</string>
+    <string name="your_friend">Your friends will love it too!</string>
+    <string name="need_help">Need help?</string>
+    <string name="email_to">Email to: lamvv9x@gmail.com</string>
+    <string name="get_more_app">Get more great apps</string>
+    <string name="checkout_recommended">Check out our recommended apps</string>
+
+    <string name="not_email">There are no email clients installed.</string>
 
     <string name="get_app">Get it on Google Play</string>
     <string name="name_app">Tin tức Ybox</string>

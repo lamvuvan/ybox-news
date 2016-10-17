@@ -21,5 +21,4 @@ public class CheckConfig {
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnected();
     }
-
 }

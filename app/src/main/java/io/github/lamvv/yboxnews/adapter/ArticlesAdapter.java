@@ -25,6 +25,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private static final int TYPE_ARTICLE = 0;
     private static final int TYPE_LOAD = 1;
+    private static final int TYPE_NATIVE_EXPRESS_AD_VIEW = 2;
 
     private Context mContext;
     private List<Object> mList;
@@ -41,6 +42,12 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
         if(!CheckConfig.isTablet(mContext)) {
+            /*if(viewType == TYPE_NATIVE_EXPRESS_AD_VIEW){
+                View nativeExpressLayoutView = LayoutInflater.from(
+                        parent.getContext()).inflate(R.layout.native_express_ad_container,
+                        parent, false);
+                return new NativeExpressAdViewHolder(nativeExpressLayoutView);
+            }*/
             if (viewType == TYPE_ARTICLE) {
                 return new ArticleHolder(inflater.inflate(R.layout.item_article, parent, false));
             } else {
@@ -64,12 +71,25 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if(getItemViewType(position) == TYPE_ARTICLE){
             ((ArticleHolder)holder).bindData((Article)mList.get(position));
         }
+        /*if(getItemViewType(position) == TYPE_NATIVE_EXPRESS_AD_VIEW){
+            NativeExpressAdViewHolder nativeExpressHolder =
+                    (NativeExpressAdViewHolder) holder;
+            NativeExpressAdView adView = (NativeExpressAdView) mList.get(position);
+            ViewGroup adCardView = (ViewGroup) nativeExpressHolder.itemView;
+            if (adCardView.getChildCount() > 0) {
+                adCardView.removeAllViews();
+            }
+            // Add the Native Express ad to the native express ad view.
+            adCardView.addView(adView);
+        }*/
     }
 
     @Override
     public int getItemViewType(int position) {
         Object item = mList.get(position);
-        if(((Article)item).getType().equals("fil")){
+        /*if(position % ITEMS_PER_AD == 0){
+            return TYPE_NATIVE_EXPRESS_AD_VIEW;
+        }else */if(((Article)item).getType().equals("fil")){
                 return TYPE_ARTICLE;
         }else{
             return TYPE_LOAD;
@@ -120,12 +140,19 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
+    static class NativeExpressAdViewHolder extends RecyclerView.ViewHolder {
+
+        public NativeExpressAdViewHolder(View itemView) {
+            super(itemView);
+        }
+    }
+
     public void setMoreDataAvailable(boolean moreDataAvailable) {
         isMoreDataAvailable = moreDataAvailable;
     }
 
-    /** notifyDataSetChanged is final method so we can't override it
-         call adapter.notifyDataChanged(); after update the list
+    /**
+     * notifyDataSetChanged is final method so we can't override it call adapter.notifyDataChanged(); after update the list
     */
     public void notifyDataChanged(){
         notifyDataSetChanged();

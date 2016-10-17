@@ -15,6 +15,17 @@
     <string name="rate_app">Đánh giá ứng dụng</string>
     <string name="other_app">Ứng dụng khác</string>
     <string name="dark">Chế độ ban đêm</string>
+    <string name="about_us">Về chúng tôi</string>
+    <string name="likeapp_clickrate">Đánh giá ứng dụng</string>
+    <string name="supportus_byrateapp">Cho chúng tôi biết mức độ hài lòng của bạn</string>
+    <string name="invite_frieng">Mời bạn bè của bạn sử dụng ứng dụng</string>
+    <string name="your_friend">Giới thiệu ứng dụng này cho bạn bè của bạn!</string>
+    <string name="need_help">Nếu bạn cần chúng tôi trợ giúp?</string>
+    <string name="email_to">Email tới: lamvv9x@gmail.com</string>
+    <string name="get_more_app">Các ứng dụng khác</string>
+    <string name="checkout_recommended">Các ứng dụng khác của chúng tôi</string>
+
+    <string name="not_email">Vui lòng cài đặt trình gửi thư.</string>
 
     <string name="get_app">Tải xuống từ Google Play</string>
     <string name="name_app">Tin tức Ybox</string>

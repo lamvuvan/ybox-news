@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ import io.github.lamvv.yboxnews.iml.YboxAPI;
 import io.github.lamvv.yboxnews.listener.RecyclerTouchListener;
 import io.github.lamvv.yboxnews.model.Article;
 import io.github.lamvv.yboxnews.model.ArticleList;
+import io.github.lamvv.yboxnews.util.CheckConfig;
 import io.github.lamvv.yboxnews.util.ServiceGenerator;
 import io.github.lamvv.yboxnews.util.VerticalLineDecorator;
 import io.github.lamvv.yboxnews.view.activity.ArticleActivity;
@@ -117,7 +119,10 @@ public class CompetitionFragment extends Fragment implements ObservableScrollVie
 
         mRecyclerView.setScrollViewCallbacks(this);
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+        if(!CheckConfig.isTablet(getActivity()))
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        else
+            mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         mRecyclerView.addItemDecoration(new VerticalLineDecorator(2));
         mRecyclerView.setAdapter(adapter);
         api = ServiceGenerator.createService(YboxAPI.class);
@@ -130,11 +135,6 @@ public class CompetitionFragment extends Fragment implements ObservableScrollVie
             @Override
             public void onClick(View view, int position) {
                 Article article = (Article) articles.get(position);
-//                Bundle args = new Bundle();
-//                args.putString("detail", article.getLinks().getDetail());
-//                Fragment two = ArticleFragment.newInstance("Article");
-//                two.setArguments(args);
-//                FragmentController.replaceWithAddToBackStackAnimation(getActivity(), two, ArticleFragment.class.toString());
                 Intent intent = new Intent(getActivity(), ArticleActivity.class);
                 intent.putExtra("article", article);
                 startActivity(intent);

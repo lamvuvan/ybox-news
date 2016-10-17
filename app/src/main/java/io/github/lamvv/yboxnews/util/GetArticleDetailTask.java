@@ -42,7 +42,7 @@ public class GetArticleDetailTask extends AsyncTask<String, Void, String> {
 //        String detail = "";
         StringBuilder detail = new StringBuilder();
         try {
-            Document doc = Jsoup.connect(params[0]).timeout(10000).get();
+            Document doc = Jsoup.connect(params[0]).timeout(20000).get();
             Elements article = doc.select("div.article-detail div");
             Elements title = article.select("strong.text-title");
             Elements create = doc.select("div.col-md-11 span.create-at");

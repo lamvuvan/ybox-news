@@ -18,17 +18,15 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginTop="@dimen/layout_margin_small"
+        android:layout_marginLeft="@dimen/layout_margin_min"
         android:text="@string/setting"
         android:textColor="@color/textColorSecondary"
-        android:textSize="20sp"/>
+        android:textSize="@dimen/text_size_normal"/>
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/colorPrimary"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"/>
+        android:layout_height="@dimen/view_line_height"
+        android:background="@color/colorPrimary"/>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -36,23 +34,128 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="@dimen/layout_margin_small"
             android:textColor="@color/textColorPrimary"
             android:text="@string/dark"
-            android:textSize="18sp"/>
+            android:textSize="@dimen/text_size_small"/>
         <com.rey.material.widget.Switch
             style="@style/Material.Widget.Switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"
+            android:layout_marginRight="@dimen/layout_margin_small"
             android:gravity="center"
             android:id="@+id/switchTheme"/>
     </RelativeLayout>
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="@dimen/view_line_height"
+        android:background="@color/colorPrimary"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/layout_margin_small"
+        android:layout_marginLeft="@dimen/layout_margin_min"
+        android:text="@string/about_us"
+        android:textColor="@color/textColorSecondary"
+        android:textSize="@dimen/text_size_normal"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_line_height"
+        android:background="@color/colorPrimary"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginLeft="@dimen/layout_margin_small">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/likeApp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/likeapp_clickrate"
+                android:textSize="@dimen/text_size_min"
+                android:textColor="@color/textColorPrimary"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/supportus_byrateapp"
+                android:textSize="@dimen/text_size_min"
+                android:textColor="@color/textColorSecondary"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/view_line_height"
+                android:background="@color/colorPrimary"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/invite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/invite_frieng"
+                android:textSize="@dimen/text_size_min"
+                android:textColor="@color/textColorPrimary"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/your_friend"
+                android:textSize="@dimen/text_size_min"
+                android:textColor="@color/textColorSecondary"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/view_line_height"
+                android:background="@color/colorPrimary"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/needHelp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/need_help"
+                android:textSize="@dimen/text_size_min"
+                android:textColor="@color/textColorPrimary"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/email_to"
+                android:textSize="@dimen/text_size_min"
+                android:textColor="@color/textColorSecondary"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/view_line_height"
+                android:background="@color/colorPrimary"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/moreApp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/get_more_app"
+                android:textSize="@dimen/text_size_min"
+                android:textColor="@color/textColorPrimary"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/checkout_recommended"
+                android:textSize="@dimen/text_size_min"
+                android:textColor="@color/textColorSecondary"/>
+        </LinearLayout>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_line_height"
         android:background="@color/colorPrimary"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"/>
+        android:layout_marginBottom="@dimen/layout_margin_min"/>
 </LinearLayout>
