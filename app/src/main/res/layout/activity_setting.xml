@@ -80,6 +80,7 @@
                 android:textSize="@dimen/text_size_min"
                 android:textColor="@color/textColorPrimary"/>
             <TextView
+                android:id="@+id/rateApp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/supportus_byrateapp"
@@ -102,6 +103,7 @@
                 android:textSize="@dimen/text_size_min"
                 android:textColor="@color/textColorPrimary"/>
             <TextView
+                android:id="@+id/sendFriend"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/your_friend"
@@ -124,6 +126,7 @@
                 android:textSize="@dimen/text_size_min"
                 android:textColor="@color/textColorPrimary"/>
             <TextView
+                android:id="@+id/sendEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/email_to"
@@ -146,6 +149,7 @@
                 android:textSize="@dimen/text_size_min"
                 android:textColor="@color/textColorPrimary"/>
             <TextView
+                android:id="@+id/checkApps"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/checkout_recommended"

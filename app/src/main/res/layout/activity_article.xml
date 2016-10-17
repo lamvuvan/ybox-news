@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/background"
+    android:orientation="vertical"
     tools:context="io.github.lamvv.yboxnews.view.activity.ArticleActivity">
 
-    <android.support.v7.widget.Toolbar
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -18,21 +17,22 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     <com.github.ksoichiro.android.observablescrollview.ObservableScrollView
         android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/background"
+        android:layout_above="@+id/adView"
         android:layout_below="@+id/toolbar"
-        android:layout_above="@+id/adView">
+        android:background="@color/background"
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/news"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:background="@color/background"
+            android:orientation="vertical"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin">
 
@@ -40,19 +40,20 @@
                 android:id="@+id/wvArticle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/background"/>
+                android:background="@color/background" />
+
             <com.facebook.share.widget.ShareButton
                 android:id="@+id/btnShareFacebook"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/image"
-                android:layout_gravity="center_horizontal"
                 android:layout_centerVertical="true"
-                android:layout_marginTop="@dimen/layout_margin_min"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="@dimen/layout_margin_small"
-                android:padding="@dimen/text_padding"
+                android:layout_marginTop="@dimen/layout_margin_min"
+                android:layout_toRightOf="@+id/image"
                 android:contentDescription="@string/share_content"
-                android:text="@string/share_content"/>
+                android:padding="@dimen/text_padding"
+                android:text="@string/share_content" />
         </LinearLayout>
     </com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
 
@@ -60,8 +61,8 @@
         android:id="@+id/adView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         ads:adSize="SMART_BANNER"
         ads:adUnitId="@string/banner_ad_unit_id">
     </com.google.android.gms.ads.AdView>
