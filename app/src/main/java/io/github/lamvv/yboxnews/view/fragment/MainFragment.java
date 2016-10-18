@@ -25,6 +25,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,7 +69,6 @@ public class MainFragment extends Fragment implements ObservableScrollViewCallba
 	private YboxAPI api;
 
 	private SwipeRefreshLayout mSwipeRefreshLayout;
-
 	MainActivity mainActivity;
 
 	private static final String TEXT_FRAGMENT = "TEXT_FRAGMENT";
@@ -87,6 +87,9 @@ public class MainFragment extends Fragment implements ObservableScrollViewCallba
 
 		articles = new ArrayList<>();
 		adapter = new ArticlesAdapter(getActivity(), articles);
+
+
+
 
 	}
 
@@ -128,6 +131,7 @@ public class MainFragment extends Fragment implements ObservableScrollViewCallba
 		super.onActivityCreated(savedInstanceState);
 		setHasOptionsMenu(true);
 
+
 		/*
 		 * onRefreshLayout
 		 */
@@ -138,10 +142,24 @@ public class MainFragment extends Fragment implements ObservableScrollViewCallba
 
 		mRecyclerView.setScrollViewCallbacks(this);
 		mRecyclerView.setHasFixedSize(true);
-		if(!CheckConfig.isTablet(getActivity()))
+		if(!CheckConfig.isTablet(getActivity())) {
 			mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-		else
-			mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+		} else {
+			DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
+			int widthPixels = displayMetrics.widthPixels;
+			int heightPixels = displayMetrics.heightPixels;
+			float widthDpi = displayMetrics.xdpi;
+			float heightDpi = displayMetrics.ydpi;
+			float widthInches = widthPixels / widthDpi;
+			float heightInches = heightPixels / heightDpi;
+			double diagonalInches = Math.sqrt((widthInches * widthInches) + (heightInches * heightInches));
+			if (diagonalInches >= 10) {
+				mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+			} else {
+				mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+			}
+		}
+
 		mRecyclerView.addItemDecoration(new VerticalLineDecorator(2));
 		mRecyclerView.setAdapter(adapter);
 		api = ServiceGenerator.createService(YboxAPI.class);
@@ -365,4 +383,5 @@ public class MainFragment extends Fragment implements ObservableScrollViewCallba
 		// Load the Native Express ad.
 		adView.loadAd(new AdRequest.Builder().build());
 	}
+
 }

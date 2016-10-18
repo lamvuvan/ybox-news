@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         /*
          * init ads
          */
-        MobileAds.initialize(getApplicationContext(), "ca-app-pub-2929884577019186~3751265151");
+        MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.admob_app_id));
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         this.setSupportActionBar(mToolbar);
