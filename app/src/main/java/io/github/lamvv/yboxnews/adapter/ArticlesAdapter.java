@@ -43,21 +43,17 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         LayoutInflater inflater = LayoutInflater.from(mContext);
         if(!CheckConfig.isTablet(mContext)) {
             /*if(viewType == TYPE_NATIVE_EXPRESS_AD_VIEW){
-                View nativeExpressLayoutView = LayoutInflater.from(
-                        parent.getContext()).inflate(R.layout.native_express_ad_container,
-                        parent, false);
-                return new NativeExpressAdViewHolder(nativeExpressLayoutView);
-            }*/
-            if (viewType == TYPE_ARTICLE) {
-                return new ArticleHolder(inflater.inflate(R.layout.item_article, parent, false));
+                return new NativeExpressAdViewHolder(inflater.inflate(R.layout.native_express_ad_container, parent, false));
+            }else */if (viewType == TYPE_ARTICLE) {
+                return new ArticleViewHolder(inflater.inflate(R.layout.item_article, parent, false));
             } else {
-                return new LoadHolder(inflater.inflate(R.layout.item_load, parent, false));
+                return new LoadViewHolder(inflater.inflate(R.layout.item_load, parent, false));
             }
         } else {
             if (viewType == TYPE_ARTICLE) {
-                return new ArticleHolder(inflater.inflate(R.layout.item_article_tablet, parent, false));
+                return new ArticleViewHolder(inflater.inflate(R.layout.item_article_tablet, parent, false));
             } else {
-                return new LoadHolder(inflater.inflate(R.layout.item_load, parent, false));
+                return new LoadViewHolder(inflater.inflate(R.layout.item_load, parent, false));
             }
         }
     }
@@ -69,11 +65,10 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             loadMoreListener.onLoadMore();
         }
         if(getItemViewType(position) == TYPE_ARTICLE){
-            ((ArticleHolder)holder).bindData((Article)mList.get(position));
+            ((ArticleViewHolder)holder).bindData((Article)mList.get(position));
         }
         /*if(getItemViewType(position) == TYPE_NATIVE_EXPRESS_AD_VIEW){
-            NativeExpressAdViewHolder nativeExpressHolder =
-                    (NativeExpressAdViewHolder) holder;
+            NativeExpressAdViewHolder nativeExpressHolder = (NativeExpressAdViewHolder) holder;
             NativeExpressAdView adView = (NativeExpressAdView) mList.get(position);
             ViewGroup adCardView = (ViewGroup) nativeExpressHolder.itemView;
             if (adCardView.getChildCount() > 0) {
@@ -87,7 +82,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public int getItemViewType(int position) {
         Object item = mList.get(position);
-        /*if(position % ITEMS_PER_AD == 0){
+        /*if(position == 2){
             return TYPE_NATIVE_EXPRESS_AD_VIEW;
         }else */if(((Article)item).getType().equals("fil")){
                 return TYPE_ARTICLE;
@@ -101,14 +96,14 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return mList.size();
     }
 
-    static class ArticleHolder extends RecyclerView.ViewHolder {
+    static class ArticleViewHolder extends RecyclerView.ViewHolder {
 
         ImageView ivImage;
         TextView tvTitle;
         TextView tvContent;
         TextView tvUpdatedAt;
 
-        public ArticleHolder(View itemView) {
+        public ArticleViewHolder(View itemView) {
             super(itemView);
             ivImage = (ImageView)itemView.findViewById(R.id.image);
             tvTitle = (TextView)itemView.findViewById(R.id.title);
@@ -120,7 +115,10 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //            ImageLoader imageLoader = ImageLoader.getInstance();
 //            imageLoader.displayImage(article.getImage(), ivImage);
 
-            Picasso.with(itemView.getContext()).load(article.getImage()).into(ivImage);
+            Picasso.with(itemView.getContext())
+                    .load(article.getImage())
+                    .placeholder(R.drawable.default_thumbnail)
+                    .into(ivImage);
             tvTitle.setText(article.getTitle().toString());
 
             //Use Html.fromHtml(String) on API Level 23 and older devices, and Html.fromHtml(String, int) on API Level 24+ devices
@@ -133,9 +131,9 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    static class LoadHolder extends RecyclerView.ViewHolder{
+    static class LoadViewHolder extends RecyclerView.ViewHolder{
 
-        public LoadHolder(View itemView) {
+        public LoadViewHolder(View itemView) {
             super(itemView);
         }
     }

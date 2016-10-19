@@ -87,10 +87,6 @@ public class MainFragment extends Fragment implements ObservableScrollViewCallba
 
 		articles = new ArrayList<>();
 		adapter = new ArticlesAdapter(getActivity(), articles);
-
-
-
-
 	}
 
 	@Override
@@ -124,13 +120,13 @@ public class MainFragment extends Fragment implements ObservableScrollViewCallba
 //		mRecyclerView = (RecyclerView)view.findViewById(R.id.recyclerView);
 		mRecyclerView = (ObservableRecyclerView)view.findViewById(R.id.recyclerView);
 		mSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipeRefreshLayout);
+
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		setHasOptionsMenu(true);
-
 
 		/*
 		 * onRefreshLayout
@@ -159,6 +155,9 @@ public class MainFragment extends Fragment implements ObservableScrollViewCallba
 				mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 			}
 		}
+
+//		addNativeExpressAds();
+//		setUpAndLoadNativeExpressAds();
 
 		mRecyclerView.addItemDecoration(new VerticalLineDecorator(2));
 		mRecyclerView.setAdapter(adapter);
@@ -201,8 +200,7 @@ public class MainFragment extends Fragment implements ObservableScrollViewCallba
 			}
 		});
 
-//		addNativeExpressAds();
-//		setUpAndLoadNativeExpressAds();
+
 	}
 
 	private void load(int page){
@@ -337,7 +335,7 @@ public class MainFragment extends Fragment implements ObservableScrollViewCallba
 					adView.setAdUnitId(getActivity().getResources().getString(R.string.native_ad_unit_id));
 				}
 				// Load the first Native Express ad in the items list.
-				loadNativeExpressAd(0);
+				loadNativeExpressAd(2);
 			}
 		});
 	}
@@ -383,5 +381,4 @@ public class MainFragment extends Fragment implements ObservableScrollViewCallba
 		// Load the Native Express ad.
 		adView.loadAd(new AdRequest.Builder().build());
 	}
-
 }
