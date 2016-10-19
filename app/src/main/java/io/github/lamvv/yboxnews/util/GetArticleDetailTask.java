@@ -39,7 +39,6 @@ public class GetArticleDetailTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... params) {
-//        String detail = "";
         StringBuilder detail = new StringBuilder();
         try {
             Document doc = Jsoup.connect(params[0]).timeout(20000).get();
@@ -63,10 +62,6 @@ public class GetArticleDetailTask extends AsyncTask<String, Void, String> {
             detail.append("<img src = \"" + imgThumb + "\"" + "/>");
             detail.append("<p style = \" color: #111111 \"><b>" + "<font size=\" 4em \" >" + cont.toString() + "</font></b></p>");
 
-//            detail += "<h2 style = \" color: #111111 \">" + title.text() + "</h2>";
-//            detail += "<font size=\" 2em \" style = \" color: #005500 \"><em>" + pubDate + ", " + viewCount +  "</em></font>";
-//            detail += "<img src = \"" + imgThumb + "\"" + "/>";
-//            detail += "<p style = \" color: #111111 \"><b>" + "<font size=\" 4em \" >" + cont.toString() + "</font></b></p>";
         } catch (IOException e) {
             e.printStackTrace();
         }

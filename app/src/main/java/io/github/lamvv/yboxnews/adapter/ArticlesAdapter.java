@@ -9,7 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
@@ -25,7 +26,6 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private static final int TYPE_ARTICLE = 0;
     private static final int TYPE_LOAD = 1;
-    private static final int TYPE_NATIVE_EXPRESS_AD_VIEW = 2;
 
     private Context mContext;
     private List<Object> mList;
@@ -42,9 +42,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
         if(!CheckConfig.isTablet(mContext)) {
-            /*if(viewType == TYPE_NATIVE_EXPRESS_AD_VIEW){
-                return new NativeExpressAdViewHolder(inflater.inflate(R.layout.native_express_ad_container, parent, false));
-            }else */if (viewType == TYPE_ARTICLE) {
+            if (viewType == TYPE_ARTICLE) {
                 return new ArticleViewHolder(inflater.inflate(R.layout.item_article, parent, false));
             } else {
                 return new LoadViewHolder(inflater.inflate(R.layout.item_load, parent, false));
@@ -67,25 +65,13 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if(getItemViewType(position) == TYPE_ARTICLE){
             ((ArticleViewHolder)holder).bindData((Article)mList.get(position));
         }
-        /*if(getItemViewType(position) == TYPE_NATIVE_EXPRESS_AD_VIEW){
-            NativeExpressAdViewHolder nativeExpressHolder = (NativeExpressAdViewHolder) holder;
-            NativeExpressAdView adView = (NativeExpressAdView) mList.get(position);
-            ViewGroup adCardView = (ViewGroup) nativeExpressHolder.itemView;
-            if (adCardView.getChildCount() > 0) {
-                adCardView.removeAllViews();
-            }
-            // Add the Native Express ad to the native express ad view.
-            adCardView.addView(adView);
-        }*/
     }
 
     @Override
     public int getItemViewType(int position) {
         Object item = mList.get(position);
-        /*if(position == 2){
-            return TYPE_NATIVE_EXPRESS_AD_VIEW;
-        }else */if(((Article)item).getType().equals("fil")){
-                return TYPE_ARTICLE;
+        if(((Article)item).getType().equals("fil")){
+            return TYPE_ARTICLE;
         }else{
             return TYPE_LOAD;
         }
@@ -96,7 +82,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return mList.size();
     }
 
-    static class ArticleViewHolder extends RecyclerView.ViewHolder {
+    private class ArticleViewHolder extends RecyclerView.ViewHolder {
 
         ImageView ivImage;
         TextView tvTitle;
@@ -112,13 +98,14 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         void bindData(Article article){
-//            ImageLoader imageLoader = ImageLoader.getInstance();
-//            imageLoader.displayImage(article.getImage(), ivImage);
+            ImageLoader imageLoader = ImageLoader.getInstance();
+            DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
+                    .cacheOnDisk(true).resetViewBeforeLoading(true)
+                    .showImageForEmptyUri(R.drawable.default_thumbnail)
+                    .showImageOnFail(R.drawable.default_thumbnail)
+                    .showImageOnLoading(R.drawable.default_thumbnail).build();
+            imageLoader.displayImage(article.getImage(), ivImage, options);
 
-            Picasso.with(itemView.getContext())
-                    .load(article.getImage())
-                    .placeholder(R.drawable.default_thumbnail)
-                    .into(ivImage);
             tvTitle.setText(article.getTitle().toString());
 
             //Use Html.fromHtml(String) on API Level 23 and older devices, and Html.fromHtml(String, int) on API Level 24+ devices
@@ -131,16 +118,9 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    static class LoadViewHolder extends RecyclerView.ViewHolder{
+    private class LoadViewHolder extends RecyclerView.ViewHolder{
 
         public LoadViewHolder(View itemView) {
-            super(itemView);
-        }
-    }
-
-    static class NativeExpressAdViewHolder extends RecyclerView.ViewHolder {
-
-        public NativeExpressAdViewHolder(View itemView) {
             super(itemView);
         }
     }

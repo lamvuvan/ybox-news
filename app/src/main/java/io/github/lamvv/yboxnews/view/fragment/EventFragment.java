@@ -50,7 +50,6 @@ public class EventFragment extends Fragment implements ObservableScrollViewCallb
     private ObservableRecyclerView mRecyclerView;
     private ArticlesAdapter adapter;
     private YboxAPI api;
-    Context mContext;
     MainActivity mainActivity;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -78,8 +77,6 @@ public class EventFragment extends Fragment implements ObservableScrollViewCallb
     public void onResume() {
         super.onResume();
         Context mContext = (MainActivity) getActivity();
-//        ActionBar actionBar = ((MainActivity) mContext).getSupportActionBar();
-//        actionBar.setSubtitle("Ybox " + mContext.getResources().getString(R.string.event));
         ((MainActivity) mContext).setTypeHomeMenu(0);
     }
 
@@ -171,7 +168,6 @@ public class EventFragment extends Fragment implements ObservableScrollViewCallb
                 mRecyclerView.post(new Runnable() {
                     @Override
                     public void run() {
-//						int index = articles.size() - 1;
                         int page = articles.size()/10;
                         page += 1;
                         loadMore(page);

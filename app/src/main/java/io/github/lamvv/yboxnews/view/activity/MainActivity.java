@@ -2,6 +2,7 @@ package io.github.lamvv.yboxnews.view.activity;
 
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.LabeledIntent;
 import android.content.pm.PackageManager;
@@ -23,6 +24,10 @@ import android.widget.Toast;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.google.android.gms.ads.MobileAds;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        initImageLoader(this);
 
         /*
          * init ads
@@ -90,11 +97,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_share:
                 Resources resources = getResources();
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
-//                emailIntent.setAction(Intent.ACTION_SEND);
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.app_name));
                 emailIntent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.get_app) + " " +
                         BuildConfig.PLAY_STORE_APP_URL + BuildConfig.APP_PACKAGE_NAME);
-//                emailIntent.setType("message/rfc822");
                 emailIntent.setType("text/plain");
 
                 PackageManager pm = getPackageManager();
@@ -119,9 +124,6 @@ public class MainActivity extends AppCompatActivity {
                             intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.app_name) + " " + resources.getString(R.string.get_app) + " " +
                                     BuildConfig.PLAY_STORE_APP_URL + BuildConfig.APP_PACKAGE_NAME);
                         } else if(packageName.contains("facebook")) {
-                            // Warning: Facebook IGNORES our text. They say "These fields are intended for users to express themselves. Pre-filling these fields erodes the authenticity of the user voice."
-                            // One workaround is to use the Facebook SDK to post, but that doesn't allow the user to choose how they want to share. We can also make a custom landing page, and the link
-                            // will show the <meta content ="..."> text from that page with our link in Facebook.
                             intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.app_name) + " " +
                                     resources.getString(R.string.get_app) + " " +
                                     BuildConfig.PLAY_STORE_APP_URL + BuildConfig.APP_PACKAGE_NAME);
@@ -221,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * init imageLoader lib
      */
-    /*public static void initImageLoader(Context context) {
+    public static void initImageLoader(Context context) {
         ImageLoaderConfiguration.Builder config = new ImageLoaderConfiguration.Builder(context);
         config.threadPriority(Thread.NORM_PRIORITY - 2);
         config.denyCacheImageMultipleSizesInMemory();
@@ -229,6 +231,6 @@ public class MainActivity extends AppCompatActivity {
         config.diskCacheSize(50 * 1024 * 1024);
         config.tasksProcessingOrder(QueueProcessingType.LIFO);
         ImageLoader.getInstance().init(config.build());
-    }*/
+    }
 
 }

@@ -8,20 +8,4 @@ public class Constant {
 
     public static final String BASE_URL = "http://www.ybox.vn/";
 
-    public static final String KEY_DATA = "data";
-    public static final String KEY_IMAGE = "image";
-    public static final String KEY_CATEGORY = "category";
-    public static final String KEY_TITLE = "title";
-    public static final String KEY_CONTENT = "content";
-    public static final String KEY_CONTENT_RAW = "raw";
-    public static final String KEY_STATS = "stats";
-    public static final String KEY_VIEW = "view";
-    public static final String KEY_TIMESTAMPS = "timestamps";
-    public static final String KEY_TIMESTAMPS_UPDATEDAT = "updatedAt";
-    public static final String KEY_LINKS = "links";
-    public static final String KEY_LINKS_DETAIL = "detail";
-
-    public static final int ITEMS_PER_AD = 8;
-    public static final int NATIVE_EXPRESS_AD_HEIGHT = 150;
-
 }

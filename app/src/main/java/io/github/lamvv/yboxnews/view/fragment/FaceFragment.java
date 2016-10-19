@@ -50,7 +50,6 @@ public class FaceFragment extends Fragment implements ObservableScrollViewCallba
     private ObservableRecyclerView mRecyclerView;
     private ArticlesAdapter adapter;
     private YboxAPI api;
-    Context mContext;
     MainActivity mainActivity;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -78,8 +77,6 @@ public class FaceFragment extends Fragment implements ObservableScrollViewCallba
     public void onResume() {
         super.onResume();
         Context mContext = (MainActivity) getActivity();
-//        ActionBar actionBar = ((MainActivity) mContext).getSupportActionBar();
-//        actionBar.setSubtitle("Ybox " + mContext.getResources().getString(R.string.face));
         ((MainActivity) mContext).setTypeHomeMenu(0);
     }
 

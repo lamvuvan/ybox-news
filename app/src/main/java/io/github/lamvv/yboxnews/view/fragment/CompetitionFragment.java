@@ -50,7 +50,6 @@ public class CompetitionFragment extends Fragment implements ObservableScrollVie
     private ObservableRecyclerView mRecyclerView;
     private ArticlesAdapter adapter;
     private YboxAPI api;
-    Context mContext;
     MainActivity mainActivity;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -78,8 +77,6 @@ public class CompetitionFragment extends Fragment implements ObservableScrollVie
     public void onResume() {
         super.onResume();
         Context mContext = (MainActivity) getActivity();
-//        ActionBar actionBar = ((MainActivity) mContext).getSupportActionBar();
-//        actionBar.setSubtitle("Ybox " + mContext.getResources().getString(R.string.competition));
         ((MainActivity) mContext).setTypeHomeMenu(0);
     }
 
@@ -171,7 +168,6 @@ public class CompetitionFragment extends Fragment implements ObservableScrollVie
                 mRecyclerView.post(new Runnable() {
                     @Override
                     public void run() {
-//						int index = articles.size() - 1;
                         int page = articles.size()/10;
                         page += 1;
                         loadMore(page);

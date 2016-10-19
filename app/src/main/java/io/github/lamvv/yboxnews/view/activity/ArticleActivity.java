@@ -13,7 +13,6 @@ import android.webkit.WebView;
 
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareButton;
-import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.google.android.gms.ads.AdRequest;
@@ -77,8 +76,9 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
 
 
         //hiding action bar when scroll
-        ObservableScrollView scrollView = (ObservableScrollView) findViewById(R.id.scroll);
-        scrollView.setScrollViewCallbacks(this);
+//        ObservableScrollView scrollView = (ObservableScrollView) findViewById(R.id.scroll);
+//        ScrollView scrollView = (ScrollView)findViewById(R.id.scroll);
+//        scrollView.setScrollViewCallbacks(this);
 
         ShareLinkContent shareLinkContent = new ShareLinkContent.Builder()
                 .setContentTitle(article.getTitle())

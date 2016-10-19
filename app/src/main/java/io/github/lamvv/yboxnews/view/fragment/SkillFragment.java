@@ -50,7 +50,6 @@ public class SkillFragment extends Fragment implements ObservableScrollViewCallb
     private ObservableRecyclerView mRecyclerView;
     private ArticlesAdapter adapter;
     private YboxAPI api;
-    Context mContext;
     MainActivity mainActivity;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -78,8 +77,6 @@ public class SkillFragment extends Fragment implements ObservableScrollViewCallb
     public void onResume() {
         super.onResume();
         Context mContext = (MainActivity) getActivity();
-//        ActionBar actionBar = ((MainActivity) mContext).getSupportActionBar();
-//        actionBar.setSubtitle("Ybox " + mContext.getResources().getString(R.string.skill));
         ((MainActivity) mContext).setTypeHomeMenu(0);
     }
 
