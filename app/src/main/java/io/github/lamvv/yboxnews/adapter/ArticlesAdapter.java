@@ -26,6 +26,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private static final int TYPE_ARTICLE = 0;
     private static final int TYPE_LOAD = 1;
+//    private static final int TYPE_NATIVE_EXPRESS_AD_VIEW = 1;
 
     private Context mContext;
     private List<Object> mList;

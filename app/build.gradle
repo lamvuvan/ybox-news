@@ -38,7 +38,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.7'
     compile 'br.com.liveo:navigationdrawer-material:2.5.1'
     compile 'com.github.rey5137:material:1.2.4'
-    compile 'com.android.support:support-v4:24.2.1'
-    compile 'com.android.support:support-vector-drawable:24.2.1'
     testCompile 'junit:junit:4.12'
 }
