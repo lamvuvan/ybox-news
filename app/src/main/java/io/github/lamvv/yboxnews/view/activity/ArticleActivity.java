@@ -160,5 +160,4 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
         GetArticleDetailTask getArticleDetailTask = new GetArticleDetailTask(this, this);
         getArticleDetailTask.execute(url);
     }
-
 }

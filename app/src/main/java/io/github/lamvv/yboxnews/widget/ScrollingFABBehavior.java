@@ -1,4 +1,4 @@
-package io.github.lamvv.yboxnews.util;
+package io.github.lamvv.yboxnews.widget;
 
 import android.content.Context;
 import android.support.design.widget.AppBarLayout;
@@ -6,6 +6,8 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
 import android.view.View;
+
+import io.github.lamvv.yboxnews.util.Utils;
 
 /**
  * Created by lamvu on 10/20/2016.

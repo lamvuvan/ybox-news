@@ -17,7 +17,7 @@ import io.github.lamvv.yboxnews.model.TabPagerItem;
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     private List<TabPagerItem> mTabs;
-    
+
     public ViewPagerAdapter(FragmentManager fragmentManager, List<TabPagerItem> tabs) {
         super(fragmentManager);
         this.mTabs = tabs;
