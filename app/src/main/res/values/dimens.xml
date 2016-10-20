@@ -14,4 +14,12 @@
     <dimen name="text_size_normal">16sp</dimen>
     <dimen name="text_size_small">14sp</dimen>
     <dimen name="text_size_min">12sp</dimen>
+
+    <dimen name="spacing_xsmall">2dp</dimen>
+    <dimen name="spacing_medium">8dp</dimen>
+    <dimen name="spacing_large">16dp</dimen>
+    <dimen name="spacing_xlarge">32dp</dimen>
+
+    <dimen name="tabsHeight">48dp</dimen>
+    <dimen name="fab_margin">0dp</dimen>
 </resources>
