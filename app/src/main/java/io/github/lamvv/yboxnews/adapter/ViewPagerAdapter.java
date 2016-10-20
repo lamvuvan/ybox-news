@@ -17,6 +17,7 @@ import io.github.lamvv.yboxnews.model.TabPagerItem;
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     private List<TabPagerItem> mTabs;
+    
     public ViewPagerAdapter(FragmentManager fragmentManager, List<TabPagerItem> tabs) {
         super(fragmentManager);
         this.mTabs = tabs;
@@ -30,11 +31,6 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         ImageView icon = (ImageView) view.findViewById(R.id.icon);
         icon.setImageResource(mTabs.get(position).getIcon());
         return view;
-    }
-    
-    public void setDatasource(List<TabPagerItem> datasource){
-        mTabs = datasource;
-        notifyDataSetChanged();
     }
 
     @Override
