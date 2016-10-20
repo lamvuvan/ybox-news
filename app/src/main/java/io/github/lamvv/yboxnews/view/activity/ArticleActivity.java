@@ -12,7 +12,11 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -24,9 +28,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.lamvv.yboxnews.R;
+import io.github.lamvv.yboxnews.adapter.ArticlesAdapter;
 import io.github.lamvv.yboxnews.iml.GetArticleDetailTaskCompleteListener;
+import io.github.lamvv.yboxnews.iml.YboxAPI;
+import io.github.lamvv.yboxnews.listener.RecyclerTouchListener;
 import io.github.lamvv.yboxnews.model.Article;
+import io.github.lamvv.yboxnews.model.ArticleList;
+import io.github.lamvv.yboxnews.util.CheckConfig;
 import io.github.lamvv.yboxnews.util.GetArticleDetailTask;
+import io.github.lamvv.yboxnews.util.ServiceGenerator;
+import io.github.lamvv.yboxnews.util.VerticalLineDecorator;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by lamvu on 10/12/2016.
@@ -38,12 +52,20 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
     protected int typeHomeMenu;
     private WebView mWebView;
     private FloatingActionButton fab;
+    private List<Object> articles;
+    private RecyclerView mRecyclerView;
+    private ArticlesAdapter adapter;
+    YboxAPI api;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article);
         fab = (FloatingActionButton)findViewById(R.id.fab);
+        mRecyclerView = (RecyclerView)findViewById(R.id.recyclerView);
+        articles = new ArrayList<>();
+        adapter = new ArticlesAdapter(this, articles);
+
 
         //banner ads
         AdView mAdView = (AdView) findViewById(R.id.adView);
@@ -118,6 +140,68 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
             }
         });
 
+
+        mRecyclerView.setHasFixedSize(true);
+        if(!CheckConfig.isTablet(this)) {
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        } else {
+            DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
+            int widthPixels = displayMetrics.widthPixels;
+            int heightPixels = displayMetrics.heightPixels;
+            float widthDpi = displayMetrics.xdpi;
+            float heightDpi = displayMetrics.ydpi;
+            float widthInches = widthPixels / widthDpi;
+            float heightInches = heightPixels / heightDpi;
+            double diagonalInches = Math.sqrt((widthInches * widthInches) + (heightInches * heightInches));
+            if (diagonalInches >= 10) {
+                mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+            } else {
+                mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+            }
+        }
+
+
+        mRecyclerView.addItemDecoration(new VerticalLineDecorator(2));
+        mRecyclerView.setAdapter(adapter);
+        api = ServiceGenerator.createService(YboxAPI.class);
+//        load(1);
+
+        /*
+		 * onItemClickListener
+		 */
+        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this,
+                mRecyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Article article = (Article) articles.get(position);
+                Intent intent = new Intent(ArticleActivity.this, ArticleActivity.class);
+                intent.putExtra("article", article);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
+
+		/*
+		 * onLoadMore
+		 */
+        adapter.setLoadMoreListener(new ArticlesAdapter.OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                mRecyclerView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        int page = articles.size()/10;
+                        page += 1;
+                        loadMore(page);
+                    }
+                });
+            }
+        });
+
     }
 
     public void setTypeHomeMenu(int typeHomeMenu) {
@@ -159,5 +243,62 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
     private void launchGetDetailTask(String url){
         GetArticleDetailTask getArticleDetailTask = new GetArticleDetailTask(this, this);
         getArticleDetailTask.execute(url);
+    }
+
+    private void load(int page){
+        Call<ArticleList> call = api.getArticle(page);
+        call.enqueue(new Callback<ArticleList>() {
+            @Override
+            public void onResponse(Call<ArticleList> call, Response<ArticleList> response) {
+                if(response.isSuccessful()){
+                    articles.addAll(response.body().articles);
+                    adapter.notifyDataChanged();
+                }else{
+//					Log.e("lamvv"," Response Error "+String.valueOf(response.code()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArticleList> call, Throwable t) {
+//				Log.e("lamvv"," Response Error "+t.getMessage());
+            }
+        });
+    }
+
+    private void loadMore(int page){
+
+        //add loading progress view
+        articles.add(new Article("load"));
+        adapter.notifyItemInserted(articles.size()-1);
+
+        Call<ArticleList> call = api.getArticle(page);
+        call.enqueue(new Callback<ArticleList>() {
+            @Override
+            public void onResponse(Call<ArticleList> call, Response<ArticleList> response) {
+                if(response.isSuccessful()){
+                    //remove loading view
+                    articles.remove(articles.size()-1);
+
+                    List<Article> result = response.body().articles;
+                    if(result.size()>0){
+                        //add loaded data
+                        articles.addAll(result);
+                    }else{//result size 0 means there is no more data available at server
+                        adapter.setMoreDataAvailable(false);
+                        //telling adapter to stop calling load more as no more server data available
+//						Toast.makeText(mContext,"No More Data Available",Toast.LENGTH_LONG).show();
+                    }
+                    adapter.notifyDataChanged();
+                    //should call the custom method adapter.notifyDataChanged here to get the correct loading status
+                }else{
+//					Log.e("lamvv"," Load More Response Error "+String.valueOf(response.code()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArticleList> call, Throwable t) {
+//				Log.e("lamvv"," Load More Response Error "+t.getMessage());
+            }
+        });
     }
 }
