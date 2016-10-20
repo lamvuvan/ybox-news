@@ -1,9 +1,16 @@
 package io.github.lamvv.yboxnews.view.activity;
 
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.pm.LabeledIntent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,12 +20,14 @@ import android.webkit.WebView;
 
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareButton;
-import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
-import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.github.lamvv.yboxnews.R;
+import io.github.lamvv.yboxnews.constant.BuildConfig;
 import io.github.lamvv.yboxnews.iml.GetArticleDetailTaskCompleteListener;
 import io.github.lamvv.yboxnews.model.Article;
 import io.github.lamvv.yboxnews.util.GetArticleDetailTask;
@@ -27,20 +36,20 @@ import io.github.lamvv.yboxnews.util.GetArticleDetailTask;
  * Created by lamvu on 10/12/2016.
  */
 
-public class ArticleActivity extends AppCompatActivity implements GetArticleDetailTaskCompleteListener<String>,
-        ObservableScrollViewCallbacks {
+public class ArticleActivity extends AppCompatActivity implements GetArticleDetailTaskCompleteListener<String> {
 
     private Toolbar mToolbar;
     protected int typeHomeMenu;
     private WebView mWebView;
     private ShareButton btnShareFacebook;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article);
         btnShareFacebook = (ShareButton)findViewById(R.id.btnShareFacebook);
-
+        fab = (FloatingActionButton)findViewById(R.id.fab);
 
         //banner ads
         AdView mAdView = (AdView) findViewById(R.id.adView);
@@ -59,7 +68,7 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
 
         //get data send from fragments
         Bundle bundle = getIntent().getExtras();
-        Article article = (Article) bundle.getSerializable("article");
+        final Article article = (Article) bundle.getSerializable("article");
 
         //webView
         mWebView = (WebView) findViewById(R.id.wvArticle);
@@ -74,11 +83,50 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
         if(detail != null)
             launchGetDetailTask(detail);
 
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Resources resources = getResources();
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.app_name));
+                emailIntent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.get_app) + " " +
+                        BuildConfig.PLAY_STORE_APP_URL + BuildConfig.APP_PACKAGE_NAME);
+                emailIntent.setType("text/plain");
 
-        //hiding action bar when scroll
-//        ObservableScrollView scrollView = (ObservableScrollView) findViewById(R.id.scroll);
-//        ScrollView scrollView = (ScrollView)findViewById(R.id.scroll);
-//        scrollView.setScrollViewCallbacks(this);
+                PackageManager pm = getPackageManager();
+                Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                sendIntent.setType("message/rfc822");
+
+                Intent openInChooser = Intent.createChooser(emailIntent, resources.getString(R.string.share_app));
+                List<ResolveInfo> resInfo = pm.queryIntentActivities(sendIntent, 0);
+                List<LabeledIntent> intentList = new ArrayList<>();
+                for (int i = 0; i < resInfo.size(); i++) {
+                    // Extract the label, append it, and repackage it in a LabeledIntent
+                    ResolveInfo ri = resInfo.get(i);
+                    String packageName = ri.activityInfo.packageName;
+                    if(packageName.contains("android.email")) {
+                        emailIntent.setPackage(packageName);
+                    } else if(packageName.contains("twitter") || packageName.contains("facebook") || packageName.contains("mms") || packageName.contains("android.gm")) {
+                        Intent intent = new Intent();
+                        intent.setComponent(new ComponentName(packageName, ri.activityInfo.name));
+                        intent.setAction(Intent.ACTION_SEND);
+                        intent.setType("text/plain");
+                        if(packageName.contains("twitter")) {
+                            intent.putExtra(Intent.EXTRA_TEXT, article.getTitle() + " " + Uri.parse(article.getImage()) + " " +
+                                   Uri.parse(article.getLinks().getDetail()));
+                        } else if(packageName.contains("facebook")) {
+                            intent.putExtra(Intent.EXTRA_TEXT, article.getTitle() + " " + Uri.parse(article.getImage()) + " " +
+                                    Uri.parse(article.getLinks().getDetail()));
+                        }
+                        intentList.add(new LabeledIntent(intent, packageName, ri.loadLabel(pm), ri.icon));
+                    }
+                }
+                // convert intentList to array
+                LabeledIntent[] extraIntents = intentList.toArray( new LabeledIntent[ intentList.size() ]);
+                openInChooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, extraIntents);
+                startActivity(openInChooser);
+            }
+        });
 
         ShareLinkContent shareLinkContent = new ShareLinkContent.Builder()
                 .setContentTitle(article.getTitle())
@@ -130,30 +178,4 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
         getArticleDetailTask.execute(url);
     }
 
-    @Override
-    public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
-
-    }
-
-    @Override
-    public void onDownMotionEvent() {
-
-    }
-
-    @Override
-    public void onUpOrCancelMotionEvent(ScrollState scrollState) {
-        ActionBar ab = getSupportActionBar();
-        if (ab == null) {
-            return;
-        }
-        if (scrollState == ScrollState.UP) {
-            if (ab.isShowing()) {
-                ab.hide();
-            }
-        } else if (scrollState == ScrollState.DOWN) {
-            if (!ab.isShowing()) {
-                ab.show();
-            }
-        }
-    }
 }

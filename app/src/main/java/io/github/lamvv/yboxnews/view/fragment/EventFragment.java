@@ -7,17 +7,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
-import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
-import com.github.ksoichiro.android.observablescrollview.ScrollState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,11 +39,10 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  * Created by lamvu on 10/10/2016.
  */
 
-public class EventFragment extends Fragment implements ObservableScrollViewCallbacks {
+public class EventFragment extends Fragment {
 
     private List<Object> articles;
-//    private RecyclerView mRecyclerView;
-    private ObservableRecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
     private ArticlesAdapter adapter;
     private YboxAPI api;
     MainActivity mainActivity;
@@ -98,8 +93,7 @@ public class EventFragment extends Fragment implements ObservableScrollViewCallb
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        mRecyclerView = (RecyclerView)view.findViewById(R.id.recyclerView);
-        mRecyclerView = (ObservableRecyclerView)view.findViewById(R.id.recyclerView);
+        mRecyclerView = (RecyclerView)view.findViewById(R.id.recyclerView);
         mSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipeRefreshLayout);
     }
 
@@ -115,7 +109,6 @@ public class EventFragment extends Fragment implements ObservableScrollViewCallb
                 Color.parseColor("#0000ff"), Color.parseColor("#f234ab"));
         mSwipeRefreshLayout.setOnRefreshListener(onRefreshListener);
 
-        mRecyclerView.setScrollViewCallbacks(this);
         mRecyclerView.setHasFixedSize(true);
 
         if(!CheckConfig.isTablet(getActivity())) {
@@ -251,30 +244,4 @@ public class EventFragment extends Fragment implements ObservableScrollViewCallb
         }
     };
 
-    @Override
-    public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
-
-    }
-
-    @Override
-    public void onDownMotionEvent() {
-
-    }
-
-    @Override
-    public void onUpOrCancelMotionEvent(ScrollState scrollState) {
-        ActionBar ab = mainActivity.getSupportActionBar();
-        if (ab == null) {
-            return;
-        }
-        if (scrollState == ScrollState.UP) {
-            if (ab.isShowing()) {
-                ab.hide();
-            }
-        } else if (scrollState == ScrollState.DOWN) {
-            if (!ab.isShowing()) {
-                ab.show();
-            }
-        }
-    }
 }
