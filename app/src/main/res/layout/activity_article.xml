@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
@@ -54,41 +54,19 @@
             android:background="@color/background"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <LinearLayout
-                android:id="@+id/news"
+            <WebView
+                android:id="@+id/wvArticle"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/background"
-                android:orientation="vertical"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin">
+                android:layout_height="wrap_content"
+                android:background="@color/background" />
 
-                <WebView
-                    android:id="@+id/wvArticle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/background" />
-
-                <com.facebook.share.widget.ShareButton
-                    android:id="@+id/btnShareFacebook"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="@dimen/layout_margin_small"
-                    android:layout_marginTop="@dimen/layout_margin_min"
-                    android:layout_toRightOf="@+id/image"
-                    android:contentDescription="@string/share_content"
-                    android:padding="@dimen/text_padding"
-                    android:text="@string/share_content" />
-            </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
-            android:layout_gravity="right|bottom|end"
             style="@style/FabStyle"
-            app:layout_behavior="io.github.lamvv.yboxnews.util.ScrollingFABBehavior"/>
+            android:layout_gravity="right|bottom|end"
+            app:layout_behavior="io.github.lamvv.yboxnews.util.ScrollingFABBehavior" />
     </android.support.design.widget.CoordinatorLayout>
 
     <com.google.android.gms.ads.AdView

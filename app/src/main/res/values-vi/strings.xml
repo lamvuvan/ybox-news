@@ -9,7 +9,7 @@
 
     <string name="title_dialog">Vui lòng chờ!</string>
     <string name="message_dialog">Đang tải dữ liệu ...</string>
-    <string name="share_content">Chia sẻ lên Facebook</string>
+    <string name="share_content">Chia sẻ bài viết</string>
     <string name="double_back">Nhấn lần nữa để thoát!</string>
 
     <string name="setting">Cài đặt</string>

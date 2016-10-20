@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -18,8 +17,6 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
-import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.widget.ShareButton;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
@@ -27,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.lamvv.yboxnews.R;
-import io.github.lamvv.yboxnews.constant.BuildConfig;
 import io.github.lamvv.yboxnews.iml.GetArticleDetailTaskCompleteListener;
 import io.github.lamvv.yboxnews.model.Article;
 import io.github.lamvv.yboxnews.util.GetArticleDetailTask;
@@ -41,14 +37,12 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
     private Toolbar mToolbar;
     protected int typeHomeMenu;
     private WebView mWebView;
-    private ShareButton btnShareFacebook;
     private FloatingActionButton fab;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article);
-        btnShareFacebook = (ShareButton)findViewById(R.id.btnShareFacebook);
         fab = (FloatingActionButton)findViewById(R.id.fab);
 
         //banner ads
@@ -88,16 +82,14 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
             public void onClick(View v) {
                 Resources resources = getResources();
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
-                emailIntent.putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.app_name));
-                emailIntent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.get_app) + " " +
-                        BuildConfig.PLAY_STORE_APP_URL + BuildConfig.APP_PACKAGE_NAME);
+                emailIntent.putExtra(Intent.EXTRA_TEXT, article.getLinks().getDetail());
                 emailIntent.setType("text/plain");
 
                 PackageManager pm = getPackageManager();
                 Intent sendIntent = new Intent(Intent.ACTION_SEND);
                 sendIntent.setType("message/rfc822");
 
-                Intent openInChooser = Intent.createChooser(emailIntent, resources.getString(R.string.share_app));
+                Intent openInChooser = Intent.createChooser(emailIntent, resources.getString(R.string.share_content));
                 List<ResolveInfo> resInfo = pm.queryIntentActivities(sendIntent, 0);
                 List<LabeledIntent> intentList = new ArrayList<>();
                 for (int i = 0; i < resInfo.size(); i++) {
@@ -112,11 +104,9 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
                         intent.setAction(Intent.ACTION_SEND);
                         intent.setType("text/plain");
                         if(packageName.contains("twitter")) {
-                            intent.putExtra(Intent.EXTRA_TEXT, article.getTitle() + " " + Uri.parse(article.getImage()) + " " +
-                                   Uri.parse(article.getLinks().getDetail()));
+                            intent.putExtra(Intent.EXTRA_TEXT, article.getLinks().getDetail());
                         } else if(packageName.contains("facebook")) {
-                            intent.putExtra(Intent.EXTRA_TEXT, article.getTitle() + " " + Uri.parse(article.getImage()) + " " +
-                                    Uri.parse(article.getLinks().getDetail()));
+                            intent.putExtra(Intent.EXTRA_TEXT, article.getLinks().getDetail());
                         }
                         intentList.add(new LabeledIntent(intent, packageName, ri.loadLabel(pm), ri.icon));
                     }
@@ -127,13 +117,6 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
                 startActivity(openInChooser);
             }
         });
-
-        ShareLinkContent shareLinkContent = new ShareLinkContent.Builder()
-                .setContentTitle(article.getTitle())
-                .setImageUrl(Uri.parse(article.getImage()))
-                .setContentUrl(Uri.parse(article.getLinks().getDetail()))
-                .build();
-        btnShareFacebook.setShareContent(shareLinkContent);
 
     }
 

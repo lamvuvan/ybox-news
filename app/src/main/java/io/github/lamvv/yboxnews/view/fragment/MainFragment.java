@@ -33,13 +33,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
-
 public class MainFragment extends Fragment {
 
 	private List<Object> articles;
 	private RecyclerView mRecyclerView;
-//	private ObservableRecyclerView mRecyclerView;
 	private ArticlesAdapter adapter;
 	private YboxAPI api;
 
@@ -133,7 +130,8 @@ public class MainFragment extends Fragment {
 		/*
 		 * onItemClickListener
 		 */
-		mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
+		mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(),
+				mRecyclerView, new RecyclerTouchListener.ClickListener() {
 			@Override
 			public void onClick(View view, int position) {
 				Article article = (Article) articles.get(position);

@@ -21,8 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
 import com.google.android.gms.ads.MobileAds;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -64,13 +62,6 @@ public class MainActivity extends AppCompatActivity {
         setTypeHomeMenu(0);
         initMainHome();
 
-
-        /*
-         * init facebook sdk
-         */
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        AppEventsLogger.activateApp(this);
-
     }
 
     @Override
@@ -98,8 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 Resources resources = getResources();
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.app_name));
-                emailIntent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.get_app) + " " +
-                        BuildConfig.PLAY_STORE_APP_URL + BuildConfig.APP_PACKAGE_NAME);
+                emailIntent.putExtra(Intent.EXTRA_TEXT, BuildConfig.PLAY_STORE_APP_URL + BuildConfig.APP_PACKAGE_NAME);
                 emailIntent.setType("text/plain");
 
                 PackageManager pm = getPackageManager();
@@ -121,16 +111,11 @@ public class MainActivity extends AppCompatActivity {
                         intent.setAction(Intent.ACTION_SEND);
                         intent.setType("text/plain");
                         if(packageName.contains("twitter")) {
-                            intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.app_name) + " " + resources.getString(R.string.get_app) + " " +
-                                    BuildConfig.PLAY_STORE_APP_URL + BuildConfig.APP_PACKAGE_NAME);
+                            intent.putExtra(Intent.EXTRA_TEXT, BuildConfig.PLAY_STORE_APP_URL + BuildConfig.APP_PACKAGE_NAME);
                         } else if(packageName.contains("facebook")) {
-                            intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.app_name) + " " +
-                                    resources.getString(R.string.get_app) + " " +
-                                    BuildConfig.PLAY_STORE_APP_URL + BuildConfig.APP_PACKAGE_NAME);
+                            intent.putExtra(Intent.EXTRA_TEXT, BuildConfig.PLAY_STORE_APP_URL + BuildConfig.APP_PACKAGE_NAME);
                         } else if(packageName.contains("mms")) {
-                            intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.app_name) + " " +
-                                    resources.getString(R.string.get_app) + " " +
-                                    BuildConfig.PLAY_STORE_APP_URL + BuildConfig.APP_PACKAGE_NAME);
+                            intent.putExtra(Intent.EXTRA_TEXT, BuildConfig.PLAY_STORE_APP_URL + BuildConfig.APP_PACKAGE_NAME);
                         } else if(packageName.contains("android.gm")) { // If Gmail shows up twice, try removing this else-if clause and the reference to "android.gm" above
                             intent.putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.app_name));
                             intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.get_app) + " " +

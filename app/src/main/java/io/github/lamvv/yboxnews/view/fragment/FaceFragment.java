@@ -33,8 +33,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
-
 /**
  * Created by lamvu on 10/11/2016.
  */
@@ -137,7 +135,8 @@ public class FaceFragment extends Fragment {
         /*
          * onItemClickListener
          */
-        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getApplicationContext(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
+        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(),
+                mRecyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
                 Article article = (Article) articles.get(position);

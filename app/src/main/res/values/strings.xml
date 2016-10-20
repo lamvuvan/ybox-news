@@ -8,7 +8,7 @@
 
     <string name="title_dialog">Please wait!</string>
     <string name="message_dialog">Loading data ...</string>
-    <string name="share_content">Share on Facebook</string>
+    <string name="share_content">Share article</string>
     <string name="double_back">Press again to exit!</string>
 
     <string name="setting">Setting</string>
