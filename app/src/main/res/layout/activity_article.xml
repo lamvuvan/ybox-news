@@ -55,7 +55,6 @@
 
         </android.support.v4.widget.NestedScrollView>
 
-
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
             style="@style/FabStyle"
