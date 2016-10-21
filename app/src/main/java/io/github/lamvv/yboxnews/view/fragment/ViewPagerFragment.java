@@ -100,4 +100,5 @@ public class ViewPagerFragment extends Fragment {
 
 		mSlidingTabLayout.getTabAt(0).getCustomView().setSelected(true);
 	}
+
 }
