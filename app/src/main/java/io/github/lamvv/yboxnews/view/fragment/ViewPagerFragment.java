@@ -84,7 +84,6 @@ public class ViewPagerFragment extends Fragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		mViewPager = (ViewPager) view.findViewById(viewPager);
-
 		mViewPager.setOffscreenPageLimit(mTabs.size());
 		pageAdapter = new ViewPagerAdapter(getChildFragmentManager(), mTabs);
 		mViewPager.setAdapter(pageAdapter);
