@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     Toolbar mToolbar;
     protected int typeHomeMenu;
     private boolean doubleBackToExitPressedOnce = false;
+    ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +55,12 @@ public class MainActivity extends AppCompatActivity {
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         this.setSupportActionBar(mToolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeButtonEnabled(true);
-        }
-        setTypeHomeMenu(0);
+//        actionBar = getSupportActionBar();
+//        if (actionBar != null) {
+//            actionBar.setDisplayHomeAsUpEnabled(true);
+//            actionBar.setHomeButtonEnabled(true);
+//        }
+//        setTypeHomeMenu(0);
         initMainHome();
 
     }
@@ -208,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * init imageLoader lib
      */
-    public static void initImageLoader(Context context) {
+    private void initImageLoader(Context context) {
         ImageLoaderConfiguration.Builder config = new ImageLoaderConfiguration.Builder(context);
         config.threadPriority(Thread.NORM_PRIORITY - 2);
         config.denyCacheImageMultipleSizesInMemory();

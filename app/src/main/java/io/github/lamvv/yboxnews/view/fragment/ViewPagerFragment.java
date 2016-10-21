@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,8 @@ import io.github.lamvv.yboxnews.adapter.ViewPagerAdapter;
 import io.github.lamvv.yboxnews.model.TabPagerItem;
 import io.github.lamvv.yboxnews.view.activity.MainActivity;
 
+import static io.github.lamvv.yboxnews.R.id.viewPager;
+
 @SuppressLint("NewApi")
 public class ViewPagerFragment extends Fragment {
 
@@ -26,7 +29,9 @@ public class ViewPagerFragment extends Fragment {
 	private Context mContext;
 	private TabLayout mSlidingTabLayout;
 	private ViewPagerAdapter pageAdapter;
-	protected LayoutInflater inflate;
+	private ViewPager mViewPager;
+	private LayoutInflater inflate;
+	private ActionBar actionBar;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -34,6 +39,7 @@ public class ViewPagerFragment extends Fragment {
 		mContext = (MainActivity) getActivity();
 		createTabPagerItem();
 		inflate = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		actionBar = ((MainActivity) getActivity()).getSupportActionBar();
 	}
 
 	@Override
@@ -77,7 +83,7 @@ public class ViewPagerFragment extends Fragment {
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
-		ViewPager mViewPager = (ViewPager) view.findViewById(R.id.viewPager);
+		mViewPager = (ViewPager) view.findViewById(viewPager);
 
 		mViewPager.setOffscreenPageLimit(mTabs.size());
 		pageAdapter = new ViewPagerAdapter(getChildFragmentManager(), mTabs);
@@ -89,6 +95,55 @@ public class ViewPagerFragment extends Fragment {
 		}
 		mSlidingTabLayout.setupWithViewPager(mViewPager);
 		setupTabIcons();
+		mSlidingTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+			@Override
+			public void onTabSelected(TabLayout.Tab tab) {
+				switch(tab.getPosition()) {
+					case 0:
+						mViewPager.setCurrentItem(0);
+						actionBar.setTitle(getResources().getString(R.string.home));
+						break;
+					case 1:
+						mViewPager.setCurrentItem(1);
+						actionBar.setTitle(getResources().getString(R.string.recruitment));
+						break;
+					case 2:
+						mViewPager.setCurrentItem(2);
+						actionBar.setTitle(getResources().getString(R.string.scholarship));
+						break;
+					case 3:
+						mViewPager.setCurrentItem(3);
+						actionBar.setTitle(getResources().getString(R.string.event));
+						break;
+					case 4:
+						mViewPager.setCurrentItem(4);
+						actionBar.setTitle(getResources().getString(R.string.skill));
+						break;
+					case 5:
+						mViewPager.setCurrentItem(5);
+						actionBar.setTitle(getResources().getString(R.string.face));
+						break;
+					case 6:
+						mViewPager.setCurrentItem(6);
+						actionBar.setTitle(getResources().getString(R.string.competition));
+						break;
+					default:
+						mViewPager.setCurrentItem(tab.getPosition());
+						actionBar.setTitle(getResources().getString(R.string.home));
+						break;
+				}
+			}
+
+			@Override
+			public void onTabUnselected(TabLayout.Tab tab) {
+
+			}
+
+			@Override
+			public void onTabReselected(TabLayout.Tab tab) {
+
+			}
+		});
 	}
 
 	private void setupTabIcons() {
