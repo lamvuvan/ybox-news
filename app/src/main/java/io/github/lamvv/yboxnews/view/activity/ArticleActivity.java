@@ -20,6 +20,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.ImageView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -55,6 +56,7 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
     private List<Object> articles;
     private RecyclerView mRecyclerView;
     private ArticlesAdapter adapter;
+    private ImageView image;
     YboxAPI api;
 
     @Override
@@ -63,9 +65,22 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
         setContentView(R.layout.activity_article);
         fab = (FloatingActionButton)findViewById(R.id.fab);
         mRecyclerView = (RecyclerView)findViewById(R.id.recyclerView);
+//        image = (ImageView) findViewById(R.id.image);
+
+        //get data send from fragments
+        Bundle bundle = getIntent().getExtras();
+        final Article article = (Article) bundle.getSerializable("article");
+
         articles = new ArrayList<>();
         adapter = new ArticlesAdapter(this, articles);
 
+//        ImageLoader imageLoader = ImageLoader.getInstance();
+//        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
+//                .cacheOnDisk(true).resetViewBeforeLoading(true)
+//                .showImageForEmptyUri(R.drawable.default_thumbnail)
+//                .showImageOnFail(R.drawable.default_thumbnail)
+//                .showImageOnLoading(R.drawable.default_thumbnail).build();
+//        imageLoader.displayImage(article.getImage(), image, options);
 
         //banner ads
         AdView mAdView = (AdView) findViewById(R.id.adView);
@@ -82,9 +97,7 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
         }
         setTypeHomeMenu(1);
 
-        //get data send from fragments
-        Bundle bundle = getIntent().getExtras();
-        final Article article = (Article) bundle.getSerializable("article");
+
 
         //webView
         mWebView = (WebView) findViewById(R.id.wvArticle);

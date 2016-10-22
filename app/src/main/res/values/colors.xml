@@ -7,6 +7,8 @@
     <color name="textColorSecondary">#787878</color>
     <color name="textColorTitle">#D50000</color>
     <color name="background">#FFFFFF</color>
+    <color name="colorView">#ffc7c6cb</color>
+    <color name="colorViewLine">#ffa9a8ae</color>
 
     <color name="white">#FFFFFFFF</color>
     <color name="white_87">#DEFFFFFF</color>

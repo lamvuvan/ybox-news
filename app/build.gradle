@@ -8,8 +8,8 @@ android {
         applicationId "io.github.lamvv.yboxnews"
         minSdkVersion 15
         targetSdkVersion 24
-        versionCode 8
-        versionName "1.2.4"
+        versionCode 10
+        versionName "1.2.6"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -38,5 +38,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.7'
     compile 'br.com.liveo:navigationdrawer-material:2.5.1'
     compile 'com.github.rey5137:material:1.2.4'
+    compile 'me.everything:overscroll-decor-android:1.0.3'
     testCompile 'junit:junit:4.12'
 }
