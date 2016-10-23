@@ -4,6 +4,9 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".util.App"
@@ -30,6 +33,21 @@
         <activity
             android:name=".view.activity.SettingActivity"
             android:theme="@style/nLiveoDrawer" />
+
+        <!-- startapp ads -->
+        <activity android:name="com.startapp.android.publish.list3d.List3DActivity"
+            android:theme="@android:style/Theme"
+            android:taskAffinity="io.github.lamvv.yboxnews.AppWall" />
+        <activity android:name="com.startapp.android.publish.OverlayActivity"
+            android:theme="@android:style/Theme.Translucent"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <activity android:name="com.startapp.android.publish.FullScreenActivity"
+            android:theme="@android:style/Theme"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <meta-data android:name="com.startapp.android.DEV_ID" android:value="@string/startapp_dev_id"/>
+        <meta-data android:name="com.startapp.android.APP_ID" android:value="@string/startapp_app_id"/>
+        <!-- end startapp ads -->
+
     </application>
 
 </manifest>

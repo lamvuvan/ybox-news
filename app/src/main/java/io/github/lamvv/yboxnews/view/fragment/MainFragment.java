@@ -104,15 +104,14 @@ public class MainFragment extends Fragment {
 		super.onActivityCreated(savedInstanceState);
 		setHasOptionsMenu(true);
 
-		/*
-		 * onRefreshLayout
-		 */
+		//onRefreshLayout
 		mSwipeRefreshLayout.setColorSchemeColors(Color.parseColor("#ff0000"), Color.parseColor("#00ff00"),
 				Color.parseColor("#0000ff"), Color.parseColor("#f234ab"));
 		mSwipeRefreshLayout.setOnRefreshListener(onRefreshListener);
 
-
 		mRecyclerView.setHasFixedSize(true);
+		mRecyclerView.addItemDecoration(new VerticalLineDecorator(2));
+
 		if(!CheckConfig.isTablet(getActivity())) {
 			mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 		} else {
@@ -124,24 +123,22 @@ public class MainFragment extends Fragment {
 			float widthInches = widthPixels / widthDpi;
 			float heightInches = heightPixels / heightDpi;
 			double diagonalInches = Math.sqrt((widthInches * widthInches) + (heightInches * heightInches));
-			if (diagonalInches >= 10) {
+			if (diagonalInches >= 9) {
 				mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
 			} else {
 				mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 			}
 		}
 
+		mRecyclerView.setAdapter(adapter);
+
 //		addNativeExpressAds();
 //		setUpAndLoadNativeExpressAds();
 
-		mRecyclerView.addItemDecoration(new VerticalLineDecorator(2));
-		mRecyclerView.setAdapter(adapter);
 		api = ServiceGenerator.createService(YboxAPI.class);
 		load(1);
 
-		/*
-		 * onItemClickListener
-		 */
+		//onItemClickListener
 		mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(),
 				mRecyclerView, new RecyclerTouchListener.ClickListener() {
 			@Override
@@ -158,9 +155,7 @@ public class MainFragment extends Fragment {
 			}
 		}));
 
-		/*
-		 * onLoadMore
-		 */
+		//onLoadMore
 		adapter.setLoadMoreListener(new ArticlesAdapter.OnLoadMoreListener() {
 			@Override
 			public void onLoadMore() {
@@ -174,7 +169,6 @@ public class MainFragment extends Fragment {
 				});
 			}
 		});
-
 
 	}
 

@@ -10,7 +10,6 @@ import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
@@ -19,13 +18,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.ads.MobileAds;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.startapp.android.publish.StartAppAd;
+import com.startapp.android.publish.StartAppAd.AdMode;
+import com.startapp.android.publish.StartAppSDK;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     Toolbar mToolbar;
     protected int typeHomeMenu;
     private boolean doubleBackToExitPressedOnce = false;
-    ActionBar actionBar;
+    private StartAppAd startAppAd = new StartAppAd(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +49,14 @@ public class MainActivity extends AppCompatActivity {
 
         initImageLoader(this);
 
-        /*
-         * init ads
-         */
+        //init admob ads
         MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.admob_app_id));
+
+        //init startapp ads
+        StartAppSDK.init(this, getResources().getString(R.string.startapp_dev_id),
+                getResources().getString(R.string.startapp_app_id), false);
+        startAppAd.loadAd(AdMode.AUTOMATIC);
+        startAppAd.disableSplash();
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         this.setSupportActionBar(mToolbar);
@@ -189,7 +194,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
+        startAppAd.onBackPressed(this);
+        super.onBackPressed();
+
+        /*if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
             return;
         }
@@ -203,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 doubleBackToExitPressedOnce = false;
             }
-        }, 2000);
+        }, 2000);*/
     }
 
     /**
