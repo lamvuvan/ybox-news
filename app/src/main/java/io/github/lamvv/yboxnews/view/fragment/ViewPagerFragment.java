@@ -54,22 +54,22 @@ public class ViewPagerFragment extends Fragment {
 				MainFragment.newInstance(getString(R.string.home)),
 				R.drawable.ic_home_white_24dp));
 		mTabs.add(new TabPagerItem(getString(R.string.recruitment),
-				RecruitmentFragment.newInstance(getString(R.string.recruitment)),
+				MainFragment.newInstance(getString(R.string.recruitment)),
 				R.drawable.ic_supervisor_account_white_24dp));
 		mTabs.add(new TabPagerItem(getString(R.string.scholarship),
-				ScholarshipFragment.newInstance(getString(R.string.scholarship)),
+				MainFragment.newInstance(getString(R.string.scholarship)),
 				R.drawable.ic_school_white_24dp));
 		mTabs.add(new TabPagerItem(getString(R.string.event),
-				EventFragment.newInstance(getString(R.string.event)),
+				MainFragment.newInstance(getString(R.string.event)),
 				R.drawable.ic_event_white_24dp));
 		mTabs.add(new TabPagerItem(getString(R.string.skill),
-				SkillFragment.newInstance(getString(R.string.skill)),
+				MainFragment.newInstance(getString(R.string.skill)),
 				R.drawable.ic_build_white_24dp));
 		mTabs.add(new TabPagerItem(getString(R.string.face),
-				FaceFragment.newInstance(getString(R.string.face)),
+				MainFragment.newInstance(getString(R.string.face)),
 				R.drawable.ic_face_white_24dp));
 		mTabs.add(new TabPagerItem(getString(R.string.competition),
-				CompetitionFragment.newInstance(getString(R.string.competition)),
+				MainFragment.newInstance(getString(R.string.competition)),
 				R.drawable.ic_equalizer_white_24dp));
 	}
 

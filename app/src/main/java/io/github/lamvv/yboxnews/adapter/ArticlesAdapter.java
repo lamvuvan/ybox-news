@@ -6,9 +6,13 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.ads.MediaView;
+import com.facebook.ads.NativeAd;
+import com.facebook.ads.NativeAdsManager;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -24,12 +28,15 @@ import io.github.lamvv.yboxnews.util.CheckConfig;
 
 public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final int TYPE_ARTICLE = 0;
-    private static final int TYPE_LOAD = 1;
-//    private static final int TYPE_NATIVE_EXPRESS_AD_VIEW = 1;
+    private static final int TYPE_LOAD = 0;
+    private static final int TYPE_ARTICLE = 1;
+    private static final int TYPE_AD = 2;
+    private static final int AD_FORM = 2;
 
-    private Context mContext;
     private List<Object> mList;
+    private Context mContext;
+    private NativeAdsManager mAds;
+    private NativeAd mAd = null;
 
     public OnLoadMoreListener loadMoreListener;
     boolean isLoading = false, isMoreDataAvailable = true;
@@ -39,20 +46,44 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.mList = list;
     }
 
+    public ArticlesAdapter(Context context, List<Object> list, NativeAdsManager ads){
+        this.mContext = context;
+        this.mList = list;
+        this.mAds = ads;
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
         if(!CheckConfig.isTablet(mContext)) {
-            if (viewType == TYPE_ARTICLE) {
+//            if (viewType == TYPE_ARTICLE) {
+//                return new ArticleViewHolder(inflater.inflate(R.layout.item_article, parent, false));
+//            } else {
+//                return new LoadViewHolder(inflater.inflate(R.layout.item_load, parent, false));
+//            }
+            if(viewType == TYPE_AD){
+                if(AD_FORM == 2){
+                    return new AdHolder(inflater.inflate(R.layout.ad_unit2, parent, false));
+                }else{
+                    return new AdHolder(inflater.inflate(R.layout.ad_unit, parent, false));
+                }
+            }else {
                 return new ArticleViewHolder(inflater.inflate(R.layout.item_article, parent, false));
-            } else {
-                return new LoadViewHolder(inflater.inflate(R.layout.item_load, parent, false));
             }
         } else {
-            if (viewType == TYPE_ARTICLE) {
+//            if (viewType == TYPE_ARTICLE) {
+//                return new ArticleViewHolder(inflater.inflate(R.layout.item_article_tablet, parent, false));
+//            } else {
+//                return new LoadViewHolder(inflater.inflate(R.layout.item_load, parent, false));
+//            }
+            if(viewType == TYPE_AD){
+                if(AD_FORM == 2){
+                    return new AdHolder(inflater.inflate(R.layout.ad_unit2, parent, false));
+                }else{
+                    return new AdHolder(inflater.inflate(R.layout.ad_unit, parent, false));
+                }
+            }else {
                 return new ArticleViewHolder(inflater.inflate(R.layout.item_article_tablet, parent, false));
-            } else {
-                return new LoadViewHolder(inflater.inflate(R.layout.item_load, parent, false));
             }
         }
     }
@@ -63,24 +94,54 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             isLoading = true;
             loadMoreListener.onLoadMore();
         }
-        if(getItemViewType(position) == TYPE_ARTICLE){
-            ((ArticleViewHolder)holder).bindData((Article)mList.get(position));
+//        if(getItemViewType(position) == TYPE_ARTICLE){
+//            ((ArticleViewHolder)holder).bindData((Article)mList.get(position));
+//        }
+        if (holder.getItemViewType() == TYPE_AD) {
+            if (mAd != null) {
+                ((AdHolder)holder).bindView(mAd);
+            }
+            else if (mAds != null && mAds.isLoaded()) {
+                mAd = mAds.nextNativeAd();
+                ((AdHolder)holder).bindView(mAd);
+            }
+            else {
+                ((AdHolder)holder).bindView(null);
+            }
+        } else {
+            int index = position;
+            if (index != 0) {
+                index--;
+            }
+            Article article = (Article) mList.get(index);
+            ((ArticleViewHolder)holder).bindData(article);
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        Object item = mList.get(position);
-        if(((Article)item).getType().equals("fil")){
+//        Object item = mList.get(position);
+//        if(((Article)item).getType().equals("fil")){
+//            return TYPE_ARTICLE;
+//        }else{
+//            return TYPE_LOAD;
+//        }
+        if (position == 1) {
+            return TYPE_AD;
+        } else {
             return TYPE_ARTICLE;
-        }else{
-            return TYPE_LOAD;
         }
     }
 
     @Override
     public int getItemCount() {
-        return mList.size();
+//        return mList.size();
+        if (mList.size() == 0) {
+            return mList.size();
+        }
+        else {
+            return mList.size()+1;
+        }
     }
 
     private class ArticleViewHolder extends RecyclerView.ViewHolder {
@@ -116,6 +177,58 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 tvContent.setText(Html.fromHtml(article.getContent().getRaw().toString()));
             }
             tvUpdatedAt.setText(article.getTimestamps().getUpdatedAt().toString());
+        }
+    }
+
+    private class AdHolder extends RecyclerView.ViewHolder {
+        private MediaView mAdMedia;
+        private ImageView mAdIcon;
+        private TextView mAdTitle;
+        private TextView mAdBody;
+        private TextView mAdSocialContext;
+        private Button mAdCallToAction;
+
+        public AdHolder(View view) {
+            super(view);
+
+            if (AD_FORM == 2) {
+                mAdMedia = (MediaView) view.findViewById(R.id.native_ad_media);
+                mAdSocialContext = (TextView) view.findViewById(R.id.native_ad_social_context);
+                mAdCallToAction = (Button)view.findViewById(R.id.native_ad_call_to_action);
+            }
+            else {
+                mAdMedia = (MediaView) view.findViewById(R.id.native_ad_media);
+                mAdTitle = (TextView) view.findViewById(R.id.native_ad_title);
+                mAdBody = (TextView) view.findViewById(R.id.native_ad_body);
+                mAdSocialContext = (TextView) view.findViewById(R.id.native_ad_social_context);
+                mAdCallToAction = (Button)view.findViewById(R.id.native_ad_call_to_action);
+                mAdIcon = (ImageView)view.findViewById(R.id.native_ad_icon);
+            }
+        }
+
+        public void bindView(NativeAd ad) {
+            if (ad == null) {
+                if (AD_FORM == 2) {
+                    mAdSocialContext.setText("No Ad");
+                } else {
+                    mAdTitle.setText("No Ad");
+                    mAdBody.setText("Ad is not loaded.");
+                }
+            } else {
+                if (AD_FORM == 2) {
+                    mAdSocialContext.setText(ad.getAdSocialContext());
+                    mAdCallToAction.setText(ad.getAdCallToAction());
+                    mAdMedia.setNativeAd(ad);
+                } else {
+                    mAdTitle.setText(ad.getAdTitle());
+                    mAdBody.setText(ad.getAdBody());
+                    mAdSocialContext.setText(ad.getAdSocialContext());
+                    mAdCallToAction.setText(ad.getAdCallToAction());
+                    mAdMedia.setNativeAd(ad);
+                    NativeAd.Image adIcon = ad.getAdIcon();
+                    NativeAd.downloadAndDisplayImage(adIcon, mAdIcon);
+                }
+            }
         }
     }
 
