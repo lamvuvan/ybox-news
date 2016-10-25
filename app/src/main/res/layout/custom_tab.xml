@@ -22,7 +22,7 @@
         android:maxLines="1"
         android:textAllCaps="false"
         android:textColor="@color/white_87"
-        android:textSize="@dimen/text_size_smallest"
+        android:textSize="@dimen/tiny_text_size"
         android:visibility="visible"
         tools:text="Recents" />
 </LinearLayout>

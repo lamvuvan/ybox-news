@@ -11,11 +11,13 @@
     <dimen name="view_line_height">1dp</dimen>
     <dimen name="image_padding">5dp</dimen>
 
-    <dimen name="text_size_large">20sp</dimen>
-    <dimen name="text_size_normal">16sp</dimen>
-    <dimen name="text_size_small">14sp</dimen>
-    <dimen name="text_size_min">12sp</dimen>
-    <dimen name="text_size_smallest">8sp</dimen>
+    <dimen name="tiny_text_size">8sp</dimen>
+    <dimen name="mini_text_size">10sp</dimen>
+    <dimen name="small_text_size">12sp</dimen>
+    <dimen name="semi_normal_text_size">14sp</dimen>
+    <dimen name="normal_text_size">16sp</dimen>
+    <dimen name="big_text_size">18sp</dimen>
+    <dimen name="large_text_size">20sp</dimen>
 
     <dimen name="spacing_xsmall">2dp</dimen>
     <dimen name="spacing_medium">8dp</dimen>
