@@ -8,21 +8,6 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <!--&lt;!&ndash;Customize here the subject of your application&ndash;&gt;
-    <style name="myTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        &lt;!&ndash; Customize your theme here. &ndash;&gt;
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
-    &lt;!&ndash;Here will be the theme of the class that will extends NavigationLiveo&ndash;&gt;
-    <style name="nLiveoDrawer" parent="Theme.nLiveo">
-        &lt;!&ndash; Customize your theme here. &ndash;&gt;
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>-->
-
     <!-- Base application theme. -->
     <style name="myTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <!-- Customize your theme here. -->

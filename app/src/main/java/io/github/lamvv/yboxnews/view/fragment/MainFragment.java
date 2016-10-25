@@ -63,7 +63,6 @@ public class MainFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 
 		articles = new ArrayList<>();
-		adapter = new ArticlesAdapter(getActivity(), articles, mAds);
 		fragmentName = getArguments().getString(TEXT_FRAGMENT);
 	}
 
@@ -127,8 +126,10 @@ public class MainFragment extends Fragment {
 			}
 		}
 
-        mAds = new NativeAdsManager(getActivity(), getResources().getString(R.string.fan_native_placement_id), 1);
-        mAds.loadAds();
+//        mAds = new NativeAdsManager(getActivity(), getResources().getString(R.string.fan_native_placement_id), 1);
+//        mAds.loadAds();
+
+		adapter = new ArticlesAdapter(getActivity(), articles);
 		mRecyclerView.setAdapter(adapter);
 
 		api = ServiceGenerator.createService(YboxAPI.class);

@@ -16,6 +16,7 @@
     <string name="message_dialog">Loading data ...</string>
     <string name="share_content">Share article</string>
     <string name="double_back">Press again to exit!</string>
+    <string name="more_article">Related articles</string>
 
     <string name="setting">Setting</string>
     <string name="share_app">Share app</string>

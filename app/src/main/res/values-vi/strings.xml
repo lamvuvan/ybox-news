@@ -7,6 +7,8 @@
     <string name="startapp_dev_id">109770308</string>
     <string name="startapp_app_id">209953856</string>
 
+    <string name="fan_native_placement_id">310999175932215_319337015098431</string>
+
     <string name="facebook_app_id">310999175932215</string>
 
     <string name="app_name">Ybox</string>
@@ -15,6 +17,7 @@
     <string name="message_dialog">Đang tải dữ liệu ...</string>
     <string name="share_content">Chia sẻ bài viết</string>
     <string name="double_back">Nhấn lần nữa để thoát!</string>
+    <string name="more_article">Các bài viết liên quan</string>
 
     <string name="setting">Cài đặt</string>
     <string name="share_app">Chia sẻ ứng dụng</string>

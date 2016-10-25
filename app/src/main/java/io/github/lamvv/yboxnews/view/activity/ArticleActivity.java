@@ -20,7 +20,6 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.ImageView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -53,34 +52,27 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
     protected int typeHomeMenu;
     private WebView mWebView;
     private FloatingActionButton fab;
+
     private List<Object> articles;
     private RecyclerView mRecyclerView;
     private ArticlesAdapter adapter;
-    private ImageView image;
-    YboxAPI api;
+    private YboxAPI api;
+    private Article article;
+    private String category;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article);
+
+        articles = new ArrayList<>();
         fab = (FloatingActionButton)findViewById(R.id.fab);
         mRecyclerView = (RecyclerView)findViewById(R.id.recyclerView);
-//        image = (ImageView) findViewById(R.id.image);
 
         //get data send from fragments
         Bundle bundle = getIntent().getExtras();
-        final Article article = (Article) bundle.getSerializable("article");
-
-        articles = new ArrayList<>();
-        adapter = new ArticlesAdapter(this, articles);
-
-//        ImageLoader imageLoader = ImageLoader.getInstance();
-//        DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
-//                .cacheOnDisk(true).resetViewBeforeLoading(true)
-//                .showImageForEmptyUri(R.drawable.default_thumbnail)
-//                .showImageOnFail(R.drawable.default_thumbnail)
-//                .showImageOnLoading(R.drawable.default_thumbnail).build();
-//        imageLoader.displayImage(article.getImage(), image, options);
+        article = (Article) bundle.getSerializable("article");
+        category = article.getCategory();
 
         //banner ads
         AdView mAdView = (AdView) findViewById(R.id.adView);
@@ -97,15 +89,12 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
         }
         setTypeHomeMenu(1);
 
-
-
         //webView
         mWebView = (WebView) findViewById(R.id.wvArticle);
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setSupportZoom(true);
         mWebView.setBackgroundColor(Color.TRANSPARENT);
-
 
         //launch task get detail article
         String detail = article.getLinks().getDetail();
@@ -153,12 +142,13 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
             }
         });
 
-
         mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.addItemDecoration(new VerticalLineDecorator(2));
+
         if(!CheckConfig.isTablet(this)) {
             mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         } else {
-            DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
+            DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
             int widthPixels = displayMetrics.widthPixels;
             int heightPixels = displayMetrics.heightPixels;
             float widthDpi = displayMetrics.xdpi;
@@ -166,23 +156,24 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
             float widthInches = widthPixels / widthDpi;
             float heightInches = heightPixels / heightDpi;
             double diagonalInches = Math.sqrt((widthInches * widthInches) + (heightInches * heightInches));
-            if (diagonalInches >= 10) {
+            if (diagonalInches >= 9) {
                 mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
             } else {
                 mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
             }
         }
 
+//        mAds = new NativeAdsManager(getActivity(), getResources().getString(R.string.fan_native_placement_id), 1);
+//        mAds.loadAds();
 
-        mRecyclerView.addItemDecoration(new VerticalLineDecorator(2));
+        adapter = new ArticlesAdapter(this, articles);
         mRecyclerView.setAdapter(adapter);
-        api = ServiceGenerator.createService(YboxAPI.class);
-//        load(1);
 
-        /*
-		 * onItemClickListener
-		 */
-        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this,
+        api = ServiceGenerator.createService(YboxAPI.class);
+        load(1);
+
+        //onItemClickListener
+        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(ArticleActivity.this,
                 mRecyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
@@ -197,23 +188,6 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
 
             }
         }));
-
-		/*
-		 * onLoadMore
-		 */
-        adapter.setLoadMoreListener(new ArticlesAdapter.OnLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-                mRecyclerView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        int page = articles.size()/10;
-                        page += 1;
-                        loadMore(page);
-                    }
-                });
-            }
-        });
 
     }
 
@@ -259,7 +233,23 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
     }
 
     private void load(int page){
-        Call<ArticleList> call = api.getArticle(page);
+        Call<ArticleList> call;
+
+        if(category.equals("#Tuyển Dụng"))
+            call = api.getRecruitmentArticle(page);
+        else if(category.equals("#Kỹ Năng"))
+            call = api.getSkillArticle(page);
+        else if(category.equals("#Sự Kiện"))
+            call = api.getEventArticle(page);
+        else if(category.equals("#Học Bổng"))
+            call = api.getScholarshipArticle(page);
+        else if(category.equals("#Cuộc Thi"))
+            call = api.getCompetitionArticle(page);
+        else if(category.equals("#Gương Mặt"))
+            call = api.getFaceArticle(page);
+        else
+            call = api.getArticle(page);
+
         call.enqueue(new Callback<ArticleList>() {
             @Override
             public void onResponse(Call<ArticleList> call, Response<ArticleList> response) {
@@ -278,40 +268,4 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
         });
     }
 
-    private void loadMore(int page){
-
-        //add loading progress view
-        articles.add(new Article("load"));
-        adapter.notifyItemInserted(articles.size()-1);
-
-        Call<ArticleList> call = api.getArticle(page);
-        call.enqueue(new Callback<ArticleList>() {
-            @Override
-            public void onResponse(Call<ArticleList> call, Response<ArticleList> response) {
-                if(response.isSuccessful()){
-                    //remove loading view
-                    articles.remove(articles.size()-1);
-
-                    List<Article> result = response.body().articles;
-                    if(result.size()>0){
-                        //add loaded data
-                        articles.addAll(result);
-                    }else{//result size 0 means there is no more data available at server
-                        adapter.setMoreDataAvailable(false);
-                        //telling adapter to stop calling load more as no more server data available
-//						Toast.makeText(mContext,"No More Data Available",Toast.LENGTH_LONG).show();
-                    }
-                    adapter.notifyDataChanged();
-                    //should call the custom method adapter.notifyDataChanged here to get the correct loading status
-                }else{
-//					Log.e("lamvv"," Load More Response Error "+String.valueOf(response.code()));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ArticleList> call, Throwable t) {
-//				Log.e("lamvv"," Load More Response Error "+t.getMessage());
-            }
-        });
-    }
 }

@@ -56,34 +56,16 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
         if(!CheckConfig.isTablet(mContext)) {
-//            if (viewType == TYPE_ARTICLE) {
-//                return new ArticleViewHolder(inflater.inflate(R.layout.item_article, parent, false));
-//            } else {
-//                return new LoadViewHolder(inflater.inflate(R.layout.item_load, parent, false));
-//            }
-            if(viewType == TYPE_AD){
-                if(AD_FORM == 2){
-                    return new AdHolder(inflater.inflate(R.layout.ad_unit2, parent, false));
-                }else{
-                    return new AdHolder(inflater.inflate(R.layout.ad_unit, parent, false));
-                }
-            }else {
+            if(viewType == TYPE_ARTICLE){
                 return new ArticleViewHolder(inflater.inflate(R.layout.item_article, parent, false));
+            }else{
+                return new LoadViewHolder(inflater.inflate(R.layout.item_load, parent, false));
             }
         } else {
-//            if (viewType == TYPE_ARTICLE) {
-//                return new ArticleViewHolder(inflater.inflate(R.layout.item_article_tablet, parent, false));
-//            } else {
-//                return new LoadViewHolder(inflater.inflate(R.layout.item_load, parent, false));
-//            }
-            if(viewType == TYPE_AD){
-                if(AD_FORM == 2){
-                    return new AdHolder(inflater.inflate(R.layout.ad_unit2, parent, false));
-                }else{
-                    return new AdHolder(inflater.inflate(R.layout.ad_unit, parent, false));
-                }
-            }else {
+            if(viewType == TYPE_ARTICLE){
                 return new ArticleViewHolder(inflater.inflate(R.layout.item_article_tablet, parent, false));
+            }else{
+                return new LoadViewHolder(inflater.inflate(R.layout.item_load, parent, false));
             }
         }
     }
@@ -94,54 +76,50 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             isLoading = true;
             loadMoreListener.onLoadMore();
         }
-//        if(getItemViewType(position) == TYPE_ARTICLE){
-//            ((ArticleViewHolder)holder).bindData((Article)mList.get(position));
-//        }
-        if (holder.getItemViewType() == TYPE_AD) {
-            if (mAd != null) {
-                ((AdHolder)holder).bindView(mAd);
-            }
-            else if (mAds != null && mAds.isLoaded()) {
-                mAd = mAds.nextNativeAd();
-                ((AdHolder)holder).bindView(mAd);
-            }
-            else {
-                ((AdHolder)holder).bindView(null);
-            }
-        } else {
-            int index = position;
-            if (index != 0) {
-                index--;
-            }
-            Article article = (Article) mList.get(index);
-            ((ArticleViewHolder)holder).bindData(article);
+        if(getItemViewType(position) == TYPE_ARTICLE){
+            ((ArticleViewHolder)holder).bindData((Article) mList.get(position));
         }
+//        if (holder.getItemViewType() == TYPE_AD) {
+//            if (mAd != null) {
+//                ((AdHolder)holder).bindView(mAd);
+//            } else if (mAds != null && mAds.isLoaded()) {
+//                mAd = mAds.nextNativeAd();
+//                ((AdHolder)holder).bindView(mAd);
+//            } else {
+//                ((AdHolder)holder).bindView(null);
+//            }
+//        } else {
+//            int index = position;
+//            if (index != 0) {
+//                index--;
+//            }
+//            Article article = (Article) mList.get(index);
+//            ((ArticleViewHolder)holder).bindData(article);
+//        }
     }
 
     @Override
     public int getItemViewType(int position) {
-//        Object item = mList.get(position);
-//        if(((Article)item).getType().equals("fil")){
+//        if (position == 1) {
+//            return TYPE_AD;
+//        } else {
 //            return TYPE_ARTICLE;
-//        }else{
-//            return TYPE_LOAD;
 //        }
-        if (position == 1) {
-            return TYPE_AD;
-        } else {
+        if(((Article)mList.get(position)).getType().equals("fil")) {
             return TYPE_ARTICLE;
+        } else {
+            return TYPE_LOAD;
         }
     }
 
     @Override
     public int getItemCount() {
-//        return mList.size();
-        if (mList.size() == 0) {
-            return mList.size();
-        }
-        else {
-            return mList.size()+1;
-        }
+        return mList.size();
+//        if (mList.size() == 0) {
+//            return mList.size();
+//        } else {
+//            return mList.size()+1;
+//        }
     }
 
     private class ArticleViewHolder extends RecyclerView.ViewHolder {
@@ -258,4 +236,5 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void setLoadMoreListener(OnLoadMoreListener loadMoreListener){
         this.loadMoreListener = loadMoreListener;
     }
+
 }
