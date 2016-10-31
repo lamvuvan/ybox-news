@@ -40,6 +40,8 @@
     <string name="hashtag">#TinTucYbox</string>
 
     <string name="home">Home</string>
+    <string name="newest">Newest</string>
+    <string name="top">Top vote</string>
     <string name="recruitment">Recruitment</string>
     <string name="scholarship">Scholarship</string>
     <string name="event">Event</string>

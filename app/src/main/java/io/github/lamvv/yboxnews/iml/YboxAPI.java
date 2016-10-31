@@ -31,4 +31,10 @@ public interface YboxAPI {
 
     @GET("search?category=competition&page")
     Call<ArticleList> getCompetitionArticle(@Query("page") int page);
+
+    @GET("search?article_type=new&page")
+    Call<ArticleList> getNewestArticle(@Query("page") int page);
+
+    @GET("search?article_type=top&page")
+    Call<ArticleList> getTopVoteArticle(@Query("page") int page);
 }

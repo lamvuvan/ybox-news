@@ -28,7 +28,6 @@ import io.github.lamvv.yboxnews.model.Article;
 import io.github.lamvv.yboxnews.model.ArticleList;
 import io.github.lamvv.yboxnews.util.CheckConfig;
 import io.github.lamvv.yboxnews.util.ServiceGenerator;
-import io.github.lamvv.yboxnews.util.VerticalLineDecorator;
 import io.github.lamvv.yboxnews.view.activity.ArticleActivity;
 import io.github.lamvv.yboxnews.view.activity.MainActivity;
 import retrofit2.Call;
@@ -106,7 +105,7 @@ public class MainFragment extends Fragment {
 		mSwipeRefreshLayout.setOnRefreshListener(onRefreshListener);
 
 		mRecyclerView.setHasFixedSize(true);
-		mRecyclerView.addItemDecoration(new VerticalLineDecorator(2));
+//		mRecyclerView.addItemDecoration(new VerticalLineDecorator(2));
 
 		if(!CheckConfig.isTablet(getActivity())) {
 			mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -173,6 +172,10 @@ public class MainFragment extends Fragment {
 		Call<ArticleList> call;
 		if(fragmentName.equals(getResources().getString(R.string.home)))
 			call = api.getArticle(page);
+		else if(fragmentName.equals(getResources().getString(R.string.newest)))
+			call = api.getNewestArticle(page);
+		else if(fragmentName.equals(getResources().getString(R.string.top)))
+			call = api.getTopVoteArticle(page);
 		else if(fragmentName.equals(getResources().getString(R.string.recruitment)))
 			call = api.getRecruitmentArticle(page);
 		else if(fragmentName.equals(getResources().getString(R.string.scholarship)))
@@ -213,6 +216,10 @@ public class MainFragment extends Fragment {
 		Call<ArticleList> call;
 		if(fragmentName.equals(getResources().getString(R.string.home)))
 			call = api.getArticle(page);
+		else if(fragmentName.equals(getResources().getString(R.string.newest)))
+			call = api.getNewestArticle(page);
+		else if(fragmentName.equals(getResources().getString(R.string.top)))
+			call = api.getTopVoteArticle(page);
 		else if(fragmentName.equals(getResources().getString(R.string.recruitment)))
 			call = api.getRecruitmentArticle(page);
 		else if(fragmentName.equals(getResources().getString(R.string.scholarship)))

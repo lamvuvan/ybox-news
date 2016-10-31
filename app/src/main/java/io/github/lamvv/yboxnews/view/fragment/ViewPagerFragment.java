@@ -53,6 +53,12 @@ public class ViewPagerFragment extends Fragment {
 		mTabs.add(new TabPagerItem(getString(R.string.home),
 				MainFragment.newInstance(getString(R.string.home)),
 				R.drawable.ic_home_white_24dp));
+		mTabs.add(new TabPagerItem(getString(R.string.newest),
+				MainFragment.newInstance(getString(R.string.newest)),
+				R.drawable.ic_av_timer_white_24dp));
+		mTabs.add(new TabPagerItem(getString(R.string.top),
+				MainFragment.newInstance(getString(R.string.top)),
+				R.drawable.ic_trending_up_white_24dp));
 		mTabs.add(new TabPagerItem(getString(R.string.recruitment),
 				MainFragment.newInstance(getString(R.string.recruitment)),
 				R.drawable.ic_supervisor_account_white_24dp));
@@ -104,26 +110,34 @@ public class ViewPagerFragment extends Fragment {
 						break;
 					case 1:
 						mViewPager.setCurrentItem(1);
-						actionBar.setTitle(getResources().getString(R.string.recruitment));
+						actionBar.setTitle(getResources().getString(R.string.newest));
 						break;
 					case 2:
 						mViewPager.setCurrentItem(2);
-						actionBar.setTitle(getResources().getString(R.string.scholarship));
+						actionBar.setTitle(getResources().getString(R.string.top));
 						break;
 					case 3:
 						mViewPager.setCurrentItem(3);
-						actionBar.setTitle(getResources().getString(R.string.event));
+						actionBar.setTitle(getResources().getString(R.string.recruitment));
 						break;
 					case 4:
 						mViewPager.setCurrentItem(4);
-						actionBar.setTitle(getResources().getString(R.string.skill));
+						actionBar.setTitle(getResources().getString(R.string.scholarship));
 						break;
 					case 5:
 						mViewPager.setCurrentItem(5);
-						actionBar.setTitle(getResources().getString(R.string.face));
+						actionBar.setTitle(getResources().getString(R.string.event));
 						break;
 					case 6:
 						mViewPager.setCurrentItem(6);
+						actionBar.setTitle(getResources().getString(R.string.skill));
+						break;
+					case 7:
+						mViewPager.setCurrentItem(7);
+						actionBar.setTitle(getResources().getString(R.string.face));
+						break;
+					case 8:
+						mViewPager.setCurrentItem(8);
 						actionBar.setTitle(getResources().getString(R.string.competition));
 						break;
 					default:

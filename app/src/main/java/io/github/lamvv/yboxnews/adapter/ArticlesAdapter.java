@@ -100,15 +100,16 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemViewType(int position) {
-//        if (position == 1) {
-//            return TYPE_AD;
-//        } else {
+//        String type = ((Article)mList.get(position)).getType();
+//        if(type.equals("fil")) {
 //            return TYPE_ARTICLE;
+//        } else {
+//            return TYPE_LOAD;
 //        }
-        if(((Article)mList.get(position)).getType().equals("fil")) {
-            return TYPE_ARTICLE;
-        } else {
+        if(position >= getItemCount()-1){
             return TYPE_LOAD;
+        } else {
+            return TYPE_ARTICLE;
         }
     }
 

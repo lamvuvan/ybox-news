@@ -235,17 +235,17 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
     private void load(int page){
         Call<ArticleList> call;
 
-        if(category.equals("#Tuyển Dụng"))
+        if(category.equalsIgnoreCase("#Tuyển Dụng"))
             call = api.getRecruitmentArticle(page);
-        else if(category.equals("#Kỹ Năng"))
+        else if(category.equalsIgnoreCase("#Kỹ Năng"))
             call = api.getSkillArticle(page);
-        else if(category.equals("#Sự Kiện"))
+        else if(category.equalsIgnoreCase("#Sự Kiện"))
             call = api.getEventArticle(page);
-        else if(category.equals("#Học Bổng"))
+        else if(category.equalsIgnoreCase("#Học Bổng"))
             call = api.getScholarshipArticle(page);
-        else if(category.equals("#Cuộc Thi"))
+        else if(category.equalsIgnoreCase("#Cuộc Thi"))
             call = api.getCompetitionArticle(page);
-        else if(category.equals("#Gương Mặt"))
+        else if(category.equalsIgnoreCase("#Gương Mặt"))
             call = api.getFaceArticle(page);
         else
             call = api.getArticle(page);
