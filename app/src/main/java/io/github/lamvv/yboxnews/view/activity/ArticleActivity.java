@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.github.lamvv.yboxnews.R;
-import io.github.lamvv.yboxnews.adapter.ArticlesAdapter;
+import io.github.lamvv.yboxnews.adapter.RelatedArticleAdapter;
 import io.github.lamvv.yboxnews.iml.GetArticleDetailTaskCompleteListener;
 import io.github.lamvv.yboxnews.iml.YboxAPI;
 import io.github.lamvv.yboxnews.listener.RecyclerTouchListener;
@@ -55,7 +55,7 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
 
     private List<Object> articles;
     private RecyclerView mRecyclerView;
-    private ArticlesAdapter adapter;
+    private RelatedArticleAdapter adapter;
     private YboxAPI api;
     private Article article;
     private String category;
@@ -163,10 +163,7 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
             }
         }
 
-//        mAds = new NativeAdsManager(getActivity(), getResources().getString(R.string.fan_native_placement_id), 1);
-//        mAds.loadAds();
-
-        adapter = new ArticlesAdapter(this, articles);
+        adapter = new RelatedArticleAdapter(this, articles);
         mRecyclerView.setAdapter(adapter);
 
         api = ServiceGenerator.createService(YboxAPI.class);

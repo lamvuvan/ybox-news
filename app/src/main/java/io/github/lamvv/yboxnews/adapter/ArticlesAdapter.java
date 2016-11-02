@@ -106,7 +106,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //        } else {
 //            return TYPE_LOAD;
 //        }
-        if(position >= getItemCount()-1){
+        if(position >= getItemCount() - 1){
             return TYPE_LOAD;
         } else {
             return TYPE_ARTICLE;

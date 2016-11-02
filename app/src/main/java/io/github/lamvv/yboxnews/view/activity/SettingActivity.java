@@ -76,12 +76,10 @@ public class SettingActivity extends AppCompatActivity {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                     prefs = getSharedPreferences(sharedPrefName, Context.MODE_PRIVATE);
                     prefs.edit().putBoolean(key, true).commit();
-                    onResume();
                 }else{
                     prefs = getSharedPreferences(sharedPrefName, Context.MODE_PRIVATE);
                     prefs.edit().putBoolean(key, false).commit();
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    onPause();
                 }
             }
         });
@@ -233,7 +231,8 @@ public class SettingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intentSendMail = new Intent(Intent.ACTION_SEND);
                 intentSendMail.setType("*/*");
-                intentSendMail.putExtra(Intent.EXTRA_EMAIL, new String[]{"lamvv9x@gmail.com"});
+                intentSendMail.putExtra(Intent.EXTRA_EMAIL, new String[]{BuildConfig.MAIN_EMAIL});
+                intentSendMail.putExtra(Intent.EXTRA_CC, new String[]{BuildConfig.CC_EMAIL});
                 intentSendMail.putExtra(Intent.EXTRA_SUBJECT, "Feedback to " + getResources().getString(R.string.app_name));
                 intentSendMail.putExtra(Intent.EXTRA_TEXT, "");
                 try {
