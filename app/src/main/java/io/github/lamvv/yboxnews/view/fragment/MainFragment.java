@@ -30,6 +30,8 @@ import io.github.lamvv.yboxnews.util.CheckConfig;
 import io.github.lamvv.yboxnews.util.ServiceGenerator;
 import io.github.lamvv.yboxnews.view.activity.ArticleActivity;
 import io.github.lamvv.yboxnews.view.activity.MainActivity;
+import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
+import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -129,7 +131,8 @@ public class MainFragment extends Fragment {
 //        mAds.loadAds();
 
 		adapter = new ArticlesAdapter(getActivity(), articles);
-		mRecyclerView.setAdapter(adapter);
+		AlphaInAnimationAdapter alphaAdapter = new AlphaInAnimationAdapter(adapter);
+		mRecyclerView.setAdapter(new ScaleInAnimationAdapter(alphaAdapter));
 
 		api = ServiceGenerator.createService(YboxAPI.class);
 		load(1);

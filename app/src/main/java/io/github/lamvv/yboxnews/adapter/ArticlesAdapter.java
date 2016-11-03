@@ -40,6 +40,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public OnLoadMoreListener loadMoreListener;
     boolean isLoading = false, isMoreDataAvailable = true;
+    private int lastPosition = -1;
 
     public ArticlesAdapter(Context context, List<Object> list){
         this.mContext = context;
@@ -79,6 +80,11 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if(getItemViewType(position) == TYPE_ARTICLE){
             ((ArticleViewHolder)holder).bindData((Article) mList.get(position));
         }
+//        if(position > lastPosition) {
+//            Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.fade_in);
+//            holder.itemView.startAnimation(animation);
+//            lastPosition = position;
+//        }
 //        if (holder.getItemViewType() == TYPE_AD) {
 //            if (mAd != null) {
 //                ((AdHolder)holder).bindView(mAd);
