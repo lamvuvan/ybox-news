@@ -2,7 +2,6 @@ package io.github.lamvv.yboxnews.view.activity;
 
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.LabeledIntent;
 import android.content.pm.PackageManager;
@@ -20,10 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.gms.ads.MobileAds;
-import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.startapp.android.publish.StartAppAd;
 import com.startapp.android.publish.StartAppAd.AdMode;
 import com.startapp.android.publish.StartAppSDK;
@@ -46,8 +41,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        initImageLoader(this);
 
         //init admob ads
         MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.admob_app_id));
@@ -212,19 +205,6 @@ public class MainActivity extends AppCompatActivity {
                 doubleBackToExitPressedOnce = false;
             }
         }, 2000);*/
-    }
-
-    /**
-     * init imageLoader lib
-     */
-    private void initImageLoader(Context context) {
-        ImageLoaderConfiguration.Builder config = new ImageLoaderConfiguration.Builder(context);
-        config.threadPriority(Thread.NORM_PRIORITY - 2);
-        config.denyCacheImageMultipleSizesInMemory();
-        config.diskCacheFileNameGenerator(new Md5FileNameGenerator());
-        config.diskCacheSize(50 * 1024 * 1024);
-        config.tasksProcessingOrder(QueueProcessingType.LIFO);
-        ImageLoader.getInstance().init(config.build());
     }
 
 }

@@ -238,7 +238,7 @@ public class SettingActivity extends AppCompatActivity {
                 try {
                     startActivity(intentSendMail);
                 } catch (android.content.ActivityNotFoundException ex) {
-                    Toast.makeText(SettingActivity.this, getString(R.string.not_email), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SettingActivity.this, getString(R.string.error_not_email), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -255,7 +255,7 @@ public class SettingActivity extends AppCompatActivity {
                 try {
                     startActivity(intentSendMail);
                 } catch (android.content.ActivityNotFoundException ex) {
-                    Toast.makeText(SettingActivity.this, getString(R.string.not_email), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SettingActivity.this, getString(R.string.error_not_email), Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -14,6 +14,7 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.facebook.ads.NativeAdsManager;
 
@@ -28,6 +29,7 @@ import io.github.lamvv.yboxnews.model.Article;
 import io.github.lamvv.yboxnews.model.ArticleList;
 import io.github.lamvv.yboxnews.util.CheckConfig;
 import io.github.lamvv.yboxnews.util.ServiceGenerator;
+import io.github.lamvv.yboxnews.util.VerticalLineDecorator;
 import io.github.lamvv.yboxnews.view.activity.ArticleActivity;
 import io.github.lamvv.yboxnews.view.activity.MainActivity;
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
@@ -40,6 +42,7 @@ public class MainFragment extends Fragment {
 
 	private List<Object> articles;
 	private RecyclerView mRecyclerView;
+	private TextView emptyView;
 	private ArticlesAdapter adapter;
 	private YboxAPI api;
 
@@ -93,13 +96,13 @@ public class MainFragment extends Fragment {
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		mRecyclerView = (RecyclerView)view.findViewById(R.id.recyclerView);
+		emptyView = (TextView)view.findViewById(R.id.emptyView);
 		mSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipeRefreshLayout);
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		setHasOptionsMenu(true);
 
 		//onRefresh
 		mSwipeRefreshLayout.setColorSchemeColors(Color.parseColor("#ff0000"), Color.parseColor("#00ff00"),
@@ -107,7 +110,7 @@ public class MainFragment extends Fragment {
 		mSwipeRefreshLayout.setOnRefreshListener(onRefreshListener);
 
 		mRecyclerView.setHasFixedSize(true);
-//		mRecyclerView.addItemDecoration(new VerticalLineDecorator(2));
+		mRecyclerView.addItemDecoration(new VerticalLineDecorator(2));
 
 		if(!CheckConfig.isTablet(getActivity())) {
 			mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -127,47 +130,54 @@ public class MainFragment extends Fragment {
 			}
 		}
 
-//        mAds = new NativeAdsManager(getActivity(), getResources().getString(R.string.fan_native_placement_id), 1);
-//        mAds.loadAds();
-
-		adapter = new ArticlesAdapter(getActivity(), articles);
-		AlphaInAnimationAdapter alphaAdapter = new AlphaInAnimationAdapter(adapter);
-		mRecyclerView.setAdapter(new ScaleInAnimationAdapter(alphaAdapter));
-
 		api = ServiceGenerator.createService(YboxAPI.class);
 		load(1);
 
-		//onItemClickListener
-		mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(),
-				mRecyclerView, new RecyclerTouchListener.ClickListener() {
-			@Override
-			public void onClick(View view, int position) {
-				Article article = (Article) articles.get(position);
-				Intent intent = new Intent(getActivity(), ArticleActivity.class);
-				intent.putExtra("article", article);
-				startActivity(intent);
+		if(!articles.isEmpty()) {
+			mRecyclerView.setVisibility(View.VISIBLE);
+			emptyView.setVisibility(View.GONE);
+			try {
+				adapter = new ArticlesAdapter(getActivity(), articles);
+				AlphaInAnimationAdapter alphaAdapter = new AlphaInAnimationAdapter(adapter);
+				mRecyclerView.setAdapter(new ScaleInAnimationAdapter(alphaAdapter));
+			} catch (Exception e){
+				e.printStackTrace();
 			}
+			//onItemClickListener
+			mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(),
+					mRecyclerView, new RecyclerTouchListener.ClickListener() {
+				@Override
+				public void onClick(View view, int position) {
+					Article article = (Article) articles.get(position);
+					Intent intent = new Intent(getActivity(), ArticleActivity.class);
+					intent.putExtra("article", article);
+					startActivity(intent);
+				}
 
-			@Override
-			public void onLongClick(View view, int position) {
+				@Override
+				public void onLongClick(View view, int position) {
 
-			}
-		}));
+				}
+			}));
 
-		//onLoadMore
-		adapter.setLoadMoreListener(new ArticlesAdapter.OnLoadMoreListener() {
-			@Override
-			public void onLoadMore() {
-				mRecyclerView.post(new Runnable() {
-					@Override
-					public void run() {
-						int page = articles.size()/10;
-						page += 1;
-						loadMore(page);
-					}
-				});
-			}
-		});
+			//onLoadMore
+			adapter.setLoadMoreListener(new ArticlesAdapter.OnLoadMoreListener() {
+				@Override
+				public void onLoadMore() {
+					mRecyclerView.post(new Runnable() {
+						@Override
+						public void run() {
+							int page = articles.size()/10;
+							page += 1;
+							loadMore(page);
+						}
+					});
+				}
+			});
+		} else {
+			mRecyclerView.setVisibility(View.GONE);
+			emptyView.setVisibility(View.VISIBLE);
+		}
 
 	}
 

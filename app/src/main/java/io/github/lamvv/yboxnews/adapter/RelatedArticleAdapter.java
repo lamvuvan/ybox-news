@@ -13,8 +13,7 @@ import android.widget.TextView;
 import com.facebook.ads.MediaView;
 import com.facebook.ads.NativeAd;
 import com.facebook.ads.NativeAdsManager;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -129,13 +128,11 @@ public class RelatedArticleAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
 
         void bindData(Article article){
-            ImageLoader imageLoader = ImageLoader.getInstance();
-            DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
-                    .cacheOnDisk(true).resetViewBeforeLoading(true)
-                    .showImageForEmptyUri(R.drawable.default_thumbnail)
-                    .showImageOnFail(R.drawable.default_thumbnail)
-                    .showImageOnLoading(R.drawable.default_thumbnail).build();
-            imageLoader.displayImage(article.getImage(), ivImage, options);
+            Picasso.with(mContext)
+                    .load(article.getImage())
+                    .placeholder(R.drawable.default_thumbnail)
+                    .error(R.drawable.default_thumbnail)
+                    .into(ivImage);
 
             tvTitle.setText(article.getTitle().toString());
 

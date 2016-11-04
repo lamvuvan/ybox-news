@@ -13,8 +13,7 @@ import android.widget.TextView;
 import com.facebook.ads.MediaView;
 import com.facebook.ads.NativeAd;
 import com.facebook.ads.NativeAdsManager;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -80,11 +79,6 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if(getItemViewType(position) == TYPE_ARTICLE){
             ((ArticleViewHolder)holder).bindData((Article) mList.get(position));
         }
-//        if(position > lastPosition) {
-//            Animation animation = AnimationUtils.loadAnimation(mContext, R.anim.fade_in);
-//            holder.itemView.startAnimation(animation);
-//            lastPosition = position;
-//        }
 //        if (holder.getItemViewType() == TYPE_AD) {
 //            if (mAd != null) {
 //                ((AdHolder)holder).bindView(mAd);
@@ -122,11 +116,6 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public int getItemCount() {
         return mList.size();
-//        if (mList.size() == 0) {
-//            return mList.size();
-//        } else {
-//            return mList.size()+1;
-//        }
     }
 
     private class ArticleViewHolder extends RecyclerView.ViewHolder {
@@ -145,13 +134,11 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         void bindData(Article article){
-            ImageLoader imageLoader = ImageLoader.getInstance();
-            DisplayImageOptions options = new DisplayImageOptions.Builder().cacheInMemory(true)
-                    .cacheOnDisk(true).resetViewBeforeLoading(true)
-                    .showImageForEmptyUri(R.drawable.default_thumbnail)
-                    .showImageOnFail(R.drawable.default_thumbnail)
-                    .showImageOnLoading(R.drawable.default_thumbnail).build();
-            imageLoader.displayImage(article.getImage(), ivImage, options);
+            Picasso.with(mContext)
+                    .load(article.getImage())
+                    .placeholder(R.drawable.default_thumbnail)
+                    .error(R.drawable.default_thumbnail)
+                    .into(ivImage);
 
             tvTitle.setText(article.getTitle().toString());
 
