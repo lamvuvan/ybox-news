@@ -34,13 +34,14 @@ public class MainActivity extends AppCompatActivity {
 
     Toolbar mToolbar;
     protected int typeHomeMenu;
-    private boolean doubleBackToExitPressedOnce = false;
     private StartAppAd startAppAd = new StartAppAd(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
 
         //init admob ads
         MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.admob_app_id));
@@ -189,22 +190,6 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         startAppAd.onBackPressed(this);
         super.onBackPressed();
-
-        /*if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            return;
-        }
-
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, getResources().getString(R.string.double_back), Toast.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce = false;
-            }
-        }, 2000);*/
     }
 
 }

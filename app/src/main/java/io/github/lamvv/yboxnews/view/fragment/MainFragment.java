@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,6 +15,7 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.ads.NativeAdsManager;
@@ -48,6 +50,7 @@ public class MainFragment extends Fragment {
 
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	MainActivity mainActivity;
+	private LinearLayout rootLayout;
 
 	private NativeAdsManager mAds;
 
@@ -98,86 +101,98 @@ public class MainFragment extends Fragment {
 		mRecyclerView = (RecyclerView)view.findViewById(R.id.recyclerView);
 		emptyView = (TextView)view.findViewById(R.id.emptyView);
 		mSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipeRefreshLayout);
+		rootLayout = (LinearLayout)view.findViewById(R.id.rootLayout);
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		//onRefresh
-		mSwipeRefreshLayout.setColorSchemeColors(Color.parseColor("#ff0000"), Color.parseColor("#00ff00"),
-				Color.parseColor("#0000ff"), Color.parseColor("#f234ab"));
-		mSwipeRefreshLayout.setOnRefreshListener(onRefreshListener);
-
-		mRecyclerView.setHasFixedSize(true);
-		mRecyclerView.addItemDecoration(new VerticalLineDecorator(2));
-
-		if(!CheckConfig.isTablet(getActivity())) {
-			mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-		} else {
-			DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
-			int widthPixels = displayMetrics.widthPixels;
-			int heightPixels = displayMetrics.heightPixels;
-			float widthDpi = displayMetrics.xdpi;
-			float heightDpi = displayMetrics.ydpi;
-			float widthInches = widthPixels / widthDpi;
-			float heightInches = heightPixels / heightDpi;
-			double diagonalInches = Math.sqrt((widthInches * widthInches) + (heightInches * heightInches));
-			if (diagonalInches >= 9) {
-				mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-			} else {
-				mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-			}
-		}
-
-		api = ServiceGenerator.createService(YboxAPI.class);
-		load(1);
-
-		if(!articles.isEmpty()) {
-			mRecyclerView.setVisibility(View.VISIBLE);
-			emptyView.setVisibility(View.GONE);
-			try {
-				adapter = new ArticlesAdapter(getActivity(), articles);
-				AlphaInAnimationAdapter alphaAdapter = new AlphaInAnimationAdapter(adapter);
-				mRecyclerView.setAdapter(new ScaleInAnimationAdapter(alphaAdapter));
-			} catch (Exception e){
-				e.printStackTrace();
-			}
-			//onItemClickListener
-			mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(),
-					mRecyclerView, new RecyclerTouchListener.ClickListener() {
-				@Override
-				public void onClick(View view, int position) {
-					Article article = (Article) articles.get(position);
-					Intent intent = new Intent(getActivity(), ArticleActivity.class);
-					intent.putExtra("article", article);
-					startActivity(intent);
-				}
-
-				@Override
-				public void onLongClick(View view, int position) {
-
-				}
-			}));
-
-			//onLoadMore
-			adapter.setLoadMoreListener(new ArticlesAdapter.OnLoadMoreListener() {
-				@Override
-				public void onLoadMore() {
-					mRecyclerView.post(new Runnable() {
-						@Override
-						public void run() {
-							int page = articles.size()/10;
-							page += 1;
-							loadMore(page);
-						}
-					});
-				}
-			});
-		} else {
+		if (!CheckConfig.isConnectedInternet(getActivity())) {
+			Snackbar.make(rootLayout, getActivity().getResources().getString(R.string.error_no_internet),
+					Snackbar.LENGTH_LONG).show();
 			mRecyclerView.setVisibility(View.GONE);
-			emptyView.setVisibility(View.VISIBLE);
+			mSwipeRefreshLayout.setVisibility(View.GONE);
+			emptyView.setVisibility(View.GONE);
+		} else {
+			//onRefresh
+			mSwipeRefreshLayout.setColorSchemeColors(Color.parseColor("#ff0000"), Color.parseColor("#00ff00"),
+					Color.parseColor("#0000ff"), Color.parseColor("#f234ab"));
+			mSwipeRefreshLayout.setOnRefreshListener(onRefreshListener);
+			mRecyclerView.setHasFixedSize(true);
+			mRecyclerView.addItemDecoration(new VerticalLineDecorator(2));
+
+			if (!CheckConfig.isTablet(getActivity())) {
+				mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+			} else {
+				DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
+				int widthPixels = displayMetrics.widthPixels;
+				int heightPixels = displayMetrics.heightPixels;
+				float widthDpi = displayMetrics.xdpi;
+				float heightDpi = displayMetrics.ydpi;
+				float widthInches = widthPixels / widthDpi;
+				float heightInches = heightPixels / heightDpi;
+				double diagonalInches = Math.sqrt((widthInches * widthInches) + (heightInches * heightInches));
+				if (diagonalInches >= 9) {
+					mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+				} else {
+					mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+				}
+			}
+
+			api = ServiceGenerator.createService(YboxAPI.class);
+			load(1);
+
+			if (articles.isEmpty()) {
+				mRecyclerView.setVisibility(View.GONE);
+				mSwipeRefreshLayout.setVisibility(View.GONE);
+				emptyView.setVisibility(View.VISIBLE);
+			} else {
+				mRecyclerView.setVisibility(View.VISIBLE);
+				mSwipeRefreshLayout.setVisibility(View.VISIBLE);
+				emptyView.setVisibility(View.GONE);
+				try {
+					adapter = new ArticlesAdapter(getActivity(), articles);
+					AlphaInAnimationAdapter alphaAdapter = new AlphaInAnimationAdapter(adapter);
+					mRecyclerView.setAdapter(new ScaleInAnimationAdapter(alphaAdapter));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				//onItemClickListener
+				mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(),
+						mRecyclerView, new RecyclerTouchListener.ClickListener() {
+					@Override
+					public void onClick(View view, int position) {
+						Article article = (Article) articles.get(position);
+						Intent intent = new Intent(getActivity(), ArticleActivity.class);
+						intent.putExtra("article", article);
+						startActivity(intent);
+					}
+
+					@Override
+					public void onLongClick(View view, int position) {
+
+					}
+				}));
+
+				//onLoadMore
+				adapter.setLoadMoreListener(new ArticlesAdapter.OnLoadMoreListener() {
+					@Override
+					public void onLoadMore() {
+						mRecyclerView.post(new Runnable() {
+							@Override
+							public void run() {
+								int page = articles.size() / 10;
+								page += 1;
+								loadMore(page);
+							}
+						});
+					}
+				});
+			}
 		}
+
+
 
 	}
 

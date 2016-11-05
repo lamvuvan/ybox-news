@@ -42,6 +42,7 @@ public class SettingActivity extends AppCompatActivity {
     private TextView tvLikeApp, tvRateApp, tvInvite, tvSendFriend, tvNeedHelp, tvSendEmail, tvMoreApp, tvCheckApps;
 
     SharedPreferences prefs; // declare the sharedPreference
+    SharedPreferences.Editor editor;
     boolean value = false; // default value if no value was found
     String key = "key"; // use this key to retrieve the value
     String sharedPrefName = "isMySwitchChecked"; // name of your sharedPreference
@@ -65,6 +66,8 @@ public class SettingActivity extends AppCompatActivity {
         }
         setTypeHomeMenu(1);
 
+//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
+
         prefs = getSharedPreferences(sharedPrefName, Context.MODE_PRIVATE);
         value = prefs.getBoolean(key, value); // retrieve the value of your key
         switchTheme.setChecked(value);
@@ -75,11 +78,17 @@ public class SettingActivity extends AppCompatActivity {
                 if(switchTheme.isChecked()){
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
                     prefs = getSharedPreferences(sharedPrefName, Context.MODE_PRIVATE);
-                    prefs.edit().putBoolean(key, true).commit();
+                    editor = prefs.edit();
+                    editor.clear();
+                    editor.putBoolean(key, true);
+                    editor.apply();
                 }else{
-                    prefs = getSharedPreferences(sharedPrefName, Context.MODE_PRIVATE);
-                    prefs.edit().putBoolean(key, false).commit();
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    prefs = getSharedPreferences(sharedPrefName, Context.MODE_PRIVATE);
+                    editor = prefs.edit();
+                    editor.clear();
+                    editor.putBoolean(key, false);
+                    editor.apply();
                 }
             }
         });

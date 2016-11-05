@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.ads.MediaView;
@@ -39,9 +40,16 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public OnLoadMoreListener loadMoreListener;
     boolean isLoading = false, isMoreDataAvailable = true;
-    private int lastPosition = -1;
+
+    private LinearLayout rootLayout;
 
     public ArticlesAdapter(Context context, List<Object> list){
+        this.mContext = context;
+        this.mList = list;
+    }
+
+    public ArticlesAdapter(LinearLayout rootLayout, Context context, List<Object> list){
+        this.rootLayout = rootLayout;
         this.mContext = context;
         this.mList = list;
     }
