@@ -34,8 +34,7 @@
     <string name="checkout_recommended">Check out our recommended apps</string>
 
     <string name="error_not_email">There is not email client installed.</string>
-    <string name="error_server_offline">Server is currently offline. We will keep checking and as soon as the site comes back, you will automatically be served the new version.</string>
-    <string name="error_no_internet">No internet connection! Check your internet connection then swipe to refresh!</string>
+    <string name="error_no_internet">No internet connection! Check your internet connection then pull down to refresh!</string>
 
     <string name="get_app">Get it on Google Play</string>
     <string name="name_app">Tin tức Ybox</string>

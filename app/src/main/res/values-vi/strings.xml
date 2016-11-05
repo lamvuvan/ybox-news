@@ -35,7 +35,7 @@
     <string name="checkout_recommended">Các ứng dụng khác của chúng tôi</string>
 
     <string name="error_not_email">Vui lòng cài đặt trình gửi thư.</string>
-    <string name="error_server_offline">Máy chủ hiện đang ngoại tuyến. Chúng tôi sẽ liên tục kiểm tra và ngay khi trang web trở lại, bạn sẽ tự động được phục vụ phiên bản mới.</string>
+    <string name="error_no_internet">Không có kết nối Internet! Kiểm tra kết nối internet của bạn sau đó cuộn xuống để làm mới!</string>
 
     <string name="get_app">Tải xuống từ Google Play</string>
     <string name="name_app">Tin tức Ybox</string>
