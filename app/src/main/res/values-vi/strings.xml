@@ -15,14 +15,12 @@
 
     <string name="title_dialog">Vui lòng chờ!</string>
     <string name="message_dialog">Đang tải dữ liệu ...</string>
+    <string name="add_favorite_message">Đã thêm vào danh sách yêu thích</string>
+    <string name="remove_favorite_message">Đã xóa khỏi danh sách yêu thích</string>
+    <string name="no_favorite_message">Chưa có bài báo nào được thêm!</string>
     <string name="share_content">Chia sẻ bài viết</string>
-    <string name="double_back">Nhấn lần nữa để thoát!</string>
     <string name="more_article">Các bài viết liên quan</string>
 
-    <string name="setting">Cài đặt</string>
-    <string name="share_app">Chia sẻ ứng dụng</string>
-    <string name="rate_app">Đánh giá ứng dụng</string>
-    <string name="other_app">Ứng dụng khác</string>
     <string name="dark">Chế độ ban đêm</string>
     <string name="about_us">Về chúng tôi</string>
     <string name="likeapp_clickrate">Đánh giá ứng dụng</string>
@@ -41,14 +39,40 @@
     <string name="name_app">Tin tức Ybox</string>
     <string name="hashtag">#TinTucYbox</string>
 
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="openDrawer">open_drawer</string>
+    <string name="closeDrawer">close_drawer</string>
+
+    <!-- Navigation Drawer menu labels -->
     <string name="home">Trang chủ</string>
-    <string name="newest">Mới nhất</string>
-    <string name="top">Xem nhiều</string>
+    <string name="newest">Tin mới nhất</string>
+    <string name="top">Tin xem nhiều</string>
     <string name="recruitment">Tuyển dụng</string>
     <string name="scholarship">Học bổng</string>
     <string name="event">Sự kiện</string>
     <string name="skill">Kỹ năng</string>
     <string name="face">Gương mặt</string>
     <string name="competition">Cuộc thi</string>
+    <string name="favorite">Danh sách yêu thích</string>
+    <string name="tool">Khác</string>
+    <string name="shareapp">Chia sẻ</string>
+    <string name="rateus">Đánh giá</string>
+    <string name="otherapp">Ứng dụng khác</string>
+    <string name="setting">Cài đặt</string>
+
+    <!-- Toolbar titles when navigation menu item is selected -->
+    <string-array name="nav_item_activity_titles">
+        <item>@string/home</item>
+        <item>@string/newest</item>
+        <item>@string/top</item>
+        <item>@string/recruitment</item>
+        <item>@string/scholarship</item>
+        <item>@string/event</item>
+        <item>@string/skill</item>
+        <item>@string/face</item>
+        <item>@string/competition</item>
+        <item>@string/favorite</item>
+    </string-array>
 
 </resources>

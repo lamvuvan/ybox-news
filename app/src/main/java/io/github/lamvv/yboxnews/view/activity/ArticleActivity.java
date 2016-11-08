@@ -20,6 +20,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.RelativeLayout;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -31,7 +32,6 @@ import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.adapter.RelatedArticleAdapter;
 import io.github.lamvv.yboxnews.iml.GetArticleDetailTaskCompleteListener;
 import io.github.lamvv.yboxnews.iml.YboxAPI;
-import io.github.lamvv.yboxnews.listener.RecyclerTouchListener;
 import io.github.lamvv.yboxnews.model.Article;
 import io.github.lamvv.yboxnews.model.ArticleList;
 import io.github.lamvv.yboxnews.util.CheckConfig;
@@ -49,7 +49,6 @@ import retrofit2.Response;
 public class ArticleActivity extends AppCompatActivity implements GetArticleDetailTaskCompleteListener<String> {
 
     private Toolbar mToolbar;
-    protected int typeHomeMenu;
     private WebView mWebView;
     private FloatingActionButton fab;
 
@@ -60,6 +59,8 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
     private Article article;
     private String category;
 
+    private RelativeLayout rootLayout;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +69,7 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
         articles = new ArrayList<>();
         fab = (FloatingActionButton)findViewById(R.id.fab);
         mRecyclerView = (RecyclerView)findViewById(R.id.recyclerView);
+        rootLayout = (RelativeLayout)findViewById(R.id.rootLayout);
 
         //get data send from fragments
         Bundle bundle = getIntent().getExtras();
@@ -87,7 +89,12 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeButtonEnabled(true);
         }
-        setTypeHomeMenu(1);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         //webView
         mWebView = (WebView) findViewById(R.id.wvArticle);
@@ -163,56 +170,12 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
             }
         }
 
-        adapter = new RelatedArticleAdapter(this, articles);
+        adapter = new RelatedArticleAdapter(rootLayout, this, articles);
         mRecyclerView.setAdapter(adapter);
 
         api = ServiceGenerator.createService(YboxAPI.class);
         load(1);
 
-        //onItemClickListener
-        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(ArticleActivity.this,
-                mRecyclerView, new RecyclerTouchListener.ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                Article article = (Article) articles.get(position);
-                Intent intent = new Intent(ArticleActivity.this, ArticleActivity.class);
-                intent.putExtra("article", article);
-                startActivity(intent);
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));
-
-    }
-
-    public void setTypeHomeMenu(int typeHomeMenu) {
-        this.typeHomeMenu = typeHomeMenu;
-        ActionBar actionBar = getSupportActionBar();
-        if (typeHomeMenu == 0) {
-            if (actionBar != null) {
-
-                actionBar.setDisplayHomeAsUpEnabled(true);
-                actionBar.setHomeButtonEnabled(true);
-
-                if (mToolbar != null){
-                    mToolbar.setNavigationIcon(R.color.transparent);
-                }
-            }
-        } else {
-            if (actionBar != null) {
-                if (mToolbar != null)
-                    mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-                mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        onBackPressed();
-                    }
-                });
-            }
-        }
     }
 
     @Override

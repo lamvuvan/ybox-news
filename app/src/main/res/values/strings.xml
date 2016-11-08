@@ -13,15 +13,13 @@
     <string name="app_name">Ybox</string>
 
     <string name="title_dialog">Please wait!</string>
-    <string name="message_dialog">Loading data ...</string>
+    <string name="message_dialog">Loading data &#8230;</string>
+    <string name="add_favorite_message">Added to favorites</string>
+    <string name="remove_favorite_message">Removed from favorites</string>
+    <string name="no_favorite_message">No favorite articles added!</string>
     <string name="share_content">Share article</string>
-    <string name="double_back">Press again to exit!</string>
     <string name="more_article">Related articles</string>
 
-    <string name="setting">Setting</string>
-    <string name="share_app">Share app</string>
-    <string name="rate_app">Rate app</string>
-    <string name="other_app">Other apps</string>
     <string name="dark">Dark Theme</string>
     <string name="about_us">About us</string>
     <string name="likeapp_clickrate">Like this app? Click to rate it</string>
@@ -40,6 +38,12 @@
     <string name="name_app">Tin tức Ybox</string>
     <string name="hashtag">#TinTucYbox</string>
 
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="openDrawer">open_drawer</string>
+    <string name="closeDrawer">close_drawer</string>
+
+    <!-- Navigation Drawer menu labels -->
     <string name="home">Home</string>
     <string name="newest">Newest</string>
     <string name="top">Top vote</string>
@@ -49,5 +53,25 @@
     <string name="skill">Skill</string>
     <string name="face">Face</string>
     <string name="competition">Competition</string>
+    <string name="favorite">Favorites</string>
+    <string name="tool">Tools</string>
+    <string name="shareapp">Share this app</string>
+    <string name="rateus">Rate us</string>
+    <string name="otherapp">Other apps</string>
+    <string name="setting">Setting</string>
+
+    <!-- Toolbar titles when navigation menu item is selected -->
+    <string-array name="nav_item_activity_titles">
+        <item>@string/home</item>
+        <item>@string/newest</item>
+        <item>@string/top</item>
+        <item>@string/recruitment</item>
+        <item>@string/scholarship</item>
+        <item>@string/event</item>
+        <item>@string/skill</item>
+        <item>@string/face</item>
+        <item>@string/competition</item>
+        <item>@string/favorite</item>
+    </string-array>
 
 </resources>

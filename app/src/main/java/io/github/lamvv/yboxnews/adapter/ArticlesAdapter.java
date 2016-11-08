@@ -1,12 +1,15 @@
 package io.github.lamvv.yboxnews.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,6 +24,8 @@ import java.util.List;
 import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.model.Article;
 import io.github.lamvv.yboxnews.util.CheckConfig;
+import io.github.lamvv.yboxnews.util.SharedPreference;
+import io.github.lamvv.yboxnews.view.activity.ArticleActivity;
 
 /**
  * Created by lamvu on 10/9/2016.
@@ -41,17 +46,14 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public OnLoadMoreListener loadMoreListener;
     boolean isLoading = false, isMoreDataAvailable = true;
 
+    private SharedPreference sharedPreference;
     private LinearLayout rootLayout;
-
-    public ArticlesAdapter(Context context, List<Object> list){
-        this.mContext = context;
-        this.mList = list;
-    }
 
     public ArticlesAdapter(LinearLayout rootLayout, Context context, List<Object> list){
         this.rootLayout = rootLayout;
         this.mContext = context;
         this.mList = list;
+        sharedPreference = new SharedPreference();
     }
 
     public ArticlesAdapter(Context context, List<Object> list, NativeAdsManager ads){
@@ -126,12 +128,13 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return mList.size();
     }
 
-    private class ArticleViewHolder extends RecyclerView.ViewHolder {
+    private class ArticleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView ivImage;
         TextView tvTitle;
         TextView tvContent;
         TextView tvUpdatedAt;
+        ImageButton ibFavorite;
 
         public ArticleViewHolder(View itemView) {
             super(itemView);
@@ -139,6 +142,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             tvTitle = (TextView)itemView.findViewById(R.id.title);
             tvContent = (TextView)itemView.findViewById(R.id.content);
             tvUpdatedAt = (TextView)itemView.findViewById(R.id.updatedAt);
+            ibFavorite = (ImageButton)itemView.findViewById(R.id.favorite);
         }
 
         void bindData(Article article){
@@ -157,6 +161,48 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 tvContent.setText(Html.fromHtml(article.getContent().getRaw().toString()));
             }
             tvUpdatedAt.setText(article.getTimestamps().getUpdatedAt().toString());
+
+            if (checkFavoriteItem(article)) {
+                ibFavorite.setImageResource(R.drawable.ic_fav_selected);
+                ibFavorite.setTag("active");
+            } else {
+                ibFavorite.setImageResource(R.drawable.ic_fav_normal);
+                ibFavorite.setTag("deactive");
+            }
+
+            ivImage.setOnClickListener(this);
+            tvTitle.setOnClickListener(this);
+            tvContent.setOnClickListener(this);
+
+            ibFavorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    String tag = ibFavorite.getTag().toString();
+                    if (tag.equalsIgnoreCase("deactive")) {
+                        sharedPreference.addFavorite(mContext, (Article) mList.get(position));
+                        ibFavorite.setTag("active");
+                        ibFavorite.setImageResource(R.drawable.ic_fav_selected);
+                        Snackbar.make(rootLayout, mContext.getResources().getString(R.string.add_favorite_message),
+                                Snackbar.LENGTH_SHORT).show();
+                    } else {
+                        sharedPreference.removeFavorite(mContext, position);
+                        ibFavorite.setTag("deactive");
+                        ibFavorite.setImageResource(R.drawable.ic_fav_normal);
+                        Snackbar.make(rootLayout, mContext.getResources().getString(R.string.remove_favorite_message),
+                                Snackbar.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            Article article = (Article) mList.get(position);
+            Intent intent = new Intent(mContext, ArticleActivity.class);
+            intent.putExtra("article", article);
+            mContext.startActivity(intent);
         }
     }
 
@@ -237,6 +283,20 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void setLoadMoreListener(OnLoadMoreListener loadMoreListener){
         this.loadMoreListener = loadMoreListener;
+    }
+
+    private boolean checkFavoriteItem(Article checkArticle) {
+        boolean check = false;
+        List<Article> favorites = sharedPreference.getFavorites(mContext);
+        if (favorites != null) {
+            for (Article article : favorites) {
+                if (article.equals(checkArticle)) {
+                    check = true;
+                    break;
+                }
+            }
+        }
+        return check;
     }
 
 }

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home_white_24dp"
+            android:title="@string/home" />
+        <item
+            android:id="@+id/nav_newest"
+            android:icon="@drawable/ic_av_timer_white_24dp"
+            android:title="@string/newest" />
+        <item
+            android:id="@+id/nav_top"
+            android:icon="@drawable/ic_trending_up_white_24dp"
+            android:title="@string/top" />
+        <item
+            android:id="@+id/nav_recruitment"
+            android:icon="@drawable/ic_account_circle_white_24dp"
+            android:title="@string/recruitment" />
+        <item
+            android:id="@+id/nav_scholarship"
+            android:icon="@drawable/ic_school_white_24dp"
+            android:title="@string/scholarship" />
+        <item
+            android:id="@+id/nav_event"
+            android:icon="@drawable/ic_event_white_24dp"
+            android:title="@string/event" />
+        <item
+            android:id="@+id/nav_skill"
+            android:icon="@drawable/ic_build_white_24dp"
+            android:title="@string/skill" />
+        <item
+            android:id="@+id/nav_face"
+            android:icon="@drawable/ic_face_white_24dp"
+            android:title="@string/face" />
+        <item
+            android:id="@+id/nav_competition"
+            android:icon="@drawable/ic_equalizer_white_24dp"
+            android:title="@string/competition" />
+        <item
+            android:id="@+id/nav_favorite"
+            android:icon="@drawable/ic_face_white_24dp"
+            android:title="@string/favorite" />
+    </group>
+
+    <item android:title="@string/tool">
+        <menu>
+            <!--<item
+                android:id="@+id/nav_shareapp"
+                android:icon="@drawable/ic_share_white_24dp"
+                android:title="@string/shareapp" />-->
+            <item
+                android:id="@+id/nav_rateus"
+                android:icon="@drawable/ic_rate_review_white_24dp"
+                android:title="@string/rateus" />
+            <item
+                android:id="@+id/nav_otherapp"
+                android:icon="@drawable/ic_more_white_24dp"
+                android:title="@string/otherapp" />
+            <item
+                android:id="@+id/nav_setting"
+                android:icon="@drawable/ic_settings_white_24dp"
+                android:title="@string/setting" />
+        </menu>
+    </item>
+</menu>

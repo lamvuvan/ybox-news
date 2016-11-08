@@ -1,7 +1,6 @@
 package io.github.lamvv.yboxnews.view.fragment;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,13 +24,11 @@ import java.util.List;
 import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.adapter.ArticlesAdapter;
 import io.github.lamvv.yboxnews.iml.YboxAPI;
-import io.github.lamvv.yboxnews.listener.RecyclerTouchListener;
 import io.github.lamvv.yboxnews.model.Article;
 import io.github.lamvv.yboxnews.model.ArticleList;
 import io.github.lamvv.yboxnews.util.CheckConfig;
 import io.github.lamvv.yboxnews.util.ServiceGenerator;
 import io.github.lamvv.yboxnews.util.VerticalLineDecorator;
-import io.github.lamvv.yboxnews.view.activity.ArticleActivity;
 import io.github.lamvv.yboxnews.view.activity.MainActivity;
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
@@ -69,13 +66,6 @@ public class MainFragment extends Fragment {
 
 		articles = new ArrayList<>();
 		fragmentName = getArguments().getString(TEXT_FRAGMENT);
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		Context mContext = getActivity();
-		((MainActivity) mContext).setTypeHomeMenu(0);
 	}
 
 	@Override
@@ -139,29 +129,12 @@ public class MainFragment extends Fragment {
 		load(1);
 
 		try {
-			adapter = new ArticlesAdapter(getActivity(), articles);
+			adapter = new ArticlesAdapter(rootLayout, getActivity(), articles);
 			AlphaInAnimationAdapter alphaAdapter = new AlphaInAnimationAdapter(adapter);
 			mRecyclerView.setAdapter(new ScaleInAnimationAdapter(alphaAdapter));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		//onItemClickListener
-		mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(),
-				mRecyclerView, new RecyclerTouchListener.ClickListener() {
-			@Override
-			public void onClick(View view, int position) {
-				Article article = (Article) articles.get(position);
-				Intent intent = new Intent(getActivity(), ArticleActivity.class);
-				intent.putExtra("article", article);
-				startActivity(intent);
-			}
-
-			@Override
-			public void onLongClick(View view, int position) {
-
-			}
-		}));
 
 		//onLoadMore
 		adapter.setLoadMoreListener(new ArticlesAdapter.OnLoadMoreListener() {

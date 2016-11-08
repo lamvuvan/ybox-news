@@ -10,6 +10,7 @@ import java.io.Serializable;
 
 public class Article implements Serializable {
 
+    private double id;
     @SerializedName("image")
     private String image;
     @SerializedName("category")
@@ -101,6 +102,20 @@ public class Article implements Serializable {
 
     public String getType() {
         return type;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Article other = (Article) obj;
+        if (id != other.id)
+            return false;
+        return true;
     }
 
 }

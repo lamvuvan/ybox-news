@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
+    android:id="@+id/rootLayout"
     tools:context="io.github.lamvv.yboxnews.view.activity.ArticleActivity">
 
     <android.support.design.widget.CoordinatorLayout

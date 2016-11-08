@@ -37,7 +37,6 @@ import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 public class SettingActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
-    protected int typeHomeMenu;
     private Switch switchTheme;
     private TextView tvLikeApp, tvRateApp, tvInvite, tvSendFriend, tvNeedHelp, tvSendEmail, tvMoreApp, tvCheckApps;
 
@@ -64,9 +63,13 @@ public class SettingActivity extends AppCompatActivity {
             actionBar.setHomeButtonEnabled(true);
             actionBar.setTitle(getResources().getString(R.string.setting));
         }
-        setTypeHomeMenu(1);
 
-//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         prefs = getSharedPreferences(sharedPrefName, Context.MODE_PRIVATE);
         value = prefs.getBoolean(key, value); // retrieve the value of your key
@@ -131,7 +134,7 @@ public class SettingActivity extends AppCompatActivity {
                 Intent sendIntent = new Intent(Intent.ACTION_SEND);
                 sendIntent.setType("message/rfc822");
 
-                Intent openInChooser = Intent.createChooser(emailIntent, resources.getString(R.string.share_app));
+                Intent openInChooser = Intent.createChooser(emailIntent, resources.getString(R.string.shareapp));
                 List<ResolveInfo> resInfo = pm.queryIntentActivities(sendIntent, 0);
                 List<LabeledIntent> intentList = new ArrayList<>();
                 for (int i = 0; i < resInfo.size(); i++) {
@@ -191,7 +194,7 @@ public class SettingActivity extends AppCompatActivity {
                 Intent sendIntent = new Intent(Intent.ACTION_SEND);
                 sendIntent.setType("message/rfc822");
 
-                Intent openInChooser = Intent.createChooser(emailIntent, resources.getString(R.string.share_app));
+                Intent openInChooser = Intent.createChooser(emailIntent, resources.getString(R.string.shareapp));
                 List<ResolveInfo> resInfo = pm.queryIntentActivities(sendIntent, 0);
                 List<LabeledIntent> intentList = new ArrayList<>();
                 for (int i = 0; i < resInfo.size(); i++) {
@@ -305,30 +308,4 @@ public class SettingActivity extends AppCompatActivity {
         tvCheckApps = (TextView)findViewById(R.id.checkApps);
     }
 
-    public void setTypeHomeMenu(int typeHomeMenu) {
-        this.typeHomeMenu = typeHomeMenu;
-        ActionBar actionBar = getSupportActionBar();
-        if (typeHomeMenu == 0) {
-            if (actionBar != null) {
-
-                actionBar.setDisplayHomeAsUpEnabled(true);
-                actionBar.setHomeButtonEnabled(true);
-
-                if (mToolbar != null){
-                    mToolbar.setNavigationIcon(R.color.transparent);
-                }
-            }
-        } else {
-            if (actionBar != null) {
-                if (mToolbar != null)
-                    mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-                mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        onBackPressed();
-                    }
-                });
-            }
-        }
-    }
 }
