@@ -46,6 +46,7 @@ public class MainFragment extends Fragment {
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	MainActivity mainActivity;
 	private LinearLayout rootLayout;
+	private LinearLayout headerProgress;
 
 	private NativeAdsManager mAds;
 
@@ -89,6 +90,7 @@ public class MainFragment extends Fragment {
 		mRecyclerView = (RecyclerView)view.findViewById(R.id.recyclerView);
 		mSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipeRefreshLayout);
 		rootLayout = (LinearLayout)view.findViewById(R.id.rootLayout);
+		headerProgress = (LinearLayout) view.findViewById(R.id.headerProgress);
 	}
 
 	@Override
@@ -99,6 +101,8 @@ public class MainFragment extends Fragment {
 			Snackbar.make(rootLayout, getActivity().getResources().getString(R.string.error_no_internet),
 					Snackbar.LENGTH_LONG).show();
 		}
+
+		headerProgress.setVisibility(View.VISIBLE);
 
 		//onRefresh
 		mSwipeRefreshLayout.setColorSchemeColors(Color.parseColor("#ff0000"), Color.parseColor("#00ff00"),
@@ -178,6 +182,7 @@ public class MainFragment extends Fragment {
 			@Override
 			public void onResponse(Call<ArticleList> call, Response<ArticleList> response) {
 				if(response.isSuccessful()){
+					headerProgress.setVisibility(View.GONE);
 					articles.addAll(response.body().articles);
 					adapter.notifyDataChanged();
 				}else{
