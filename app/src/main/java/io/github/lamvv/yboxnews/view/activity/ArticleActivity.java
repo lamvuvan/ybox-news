@@ -153,7 +153,10 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
         mRecyclerView.addItemDecoration(new VerticalLineDecorator(2));
 
         if(!CheckConfig.isTablet(this)) {
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            if(CheckConfig.isPortrait(this))
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            else
+                mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         } else {
             DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
             int widthPixels = displayMetrics.widthPixels;

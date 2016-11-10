@@ -21,4 +21,8 @@ public class CheckConfig {
         NetworkInfo networkInfo = cm.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isConnected();
     }
+
+    public static boolean isPortrait(Context context){
+        return (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT);
+    }
 }

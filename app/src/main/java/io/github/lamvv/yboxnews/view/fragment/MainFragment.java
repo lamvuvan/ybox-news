@@ -112,7 +112,10 @@ public class MainFragment extends Fragment {
 		mRecyclerView.addItemDecoration(new VerticalLineDecorator(2));
 
 		if (!CheckConfig.isTablet(getActivity())) {
-			mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+			if(CheckConfig.isPortrait(getActivity()))
+				mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+			else
+				mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 		} else {
 			DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
 			int widthPixels = displayMetrics.widthPixels;
