@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.NativeExpressAdView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,10 +80,24 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
         //banner ads
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("82F5D7F589174F5BDAEBEEF3E27B4E16")
                 .addTestDevice("9E1B9BD30BDD0D71713E0611982A7D6C")
+                .addTestDevice("5911C7ACA6D91588481831737229F467")
                 .build();
         mAdView.loadAd(adRequest);
+
+        NativeExpressAdView nativeAdView = (NativeExpressAdView)findViewById(R.id.nativeAdView);
+        AdRequest request = new AdRequest.Builder()
+                .addTestDevice("9E1B9BD30BDD0D71713E0611982A7D6C")
+                .addTestDevice("5911C7ACA6D91588481831737229F467")
+                .build();
+        nativeAdView.loadAd(request);
+
+        NativeExpressAdView nativeAdView2 = (NativeExpressAdView)findViewById(R.id.nativeAdView2);
+        AdRequest request2 = new AdRequest.Builder()
+                .addTestDevice("9E1B9BD30BDD0D71713E0611982A7D6C")
+                .addTestDevice("5911C7ACA6D91588481831737229F467")
+                .build();
+        nativeAdView2.loadAd(request2);
 
         //toolbar
         mToolbar = (Toolbar) findViewById(R.id.toolbar);

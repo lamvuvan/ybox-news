@@ -1,7 +1,10 @@
 <resources>
     <string name="admob_app_id">ca-app-pub-2929884577019186~3751265151</string>
     <string name="banner_ad_unit_id">ca-app-pub-2929884577019186/5227998354</string>
+    <string name="banner2_ad_unit_id">ca-app-pub-2929884577019186/7081443957</string>
     <string name="native_ad_unit_id">ca-app-pub-2929884577019186/6549954355</string>
+    <string name="native2_ad_unit_id">ca-app-pub-2929884577019186/4208702750</string>
+    <string name="native3_ad_unit_id">ca-app-pub-2929884577019186/5766161156</string>
 
     <string name="startapp_dev_id">109770308</string>
     <string name="startapp_app_id">209953856</string>

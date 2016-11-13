@@ -78,8 +78,8 @@ public class MainActivity extends AppCompatActivity {
         MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.admob_app_id));
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("82F5D7F589174F5BDAEBEEF3E27B4E16")
                 .addTestDevice("9E1B9BD30BDD0D71713E0611982A7D6C")
+                .addTestDevice("5911C7ACA6D91588481831737229F467")
                 .build();
         mAdView.loadAd(adRequest);
 
@@ -282,10 +282,10 @@ public class MainActivity extends AppCompatActivity {
                         navItemIndex = 9;
                         CURRENT_TAG = TAG_FAVORITE;
                         break;
-//                    case R.id.nav_shareapp:
-//                        shareApp();
-//                        drawer.closeDrawers();
-//                        return true;
+                    case R.id.nav_shareapp:
+                        shareApp();
+                        drawer.closeDrawers();
+                        return true;
                     case R.id.nav_rateus:
                         try {
                             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + APP_PACKAGE_NAME)));

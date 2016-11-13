@@ -8,15 +8,13 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.facebook.ads.MediaView;
-import com.facebook.ads.NativeAd;
-import com.facebook.ads.NativeAdsManager;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.NativeExpressAdView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -36,12 +34,9 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static final int TYPE_LOAD = 0;
     private static final int TYPE_ARTICLE = 1;
     private static final int TYPE_AD = 2;
-    private static final int AD_FORM = 2;
 
     private List<Object> mList;
     private Context mContext;
-    private NativeAdsManager mAds;
-    private NativeAd mAd = null;
 
     public OnLoadMoreListener loadMoreListener;
     boolean isLoading = false, isMoreDataAvailable = true;
@@ -56,26 +51,30 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         sharedPreference = new SharedPreference();
     }
 
-    public ArticlesAdapter(Context context, List<Object> list, NativeAdsManager ads){
-        this.mContext = context;
-        this.mList = list;
-        this.mAds = ads;
-    }
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
         if(!CheckConfig.isTablet(mContext)) {
-            if(viewType == TYPE_ARTICLE){
-                return new ArticleViewHolder(inflater.inflate(R.layout.item_article, parent, false));
-            }else{
-                return new LoadViewHolder(inflater.inflate(R.layout.item_load, parent, false));
+            switch (viewType){
+                case TYPE_ARTICLE:
+                    return new ArticleViewHolder(inflater.inflate(R.layout.item_article, parent, false));
+                case TYPE_LOAD:
+                    return new LoadViewHolder(inflater.inflate(R.layout.item_load, parent, false));
+                case TYPE_AD:
+                    return new NativeExpressAdViewHolder(inflater.inflate(R.layout.native_express_ad_container, parent, false));
+                default:
+                    return new ArticleViewHolder(inflater.inflate(R.layout.item_article, parent, false));
             }
         } else {
-            if(viewType == TYPE_ARTICLE){
-                return new ArticleViewHolder(inflater.inflate(R.layout.item_article_tablet, parent, false));
-            }else{
-                return new LoadViewHolder(inflater.inflate(R.layout.item_load, parent, false));
+            switch (viewType) {
+                case TYPE_ARTICLE:
+                    return new ArticleViewHolder(inflater.inflate(R.layout.item_article_tablet, parent, false));
+                case TYPE_LOAD:
+                    return new LoadViewHolder(inflater.inflate(R.layout.item_load, parent, false));
+                case TYPE_AD:
+                    return new NativeExpressAdViewHolder(inflater.inflate(R.layout.native_express_ad_container, parent, false));
+                default:
+                    return new ArticleViewHolder(inflater.inflate(R.layout.item_article, parent, false));
             }
         }
     }
@@ -86,40 +85,25 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             isLoading = true;
             loadMoreListener.onLoadMore();
         }
-        if(getItemViewType(position) == TYPE_ARTICLE){
-            ((ArticleViewHolder)holder).bindData((Article) mList.get(position));
+        switch (getItemViewType(position)){
+            case TYPE_ARTICLE:
+                ((ArticleViewHolder)holder).bindData((Article) mList.get(position));
+                break;
+            case TYPE_AD:
+                break;
         }
-//        if (holder.getItemViewType() == TYPE_AD) {
-//            if (mAd != null) {
-//                ((AdHolder)holder).bindView(mAd);
-//            } else if (mAds != null && mAds.isLoaded()) {
-//                mAd = mAds.nextNativeAd();
-//                ((AdHolder)holder).bindView(mAd);
-//            } else {
-//                ((AdHolder)holder).bindView(null);
-//            }
-//        } else {
-//            int index = position;
-//            if (index != 0) {
-//                index--;
-//            }
-//            Article article = (Article) mList.get(index);
-//            ((ArticleViewHolder)holder).bindData(article);
-//        }
     }
 
     @Override
     public int getItemViewType(int position) {
-//        String type = ((Article)mList.get(position)).getType();
-//        if(type.equals("fil")) {
-//            return TYPE_ARTICLE;
-//        } else {
-//            return TYPE_LOAD;
-//        }
-        if(position >= getItemCount() - 1){
-            return TYPE_LOAD;
-        } else {
-            return TYPE_ARTICLE;
+        if(position == 1)
+            return TYPE_AD;
+        else {
+            if (position >= getItemCount() - 1) {
+                return TYPE_LOAD;
+            } else {
+                return TYPE_ARTICLE;
+            }
         }
     }
 
@@ -206,62 +190,25 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    private class AdHolder extends RecyclerView.ViewHolder {
-        private MediaView mAdMedia;
-        private ImageView mAdIcon;
-        private TextView mAdTitle;
-        private TextView mAdBody;
-        private TextView mAdSocialContext;
-        private Button mAdCallToAction;
-
-        public AdHolder(View view) {
-            super(view);
-
-            if (AD_FORM == 2) {
-                mAdMedia = (MediaView) view.findViewById(R.id.native_ad_media);
-                mAdSocialContext = (TextView) view.findViewById(R.id.native_ad_social_context);
-                mAdCallToAction = (Button)view.findViewById(R.id.native_ad_call_to_action);
-            }
-            else {
-                mAdMedia = (MediaView) view.findViewById(R.id.native_ad_media);
-                mAdTitle = (TextView) view.findViewById(R.id.native_ad_title);
-                mAdBody = (TextView) view.findViewById(R.id.native_ad_body);
-                mAdSocialContext = (TextView) view.findViewById(R.id.native_ad_social_context);
-                mAdCallToAction = (Button)view.findViewById(R.id.native_ad_call_to_action);
-                mAdIcon = (ImageView)view.findViewById(R.id.native_ad_icon);
-            }
-        }
-
-        public void bindView(NativeAd ad) {
-            if (ad == null) {
-                if (AD_FORM == 2) {
-                    mAdSocialContext.setText("No Ad");
-                } else {
-                    mAdTitle.setText("No Ad");
-                    mAdBody.setText("Ad is not loaded.");
-                }
-            } else {
-                if (AD_FORM == 2) {
-                    mAdSocialContext.setText(ad.getAdSocialContext());
-                    mAdCallToAction.setText(ad.getAdCallToAction());
-                    mAdMedia.setNativeAd(ad);
-                } else {
-                    mAdTitle.setText(ad.getAdTitle());
-                    mAdBody.setText(ad.getAdBody());
-                    mAdSocialContext.setText(ad.getAdSocialContext());
-                    mAdCallToAction.setText(ad.getAdCallToAction());
-                    mAdMedia.setNativeAd(ad);
-                    NativeAd.Image adIcon = ad.getAdIcon();
-                    NativeAd.downloadAndDisplayImage(adIcon, mAdIcon);
-                }
-            }
-        }
-    }
-
     private class LoadViewHolder extends RecyclerView.ViewHolder{
 
         public LoadViewHolder(View itemView) {
             super(itemView);
+        }
+    }
+
+    private class NativeExpressAdViewHolder extends RecyclerView.ViewHolder {
+
+        NativeExpressAdView nativeAdView;
+
+        public NativeExpressAdViewHolder(View itemView) {
+            super(itemView);
+            nativeAdView = (NativeExpressAdView)itemView.findViewById(R.id.nativeAdView);
+            AdRequest request = new AdRequest.Builder()
+                    .addTestDevice("9E1B9BD30BDD0D71713E0611982A7D6C")
+                    .addTestDevice("5911C7ACA6D91588481831737229F467")
+                    .build();
+            nativeAdView.loadAd(request);
         }
     }
 

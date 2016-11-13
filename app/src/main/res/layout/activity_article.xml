@@ -56,6 +56,15 @@
                         android:layout_height="wrap_content"
                         android:background="@color/background"/>
 
+                    <com.google.android.gms.ads.NativeExpressAdView
+                        android:id="@+id/nativeAdView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        ads:adSize="320x150"
+                        ads:adUnitId="@string/native_ad_unit_id">
+                    </com.google.android.gms.ads.NativeExpressAdView>
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -73,6 +82,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/activity_vertical_margin"/>
+
+                    <com.google.android.gms.ads.NativeExpressAdView
+                        android:id="@+id/nativeAdView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:layout_gravity="center_horizontal"
+                        ads:adSize="320x150"
+                        ads:adUnitId="@string/native3_ad_unit_id">
+                    </com.google.android.gms.ads.NativeExpressAdView>
 
                 </LinearLayout>
             </ScrollView>
@@ -94,5 +113,5 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         ads:adSize="SMART_BANNER"
-        ads:adUnitId="@string/banner_ad_unit_id" />
+        ads:adUnitId="@string/banner2_ad_unit_id" />
 </RelativeLayout>
