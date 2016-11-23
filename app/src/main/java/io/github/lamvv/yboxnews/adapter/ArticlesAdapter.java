@@ -60,8 +60,8 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     return new ArticleViewHolder(inflater.inflate(R.layout.item_article, parent, false));
                 case TYPE_LOAD:
                     return new LoadViewHolder(inflater.inflate(R.layout.item_load, parent, false));
-                case TYPE_AD:
-                    return new NativeExpressAdViewHolder(inflater.inflate(R.layout.native_express_ad_container, parent, false));
+//                case TYPE_AD:
+//                    return new NativeExpressAdViewHolder(inflater.inflate(R.layout.native_express_ad_container, parent, false));
                 default:
                     return new ArticleViewHolder(inflater.inflate(R.layout.item_article, parent, false));
             }
@@ -71,8 +71,8 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     return new ArticleViewHolder(inflater.inflate(R.layout.item_article_tablet, parent, false));
                 case TYPE_LOAD:
                     return new LoadViewHolder(inflater.inflate(R.layout.item_load, parent, false));
-                case TYPE_AD:
-                    return new NativeExpressAdViewHolder(inflater.inflate(R.layout.native_express_ad_container, parent, false));
+//                case TYPE_AD:
+//                    return new NativeExpressAdViewHolder(inflater.inflate(R.layout.native_express_ad_container, parent, false));
                 default:
                     return new ArticleViewHolder(inflater.inflate(R.layout.item_article, parent, false));
             }
@@ -89,22 +89,22 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case TYPE_ARTICLE:
                 ((ArticleViewHolder)holder).bindData((Article) mList.get(position));
                 break;
-            case TYPE_AD:
-                break;
+//            case TYPE_AD:
+//                break;
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        if(position == 1)
-            return TYPE_AD;
-        else {
+//        if(position % 15 == 1)
+//            return TYPE_AD;
+//        else {
             if (position >= getItemCount() - 1) {
                 return TYPE_LOAD;
             } else {
                 return TYPE_ARTICLE;
             }
-        }
+//        }
     }
 
     @Override
