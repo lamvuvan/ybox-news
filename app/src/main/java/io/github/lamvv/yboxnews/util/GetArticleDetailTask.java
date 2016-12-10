@@ -60,7 +60,8 @@ public class GetArticleDetailTask extends AsyncTask<String, Void, String> {
             detail.append("<h2 style = \" color: #111111 \">" + title.text() + "</h2>");
             detail.append("<font size=\" 2em \" style = \" color: #005500 \"><em>" + pubDate + ", " + viewCount + "</em></font>");
             detail.append("<img src = \"" + imgThumb + "\"" + "/>");
-            detail.append("<p style = \" color: #111111 \"><b>" + "<font size=\" 4em \" >" + cont.toString() + "</font></b></p>");
+//            detail.append("<p style = \" color: #111111 \"><b>" + "<font size=\" 4em \" >" + cont.toString() + "</font></b></p>");
+            detail.append("<p>" + "<font size=\" 4em \" >" + cont.toString() + "</font></p>");
 
         } catch (IOException e) {
             e.printStackTrace();

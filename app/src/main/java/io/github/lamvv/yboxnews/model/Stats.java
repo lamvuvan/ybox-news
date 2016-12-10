@@ -24,7 +24,4 @@ public class Stats implements Serializable {
         return view;
     }
 
-    public void setView(String view) {
-        this.view = view;
-    }
 }

@@ -6,6 +6,7 @@ import android.content.pm.LabeledIntent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,8 +19,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.google.android.gms.ads.AdRequest;
@@ -61,6 +65,7 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
     private String category;
 
     private RelativeLayout rootLayout;
+    private LinearLayout headerProgress;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,6 +76,7 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
         fab = (FloatingActionButton)findViewById(R.id.fab);
         mRecyclerView = (RecyclerView)findViewById(R.id.recyclerView);
         rootLayout = (RelativeLayout)findViewById(R.id.rootLayout);
+        headerProgress = (LinearLayout)findViewById(R.id.headerProgress);
 
         //get data send from fragments
         Bundle bundle = getIntent().getExtras();
@@ -114,12 +120,15 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
             }
         });
 
+        headerProgress.setVisibility(View.VISIBLE);
+
         //webView
         mWebView = (WebView) findViewById(R.id.wvArticle);
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setSupportZoom(true);
         mWebView.setBackgroundColor(Color.TRANSPARENT);
+        mWebView.setWebViewClient(new MyWebViewClient());
 
         //launch task get detail article
         String detail = article.getLinks().getDetail();
@@ -247,6 +256,27 @@ public class ArticleActivity extends AppCompatActivity implements GetArticleDeta
 //				Log.e("lamvv"," Response Error "+t.getMessage());
             }
         });
+    }
+
+    private class MyWebViewClient extends WebViewClient {
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+            headerProgress.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+            headerProgress.setVisibility(View.GONE);
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+            headerProgress.setVisibility(View.VISIBLE);
+            view.loadUrl(String.valueOf(request));
+            return true;
+        }
     }
 
 }

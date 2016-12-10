@@ -48,56 +48,28 @@ public class Article implements Serializable {
         return image;
     }
 
-    public void setImage(String image) {
-        this.image = image;
-    }
-
     public String getCategory() {
         return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public Content getContent() {
         return content;
-    }
-
-    public void setContent(Content content) {
-        this.content = content;
     }
 
     public Stats getStats() {
         return stats;
     }
 
-    public void setStats(Stats stats) {
-        this.stats = stats;
-    }
-
     public Timestamps getTimestamps() {
         return timestamps;
     }
 
-    public void setTimestamps(Timestamps timestamps) {
-        this.timestamps = timestamps;
-    }
-
     public Links getLinks() {
         return links;
-    }
-
-    public void setLinks(Links links) {
-        this.links = links;
     }
 
     public String getType() {

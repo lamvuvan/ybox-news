@@ -24,7 +24,4 @@ public class Timestamps implements Serializable {
         return updatedAt;
     }
 
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 }

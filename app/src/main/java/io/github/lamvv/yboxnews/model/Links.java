@@ -24,7 +24,4 @@ public class Links implements Serializable {
         return detail;
     }
 
-    public void setDetail(String detail) {
-        this.detail = detail;
-    }
 }

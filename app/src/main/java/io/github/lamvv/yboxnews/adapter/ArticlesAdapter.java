@@ -13,8 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.NativeExpressAdView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -60,10 +58,8 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     return new ArticleViewHolder(inflater.inflate(R.layout.item_article, parent, false));
                 case TYPE_LOAD:
                     return new LoadViewHolder(inflater.inflate(R.layout.item_load, parent, false));
-//                case TYPE_AD:
-//                    return new NativeExpressAdViewHolder(inflater.inflate(R.layout.native_express_ad_container, parent, false));
                 default:
-                    return new ArticleViewHolder(inflater.inflate(R.layout.item_article, parent, false));
+                    return new NativeExpressAdViewHolder(inflater.inflate(R.layout.native_express_ad_container, parent, false));
             }
         } else {
             switch (viewType) {
@@ -71,16 +67,14 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     return new ArticleViewHolder(inflater.inflate(R.layout.item_article_tablet, parent, false));
                 case TYPE_LOAD:
                     return new LoadViewHolder(inflater.inflate(R.layout.item_load, parent, false));
-//                case TYPE_AD:
-//                    return new NativeExpressAdViewHolder(inflater.inflate(R.layout.native_express_ad_container, parent, false));
                 default:
-                    return new ArticleViewHolder(inflater.inflate(R.layout.item_article, parent, false));
+                    return new NativeExpressAdViewHolder(inflater.inflate(R.layout.native_express_ad_container, parent, false));
             }
         }
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (position >= getItemCount()-1 && isMoreDataAvailable && !isLoading && loadMoreListener != null){
             isLoading = true;
             loadMoreListener.onLoadMore();
@@ -89,14 +83,14 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case TYPE_ARTICLE:
                 ((ArticleViewHolder)holder).bindData((Article) mList.get(position));
                 break;
-//            case TYPE_AD:
-//                break;
+            default:
+
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-//        if(position % 15 == 1)
+//        if(position % Constant.ITEMS_PER_AD == 1)
 //            return TYPE_AD;
 //        else {
             if (position >= getItemCount() - 1) {
@@ -187,6 +181,9 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             Intent intent = new Intent(mContext, ArticleActivity.class);
             intent.putExtra("article", article);
             mContext.startActivity(intent);
+
+//            ArticleFragment articleFragment = ArticleFragment.newInstance("Article Detail", article);
+//            FragmentController.replaceWithAddToBackStackAnimation(mContext, articleFragment , ArticleFragment.class.toString());
         }
     }
 
@@ -198,17 +195,8 @@ public class ArticlesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     private class NativeExpressAdViewHolder extends RecyclerView.ViewHolder {
-
-        NativeExpressAdView nativeAdView;
-
-        public NativeExpressAdViewHolder(View itemView) {
+        public NativeExpressAdViewHolder(View itemView){
             super(itemView);
-            nativeAdView = (NativeExpressAdView)itemView.findViewById(R.id.nativeAdView);
-            AdRequest request = new AdRequest.Builder()
-                    .addTestDevice("9E1B9BD30BDD0D71713E0611982A7D6C")
-                    .addTestDevice("5911C7ACA6D91588481831737229F467")
-                    .build();
-            nativeAdView.loadAd(request);
         }
     }
 

@@ -4,25 +4,30 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.facebook.ads.NativeAdsManager;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.NativeExpressAdView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.adapter.ArticlesAdapter;
+import io.github.lamvv.yboxnews.constant.Constant;
 import io.github.lamvv.yboxnews.iml.YboxAPI;
 import io.github.lamvv.yboxnews.model.Article;
 import io.github.lamvv.yboxnews.model.ArticleList;
@@ -36,6 +41,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static io.github.lamvv.yboxnews.constant.Constant.ITEMS_PER_AD;
+
 public class MainFragment extends Fragment {
 
 	private List<Object> articles;
@@ -47,8 +54,7 @@ public class MainFragment extends Fragment {
 	MainActivity mainActivity;
 	private LinearLayout rootLayout;
 	private LinearLayout headerProgress;
-
-	private NativeAdsManager mAds;
+	private FloatingActionButton fab;
 
 	private static final String TEXT_FRAGMENT = "TEXT_FRAGMENT";
 	private String fragmentName;
@@ -91,6 +97,7 @@ public class MainFragment extends Fragment {
 		mSwipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipeRefreshLayout);
 		rootLayout = (LinearLayout)view.findViewById(R.id.rootLayout);
 		headerProgress = (LinearLayout) view.findViewById(R.id.headerProgress);
+		fab = (FloatingActionButton)view.findViewById(R.id.fab);
 	}
 
 	@Override
@@ -117,20 +124,17 @@ public class MainFragment extends Fragment {
 			else
 				mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 		} else {
-			DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
-			int widthPixels = displayMetrics.widthPixels;
-			int heightPixels = displayMetrics.heightPixels;
-			float widthDpi = displayMetrics.xdpi;
-			float heightDpi = displayMetrics.ydpi;
-			float widthInches = widthPixels / widthDpi;
-			float heightInches = heightPixels / heightDpi;
-			double diagonalInches = Math.sqrt((widthInches * widthInches) + (heightInches * heightInches));
+			double diagonalInches = CheckConfig.getDiagonal(getActivity());
 			if (diagonalInches >= 9) {
 				mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
 			} else {
 				mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 			}
 		}
+
+		// Update the RecyclerView item's list with menu items and Native Express ads.
+//		addNativeExpressAds();
+//		setUpAndLoadNativeExpressAds();
 
 		api = ServiceGenerator.createService(YboxAPI.class);
 		load(1);
@@ -155,6 +159,14 @@ public class MainFragment extends Fragment {
 						loadMore(page);
 					}
 				});
+			}
+		});
+
+		fab.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				LinearLayoutManager layoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+				layoutManager.scrollToPositionWithOffset(0, 0);
 			}
 		});
 
@@ -271,5 +283,87 @@ public class MainFragment extends Fragment {
 			}, 1000);
 		}
 	};
+
+	/**
+	 * Adds Native Express ads to the items list.
+	 */
+	private void addNativeExpressAds() {
+
+		// Loop through the items array and place a new Native Express ad in every ith position in
+		// the items List.
+		for (int i = 0; i <= articles.size(); i += Constant.ITEMS_PER_AD) {
+			final NativeExpressAdView adView = new NativeExpressAdView(getActivity());
+			articles.add(i, adView);
+		}
+	}
+
+	/**
+	 * Sets up and loads the Native Express ads.
+	 */
+	private void setUpAndLoadNativeExpressAds() {
+		// Use a Runnable to ensure that the RecyclerView has been laid out before setting the
+		// ad size for the Native Express ad. This allows us to set the Native Express ad's
+		// width to match the full width of the RecyclerView.
+		mRecyclerView.post(new Runnable() {
+			@Override
+			public void run() {
+				final float density = getActivity().getResources().getDisplayMetrics().density;
+				// Set the ad size and ad unit ID for each Native Express ad in the items list.
+				for (int i = 0; i <= articles.size(); i += ITEMS_PER_AD) {
+					final NativeExpressAdView adView =
+							(NativeExpressAdView) articles.get(i);
+					AdSize adSize = new AdSize(
+							(int) (mRecyclerView.getWidth() / density), Constant.NATIVE_EXPRESS_AD_HEIGHT);
+					adView.setAdSize(adSize);
+					adView.setAdUnitId(getResources().getString(R.string.native2_ad_unit_id));
+				}
+
+				// Load the first Native Express ad in the items list.
+				loadNativeExpressAd(0);
+			}
+		});
+	}
+
+	/**
+	 * Loads the Native Express ads in the items list.
+	 */
+	private void loadNativeExpressAd(final int index) {
+
+		if (index >= articles.size()) {
+			return;
+		}
+
+		Object item = articles.get(index);
+		if (!(item instanceof NativeExpressAdView)) {
+			throw new ClassCastException("Expected item at index " + index + " to be a Native"
+					+ " Express ad.");
+		}
+
+		final NativeExpressAdView adView = (NativeExpressAdView) item;
+
+		// Set an AdListener on the NativeExpressAdView to wait for the previous Native Express ad
+		// to finish loading before loading the next ad in the items list.
+		adView.setAdListener(new AdListener() {
+			@Override
+			public void onAdLoaded() {
+				super.onAdLoaded();
+				// The previous Native Express ad loaded successfully, call this method again to
+				// load the next ad in the items list.
+				loadNativeExpressAd(index + ITEMS_PER_AD);
+			}
+
+			@Override
+			public void onAdFailedToLoad(int errorCode) {
+				// The previous Native Express ad failed to load. Call this method again to load
+				// the next ad in the items list.
+				Log.e("MainActivity", "The previous Native Express ad failed to load. Attempting to"
+						+ " load the next Native Express ad in the items list.");
+				loadNativeExpressAd(index + ITEMS_PER_AD);
+			}
+		});
+
+		// Load the Native Express ad.
+		adView.loadAd(new AdRequest.Builder().build());
+	}
 
 }

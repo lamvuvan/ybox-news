@@ -24,7 +24,4 @@ public class Content implements Serializable {
         return raw;
     }
 
-    public void setRaw(String raw) {
-        this.raw = raw;
-    }
 }
