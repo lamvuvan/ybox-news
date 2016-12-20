@@ -17,10 +17,12 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.model.Article;
-import io.github.lamvv.yboxnews.util.SharedPreference;
-import io.github.lamvv.yboxnews.view.activity.ArticleActivity;
+import io.github.lamvv.yboxnews.util.SharedPreferenceUtils;
+import io.github.lamvv.yboxnews.view.activity.DetailArticleActivity;
 
 /**
  * Created by lamvu on 11/2/2016.
@@ -30,21 +32,21 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private static final int TYPE_ARTICLE = 1;
 
-    private Context mContext;
+    private Context context;
     private List<Article> favoriteArticles;
-    private SharedPreference sharedPreference;
+    private SharedPreferenceUtils sharedPreference;
     private LinearLayout rootLayout;
 
     public FavoriteAdapter(LinearLayout rootLayout, Context context, List<Article> favoriteArticles){
         this.rootLayout = rootLayout;
-        this.mContext = context;
+        this.context = context;
         this.favoriteArticles = favoriteArticles;
-        sharedPreference = new SharedPreference();
+        sharedPreference = new SharedPreferenceUtils();
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(mContext);
+        LayoutInflater inflater = LayoutInflater.from(context);
         return new ArticleViewHolder(inflater.inflate(R.layout.item_article, parent, false));
     }
 
@@ -65,25 +67,26 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return favoriteArticles.size();
     }
 
-    private class ArticleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ArticleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        @BindView(R.id.image)
         ImageView ivImage;
+        @BindView(R.id.title)
         TextView tvTitle;
+        @BindView(R.id.content)
         TextView tvContent;
+        @BindView(R.id.updatedAt)
         TextView tvUpdatedAt;
+        @BindView(R.id.favorite)
         ImageButton ibFavorite;
 
         public ArticleViewHolder(View itemView) {
             super(itemView);
-            ivImage = (ImageView)itemView.findViewById(R.id.image);
-            tvTitle = (TextView)itemView.findViewById(R.id.title);
-            tvContent = (TextView)itemView.findViewById(R.id.content);
-            tvUpdatedAt = (TextView)itemView.findViewById(R.id.updatedAt);
-            ibFavorite = (ImageButton)itemView.findViewById(R.id.favorite);
+            ButterKnife.bind(this, itemView);
         }
 
         void bindData(final Article article) {
-            Picasso.with(mContext)
+            Picasso.with(context)
                     .load(article.getImage())
                     .placeholder(R.drawable.default_thumbnail)
                     .error(R.drawable.default_thumbnail)
@@ -110,11 +113,11 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 public void onClick(View view) {
                     int position = getAdapterPosition();
                     favoriteArticles.remove(position);
-                    sharedPreference.removeFavorite(mContext, position);
+                    sharedPreference.removeFavorite(context, position);
                     notifyItemRemoved(position);
                     ibFavorite.setTag("deactive");
                     ibFavorite.setImageResource(R.drawable.ic_fav_normal);
-                    Snackbar.make(rootLayout, mContext.getResources().getString(R.string.remove_favorite_message),
+                    Snackbar.make(rootLayout, context.getResources().getString(R.string.remove_favorite_message),
                             Snackbar.LENGTH_SHORT).show();
                 }
             });
@@ -124,10 +127,10 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public void onClick(View v) {
             int position = getAdapterPosition();
             Article article = favoriteArticles.get(position);
-            Intent intent = new Intent(mContext, ArticleActivity.class);
+            Intent intent = new Intent(context, DetailArticleActivity.class);
             intent.putExtra("article", article);
             intent.putExtra("position", position);
-            mContext.startActivity(intent);
+            context.startActivity(intent);
         }
     }
 

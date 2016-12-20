@@ -61,6 +61,10 @@
                 android:id="@+id/nav_setting"
                 android:icon="@drawable/ic_settings_white_24dp"
                 android:title="@string/setting" />
+            <item
+                android:id="@+id/nav_version"
+                android:icon="@drawable/ic_info_white_24dp"
+                android:title="@string/version"/>
         </menu>
     </item>
 </menu>

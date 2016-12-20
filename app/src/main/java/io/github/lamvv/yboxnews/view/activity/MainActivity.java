@@ -1,12 +1,7 @@
 package io.github.lamvv.yboxnews.view.activity;
 
 import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.pm.LabeledIntent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,24 +16,23 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.squareup.picasso.Picasso;
 import com.startapp.android.publish.StartAppAd;
 import com.startapp.android.publish.StartAppSDK;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.view.fragment.FavoriteFragment;
 import io.github.lamvv.yboxnews.view.fragment.MainFragment;
 
-import static io.github.lamvv.yboxnews.constant.BuildConfig.APP_PACKAGE_NAME;
-import static io.github.lamvv.yboxnews.constant.BuildConfig.DEV_STORE_ID;
-import static io.github.lamvv.yboxnews.constant.BuildConfig.PLAY_STORE_APP_URL;
-import static io.github.lamvv.yboxnews.constant.BuildConfig.PLAY_STORE_DEV_URL;
+import static io.github.lamvv.yboxnews.util.ShareUtils.APP_PACKAGE_NAME;
+import static io.github.lamvv.yboxnews.util.ShareUtils.DEV_STORE_ID;
+import static io.github.lamvv.yboxnews.util.ShareUtils.PLAY_STORE_APP_URL;
+import static io.github.lamvv.yboxnews.util.ShareUtils.PLAY_STORE_DEV_URL;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,12 +43,14 @@ public class MainActivity extends AppCompatActivity {
     private NavigationView navigationView;
     private View navHeader;
 
+    private ImageView imgNavHeaderBg;
+
     // index to identify current nav menu item
     public static int navItemIndex = 0;
     // toolbar titles respected to selected nav menu item
     private String[] activityTitles;
 
-    private Handler mHandler;
+    private Handler handler;
 
     // tags used to attach the fragments
     private static final String TAG_HOME = "home";
@@ -93,15 +89,18 @@ public class MainActivity extends AppCompatActivity {
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
 
-        mHandler = new Handler();
+        handler = new Handler();
 
         setSupportActionBar(toolbar);
 
         // Navigation view header
         navHeader = navigationView.getHeaderView(0);
+        imgNavHeaderBg = (ImageView) navHeader.findViewById(R.id.img_header_bg);
 
         // load toolbar titles from string resources
         activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
+
+        loadNavHeader();
 
         // initializing navigation menu
         setUpNavigationView();
@@ -147,6 +146,12 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void loadNavHeader() {
+        Picasso.with(this)
+                .load(R.drawable.header)
+                .into(imgNavHeaderBg);
+    }
+
     /***
      * Returns respected fragment that user
      * selected from navigation menu
@@ -185,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
 
         // If mPendingRunnable is not null, then add to the message queue
         if (mPendingRunnable != null) {
-            mHandler.post(mPendingRunnable);
+            handler.post(mPendingRunnable);
         }
 
         //Closing drawer on item click
@@ -204,7 +209,6 @@ public class MainActivity extends AppCompatActivity {
             case 2:
                 return MainFragment.newInstance(getResources().getString(R.string.top));
             case 3:
-                //Blog corporation-cats
                 return MainFragment.newInstance(getResources().getString(R.string.recruitment));
             case 4:
                 return MainFragment.newInstance(getResources().getString(R.string.scholarship));
@@ -306,6 +310,14 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(new Intent(MainActivity.this, SettingActivity.class));
                         drawer.closeDrawers();
                         return true;
+                    case R.id.nav_version:
+                        try {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + APP_PACKAGE_NAME)));
+                        } catch (ActivityNotFoundException e) {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(PLAY_STORE_APP_URL + APP_PACKAGE_NAME)));
+                        }
+                        drawer.closeDrawers();
+                        return true;
                     default:
                         navItemIndex = 0;
                 }
@@ -349,49 +361,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void shareApp(){
-        Resources resources = getResources();
-        Intent emailIntent = new Intent(Intent.ACTION_SEND);
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.app_name));
-        emailIntent.putExtra(Intent.EXTRA_TEXT, PLAY_STORE_APP_URL + APP_PACKAGE_NAME);
-        emailIntent.setType("text/plain");
-
-        PackageManager pm = getPackageManager();
-        Intent sendIntent = new Intent(Intent.ACTION_SEND);
-        sendIntent.setType("message/rfc822");
-
-        Intent openInChooser = Intent.createChooser(emailIntent, resources.getString(R.string.shareapp));
-        List<ResolveInfo> resInfo = pm.queryIntentActivities(sendIntent, 0);
-        List<LabeledIntent> intentList = new ArrayList<>();
-        for (int i = 0; i < resInfo.size(); i++) {
-            // Extract the label, append it, and repackage it in a LabeledIntent
-            ResolveInfo ri = resInfo.get(i);
-            String packageName = ri.activityInfo.packageName;
-            if(packageName.contains("android.email")) {
-                emailIntent.setPackage(packageName);
-            } else if(packageName.contains("twitter") || packageName.contains("facebook") || packageName.contains("mms") || packageName.contains("android.gm")) {
-                Intent intent = new Intent();
-                intent.setComponent(new ComponentName(packageName, ri.activityInfo.name));
-                intent.setAction(Intent.ACTION_SEND);
-                intent.setType("text/plain");
-                if(packageName.contains("twitter")) {
-                    intent.putExtra(Intent.EXTRA_TEXT, PLAY_STORE_APP_URL + APP_PACKAGE_NAME);
-                } else if(packageName.contains("facebook")) {
-                    intent.putExtra(Intent.EXTRA_TEXT, PLAY_STORE_APP_URL + APP_PACKAGE_NAME);
-                } else if(packageName.contains("mms")) {
-                    intent.putExtra(Intent.EXTRA_TEXT, PLAY_STORE_APP_URL + APP_PACKAGE_NAME);
-                } else if(packageName.contains("android.gm")) { // If Gmail shows up twice, try removing this else-if clause and the reference to "android.gm" above
-                    intent.putExtra(Intent.EXTRA_SUBJECT, resources.getString(R.string.app_name));
-                    intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.get_app) + " " +
-                            PLAY_STORE_APP_URL + APP_PACKAGE_NAME);
-                    intent.setType("message/rfc822");
-                }
-                intentList.add(new LabeledIntent(intent, packageName, ri.loadLabel(pm), ri.icon));
-            }
-        }
-        // convert intentList to array
-        LabeledIntent[] extraIntents = intentList.toArray( new LabeledIntent[ intentList.size() ]);
-        openInChooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, extraIntents);
-        startActivity(openInChooser);
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, PLAY_STORE_APP_URL + APP_PACKAGE_NAME);
+        startActivity(Intent.createChooser(intent, getResources().getString(R.string.shareapp)));
     }
 
 }

@@ -2,16 +2,16 @@
 <resources>
     <color name="colorPrimary">#607D8B</color>
     <color name="colorPrimaryDark">#455A64</color>
-    <color name="colorAccent">#64DD17</color>
+    <color name="colorAccent">#FF4081</color>
+
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="textColorSecondary">#FFFFFF</color>
-    <color name="textColorTitle">#D50000</color>
-    <color name="background">#555555</color>
+    <color name="textColor">#FFFFFF</color>
+    <color name="textColorTitle">#FFFFFF</color>
 
-    <color name="colorRow">#FFFFFF</color>
-    <color name="colorBackground">#F1F1F1</color>
+    <color name="colorCard">#202124</color>
+    <color name="colorBackground">#383F41</color>
+    <color name="colorBackgroundWebview">#383F41</color>
 
     <color name="white">#FFFFFFFF</color>
-    <color name="white_87">#DEFFFFFF</color>
-    <color name="white_54">#8AFFFFFF</color>
 </resources>

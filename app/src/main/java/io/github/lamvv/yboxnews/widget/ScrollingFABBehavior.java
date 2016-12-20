@@ -7,7 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
 import android.view.View;
 
-import io.github.lamvv.yboxnews.util.Utils;
+import io.github.lamvv.yboxnews.util.BarUtils;
 
 /**
  * Created by lamvu on 10/20/2016.
@@ -19,7 +19,7 @@ public class ScrollingFABBehavior extends FloatingActionButton.Behavior {
 
     public ScrollingFABBehavior(Context context, AttributeSet attrs) {
         super();
-        this.toolbarHeight = Utils.getToolbarHeight(context);
+        this.toolbarHeight = BarUtils.getToolbarHeight(context);
     }
 
     @Override

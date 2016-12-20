@@ -29,12 +29,12 @@ import java.util.List;
 import io.github.lamvv.yboxnews.R;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
-import static io.github.lamvv.yboxnews.constant.BuildConfig.APP_PACKAGE_NAME;
-import static io.github.lamvv.yboxnews.constant.BuildConfig.CC_EMAIL;
-import static io.github.lamvv.yboxnews.constant.BuildConfig.DEV_STORE_ID;
-import static io.github.lamvv.yboxnews.constant.BuildConfig.MAIN_EMAIL;
-import static io.github.lamvv.yboxnews.constant.BuildConfig.PLAY_STORE_APP_URL;
-import static io.github.lamvv.yboxnews.constant.BuildConfig.PLAY_STORE_DEV_URL;
+import static io.github.lamvv.yboxnews.util.ShareUtils.APP_PACKAGE_NAME;
+import static io.github.lamvv.yboxnews.util.ShareUtils.CC_EMAIL;
+import static io.github.lamvv.yboxnews.util.ShareUtils.DEV_STORE_ID;
+import static io.github.lamvv.yboxnews.util.ShareUtils.MAIN_EMAIL;
+import static io.github.lamvv.yboxnews.util.ShareUtils.PLAY_STORE_APP_URL;
+import static io.github.lamvv.yboxnews.util.ShareUtils.PLAY_STORE_DEV_URL;
 
 /**
  * Created by lamvu on 10/13/2016.
@@ -42,7 +42,7 @@ import static io.github.lamvv.yboxnews.constant.BuildConfig.PLAY_STORE_DEV_URL;
 
 public class SettingActivity extends AppCompatActivity {
 
-    private Toolbar mToolbar;
+    private Toolbar toolbar;
     private Switch switchTheme;
     private TextView tvLikeApp, tvRateApp, tvInvite, tvSendFriend, tvNeedHelp, tvSendEmail, tvMoreApp, tvCheckApps;
 
@@ -62,7 +62,7 @@ public class SettingActivity extends AppCompatActivity {
 
         getComponent();
 
-        this.setSupportActionBar(mToolbar);
+        this.setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -70,7 +70,7 @@ public class SettingActivity extends AppCompatActivity {
             actionBar.setTitle(getResources().getString(R.string.setting));
         }
 
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
@@ -198,7 +198,7 @@ public class SettingActivity extends AppCompatActivity {
             try {
                 startActivity(intentSendMail);
             } catch (ActivityNotFoundException ex) {
-                Toast.makeText(SettingActivity.this, getString(R.string.error_not_email), Toast.LENGTH_SHORT).show();
+                Toast.makeText(SettingActivity.this, getString(R.string.error_email), Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -215,7 +215,7 @@ public class SettingActivity extends AppCompatActivity {
     };
 
     private void getComponent(){
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         switchTheme = (Switch)findViewById(R.id.switchTheme);
         tvLikeApp = (TextView)findViewById(R.id.likeApp);
         tvRateApp = (TextView)findViewById(R.id.rateApp);

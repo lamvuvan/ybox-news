@@ -16,13 +16,13 @@
 
     <string name="app_name">Ybox</string>
 
-    <string name="title_dialog">Vui lòng chờ!</string>
-    <string name="message_dialog">Đang tải dữ liệu ...</string>
     <string name="add_favorite_message">Đã thêm vào danh sách yêu thích</string>
     <string name="remove_favorite_message">Đã xóa khỏi danh sách yêu thích</string>
     <string name="no_favorite_message">Chưa có bài báo nào được thêm!</string>
     <string name="share_content">Chia sẻ bài viết</string>
-    <string name="more_article">Các bài viết liên quan</string>
+    <string name="more_article">Cùng chuyên mục</string>
+    <string name="views">lượt xem</string>
+    <string name="version_app">Phiên bản</string>
 
     <string name="dark">Chế độ ban đêm</string>
     <string name="about_us">Về chúng tôi</string>
@@ -35,8 +35,8 @@
     <string name="get_more_app">Các ứng dụng khác</string>
     <string name="checkout_recommended">Các ứng dụng khác của chúng tôi</string>
 
-    <string name="error_not_email">Vui lòng cài đặt trình gửi thư.</string>
-    <string name="error_no_internet">Không có kết nối Internet! Kiểm tra kết nối internet của bạn sau đó cuộn xuống để làm mới!</string>
+    <string name="error_email">Vui lòng cài đặt trình gửi thư.</string>
+    <string name="error_internet">Không có kết nối Internet! Kiểm tra kết nối internet của bạn sau đó cuộn xuống để làm mới!</string>
 
     <string name="get_app">Tải xuống từ Google Play</string>
     <string name="name_app">Tin tức Ybox</string>
@@ -63,6 +63,7 @@
     <string name="rateus">Đánh giá</string>
     <string name="otherapp">Ứng dụng khác</string>
     <string name="setting">Cài đặt</string>
+    <string name="version">Phiên bản 1.5.0</string>
 
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">

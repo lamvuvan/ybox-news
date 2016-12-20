@@ -6,5 +6,9 @@ package io.github.lamvv.yboxnews.iml;
 
 public interface GetArticleDetailTaskCompleteListener<T> {
 
+    void showProgress();
+
+    void hideProgress();
+
     void onGetDetailTaskComplete(T result);
 }

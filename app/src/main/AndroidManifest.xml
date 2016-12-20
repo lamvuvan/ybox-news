@@ -16,8 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".view.activity.SplashActivity"
-            android:theme="@style/SplashTheme">
+            android:name=".view.activity.SplashActivity" android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,7 +24,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.activity.MainActivity" />
-        <activity android:name=".view.activity.ArticleActivity" />
+        <activity android:name=".view.activity.DetailArticleActivity" android:theme="@style/AppTheme.NoTrans">
+        </activity>
         <activity android:name=".view.activity.SettingActivity" />
 
         <!-- startapp ads -->

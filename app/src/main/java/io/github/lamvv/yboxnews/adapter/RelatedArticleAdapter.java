@@ -13,17 +13,17 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.facebook.ads.NativeAd;
-import com.facebook.ads.NativeAdsManager;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.model.Article;
-import io.github.lamvv.yboxnews.util.CheckConfig;
-import io.github.lamvv.yboxnews.util.SharedPreference;
-import io.github.lamvv.yboxnews.view.activity.ArticleActivity;
+import io.github.lamvv.yboxnews.util.DeviceUtils;
+import io.github.lamvv.yboxnews.util.SharedPreferenceUtils;
+import io.github.lamvv.yboxnews.view.activity.DetailArticleActivity;
 
 /**
  * Created by lamvu on 11/3/2016.
@@ -31,32 +31,26 @@ import io.github.lamvv.yboxnews.view.activity.ArticleActivity;
 
 public class RelatedArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final int TYPE_LOAD = 0;
     private static final int TYPE_ARTICLE = 1;
-    private static final int TYPE_AD = 2;
-    private static final int AD_FORM = 2;
 
-    private List<Object> mList;
-    private Context mContext;
-    private NativeAdsManager mAds;
-    private NativeAd mAd = null;
+    private List<Object> list;
+    private Context context;
 
-    private SharedPreference sharedPreference;
+    private SharedPreferenceUtils sharedPreference;
     private RelativeLayout rootLayout;
 
     public RelatedArticleAdapter(RelativeLayout rootLayout, Context context, List<Object> list){
         this.rootLayout = rootLayout;
-        this.mContext = context;
-        this.mList = list;
-        sharedPreference = new SharedPreference();
+        this.context = context;
+        this.list = list;
+        sharedPreference = new SharedPreferenceUtils();
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(mContext);
-        if(!CheckConfig.isTablet(mContext)) {
+        LayoutInflater inflater = LayoutInflater.from(context);
+        if(!DeviceUtils.isTablet(context)) {
             return new ArticleViewHolder(inflater.inflate(R.layout.item_article, parent, false));
-
         } else {
             return new ArticleViewHolder(inflater.inflate(R.layout.item_article_tablet, parent, false));
         }
@@ -65,67 +59,40 @@ public class RelatedArticleAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(getItemViewType(position) == TYPE_ARTICLE){
-            ((ArticleViewHolder)holder).bindData((Article) mList.get(position));
+            ((ArticleViewHolder)holder).bindData((Article) list.get(position));
         }
-//        if (holder.getItemViewType() == TYPE_AD) {
-//            if (mAd != null) {
-//                ((AdHolder)holder).bindView(mAd);
-//            } else if (mAds != null && mAds.isLoaded()) {
-//                mAd = mAds.nextNativeAd();
-//                ((AdHolder)holder).bindView(mAd);
-//            } else {
-//                ((AdHolder)holder).bindView(null);
-//            }
-//        } else {
-//            int index = position;
-//            if (index != 0) {
-//                index--;
-//            }
-//            Article article = (Article) mList.get(index);
-//            ((ArticleViewHolder)holder).bindData(article);
-//        }
     }
 
     @Override
     public int getItemViewType(int position) {
-//        String type = ((Article)mList.get(position)).getType();
-//        if(type.equals("fil")) {
-//            return TYPE_ARTICLE;
-//        } else {
-//            return TYPE_LOAD;
-//        }
-//        if(position >= getItemCount()){
-//            return TYPE_LOAD;
-//        } else {
-//            return TYPE_ARTICLE;
-//        }
         return TYPE_ARTICLE;
     }
 
     @Override
     public int getItemCount() {
-        return mList.size();
+        return list.size();
     }
 
-    private class ArticleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ArticleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        @BindView(R.id.image)
         ImageView ivImage;
+        @BindView(R.id.title)
         TextView tvTitle;
+        @BindView(R.id.content)
         TextView tvContent;
+        @BindView(R.id.updatedAt)
         TextView tvUpdatedAt;
+        @BindView(R.id.favorite)
         ImageButton ibFavorite;
 
         public ArticleViewHolder(View itemView) {
             super(itemView);
-            ivImage = (ImageView)itemView.findViewById(R.id.image);
-            tvTitle = (TextView)itemView.findViewById(R.id.title);
-            tvContent = (TextView)itemView.findViewById(R.id.content);
-            tvUpdatedAt = (TextView)itemView.findViewById(R.id.updatedAt);
-            ibFavorite = (ImageButton)itemView.findViewById(R.id.favorite);
+            ButterKnife.bind(this, itemView);
         }
 
         void bindData(Article article){
-            Picasso.with(mContext)
+            Picasso.with(context)
                     .load(article.getImage())
                     .placeholder(R.drawable.default_thumbnail)
                     .error(R.drawable.default_thumbnail)
@@ -159,16 +126,16 @@ public class RelatedArticleAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     int position = getAdapterPosition();
                     String tag = ibFavorite.getTag().toString();
                     if (tag.equalsIgnoreCase("deactive")) {
-                        sharedPreference.addFavorite(mContext, (Article) mList.get(position));
+                        sharedPreference.addFavorite(context, (Article) list.get(position));
                         ibFavorite.setTag("active");
                         ibFavorite.setImageResource(R.drawable.ic_fav_selected);
-                        Snackbar.make(rootLayout, mContext.getResources().getString(R.string.add_favorite_message),
+                        Snackbar.make(rootLayout, context.getResources().getString(R.string.add_favorite_message),
                                 Snackbar.LENGTH_SHORT).show();
                     } else {
-                        sharedPreference.removeFavorite(mContext, position);
+                        sharedPreference.removeFavorite(context, position);
                         ibFavorite.setTag("deactive");
                         ibFavorite.setImageResource(R.drawable.ic_fav_normal);
-                        Snackbar.make(rootLayout, mContext.getResources().getString(R.string.remove_favorite_message),
+                        Snackbar.make(rootLayout, context.getResources().getString(R.string.remove_favorite_message),
                                 Snackbar.LENGTH_SHORT).show();
                     }
                 }
@@ -178,10 +145,10 @@ public class RelatedArticleAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-            Article article = (Article) mList.get(position);
-            Intent intent = new Intent(mContext, ArticleActivity.class);
+            Article article = (Article) list.get(position);
+            Intent intent = new Intent(context, DetailArticleActivity.class);
             intent.putExtra("article", article);
-            mContext.startActivity(intent);
+            context.startActivity(intent);
         }
     }
 
@@ -194,7 +161,7 @@ public class RelatedArticleAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     private boolean checkFavoriteItem(Article checkArticle) {
         boolean check = false;
-        List<Article> favorites = sharedPreference.getFavorites(mContext);
+        List<Article> favorites = sharedPreference.getFavorites(context);
         if (favorites != null) {
             for (Article article : favorites) {
                 if (article.equals(checkArticle)) {

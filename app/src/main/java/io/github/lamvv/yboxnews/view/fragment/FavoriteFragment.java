@@ -15,11 +15,14 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindString;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.adapter.FavoriteAdapter;
 import io.github.lamvv.yboxnews.model.Article;
-import io.github.lamvv.yboxnews.util.CheckConfig;
-import io.github.lamvv.yboxnews.util.SharedPreference;
+import io.github.lamvv.yboxnews.util.NetworkUtils;
+import io.github.lamvv.yboxnews.util.SharedPreferenceUtils;
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 
@@ -29,12 +32,19 @@ import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 
 public class FavoriteFragment extends Fragment {
 
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+    @BindView(R.id.emptyView)
+    TextView emptyView;
+    @BindView(R.id.rootLayout)
+    LinearLayout rootLayout;
+
+    @BindString(R.string.error_internet)
+    String errorInternet;
+
     private List<Article> favoriteArticles;
-    private RecyclerView recyclerView;
-    private TextView emptyView;
     private FavoriteAdapter favoriteAdapter;
-    private SharedPreference sharedPreference;
-    private LinearLayout rootLayout;
+    private SharedPreferenceUtils sharedPreference;
 
     public FavoriteFragment(){}
 
@@ -43,31 +53,23 @@ public class FavoriteFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         favoriteArticles = new ArrayList<>();
-        sharedPreference = new SharedPreference();
+        sharedPreference = new SharedPreferenceUtils();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_favorite, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        emptyView = (TextView) view.findViewById(R.id.emptyView);
-        rootLayout = (LinearLayout) view.findViewById(R.id.rootLayout);
+        View view = inflater.inflate(R.layout.fragment_favorite, container, false);
+        ButterKnife.bind(this, view);
+        return view;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if(!CheckConfig.isConnectedInternet(getActivity())){
-            Snackbar.make(rootLayout, getActivity().getResources().getString(R.string.error_no_internet),
-                    Snackbar.LENGTH_LONG).show();
+        if(!NetworkUtils.isConnectedInternet(getActivity())){
+            Snackbar.make(rootLayout, errorInternet, Snackbar.LENGTH_LONG).show();
         }
-
     }
 
     @Override
