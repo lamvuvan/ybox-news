@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,6 +22,8 @@ import butterknife.ButterKnife;
 import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.adapter.FavoriteAdapter;
 import io.github.lamvv.yboxnews.model.Article;
+import io.github.lamvv.yboxnews.util.DeviceUtils;
+import io.github.lamvv.yboxnews.util.DividerItemDecoration;
 import io.github.lamvv.yboxnews.util.NetworkUtils;
 import io.github.lamvv.yboxnews.util.SharedPreferenceUtils;
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
@@ -77,7 +80,21 @@ public class FavoriteFragment extends Fragment {
         super.onResume();
         try {
             favoriteArticles = sharedPreference.getFavorites(getActivity());
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            recyclerView.setHasFixedSize(true);
+            recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
+            if (!DeviceUtils.isTablet(getActivity())) {
+                if(DeviceUtils.isPortrait(getActivity()))
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                else
+                    recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+            } else {
+                double diagonalInches = DeviceUtils.getDiagonal(getActivity());
+                if (diagonalInches > 9.5) {
+                    recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+                } else {
+                    recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+                }
+            }
             if (!favoriteArticles.isEmpty()) {
                 emptyView.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);

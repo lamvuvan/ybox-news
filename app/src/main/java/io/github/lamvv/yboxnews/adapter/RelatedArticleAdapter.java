@@ -81,8 +81,8 @@ public class RelatedArticleAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         TextView tvTitle;
         @BindView(R.id.content)
         TextView tvContent;
-        @BindView(R.id.updatedAt)
-        TextView tvUpdatedAt;
+        @BindView(R.id.createdAt)
+        TextView tvCreatedAt;
         @BindView(R.id.favorite)
         ImageButton ibFavorite;
 
@@ -98,15 +98,15 @@ public class RelatedArticleAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     .error(R.drawable.default_thumbnail)
                     .into(ivImage);
 
-            tvTitle.setText(article.getTitle().toString());
+            tvTitle.setText(article.getTitle());
+            tvCreatedAt.setText(article.getTimestamps().getCreatedAt());
 
             //Use Html.fromHtml(String) on API Level 23 and older devices, and Html.fromHtml(String, int) on API Level 24+ devices
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                tvContent.setText(Html.fromHtml(article.getContent().getRaw().toString(), Html.FROM_HTML_MODE_LEGACY));
+                tvContent.setText(Html.fromHtml(article.getContent().getRaw(), Html.FROM_HTML_MODE_LEGACY));
             } else {
-                tvContent.setText(Html.fromHtml(article.getContent().getRaw().toString()));
+                tvContent.setText(Html.fromHtml(article.getContent().getRaw()));
             }
-            tvUpdatedAt.setText(article.getTimestamps().getUpdatedAt().toString());
 
             if (checkFavoriteItem(article)) {
                 ibFavorite.setImageResource(R.drawable.ic_fav_selected);
@@ -119,6 +119,7 @@ public class RelatedArticleAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             ivImage.setOnClickListener(this);
             tvTitle.setOnClickListener(this);
             tvContent.setOnClickListener(this);
+            tvCreatedAt.setOnClickListener(this);
 
             ibFavorite.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -132,7 +133,7 @@ public class RelatedArticleAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                         Snackbar.make(rootLayout, context.getResources().getString(R.string.add_favorite_message),
                                 Snackbar.LENGTH_SHORT).show();
                     } else {
-                        sharedPreference.removeFavorite(context, position);
+                        sharedPreference.removeFavorite(context, (Article) list.get(position));
                         ibFavorite.setTag("deactive");
                         ibFavorite.setImageResource(R.drawable.ic_fav_normal);
                         Snackbar.make(rootLayout, context.getResources().getString(R.string.remove_favorite_message),

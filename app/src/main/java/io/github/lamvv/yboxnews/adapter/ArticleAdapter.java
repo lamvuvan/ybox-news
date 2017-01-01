@@ -43,6 +43,8 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private SharedPreferenceUtils sharedPreference;
     private RelativeLayout rootLayout;
 
+    private static final String TAG = "lamvv";
+
     public ArticleAdapter(RelativeLayout rootLayout, Context context, List<Object> list){
         this.rootLayout = rootLayout;
         this.context = context;
@@ -111,8 +113,8 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         TextView tvTitle;
         @BindView(R.id.content)
         TextView tvContent;
-        @BindView(R.id.updatedAt)
-        TextView tvUpdatedAt;
+        @BindView(R.id.createdAt)
+        TextView tvCreatedAt;
         @BindView(R.id.favorite)
         ImageButton ibFavorite;
 
@@ -129,7 +131,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     .into(ivImage);
 
             tvTitle.setText(article.getTitle());
-            tvUpdatedAt.setText(article.getTimestamps().getUpdatedAt());
+            tvCreatedAt.setText(article.getTimestamps().getCreatedAt());
 
             //Use Html.fromHtml(String) on API Level 23 and older devices, and Html.fromHtml(String, int) on API Level 24+ devices
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
@@ -149,6 +151,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ivImage.setOnClickListener(this);
             tvTitle.setOnClickListener(this);
             tvContent.setOnClickListener(this);
+            tvCreatedAt.setOnClickListener(this);
 
             ibFavorite.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -162,7 +165,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         Snackbar.make(rootLayout, context.getResources().getString(R.string.add_favorite_message),
                                 Snackbar.LENGTH_SHORT).show();
                     } else {
-                        sharedPreference.removeFavorite(context, position);
+                        sharedPreference.removeFavorite(context, (Article) list.get(position));
                         ibFavorite.setTag("deactive");
                         ibFavorite.setImageResource(R.drawable.ic_fav_normal);
                         Snackbar.make(rootLayout, context.getResources().getString(R.string.remove_favorite_message),

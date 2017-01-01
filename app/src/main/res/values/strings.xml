@@ -5,6 +5,7 @@
     <string name="native_ad_unit_id">ca-app-pub-2929884577019186/6549954355</string>
     <string name="native2_ad_unit_id">ca-app-pub-2929884577019186/4208702750</string>
     <string name="native3_ad_unit_id">ca-app-pub-2929884577019186/5766161156</string>
+    <string name="interstitial_ad_unit_id">ca-app-pub-2929884577019186/1440681954</string>
 
     <string name="startapp_dev_id">109770308</string>
     <string name="startapp_app_id">209953856</string>
@@ -27,10 +28,8 @@
     <string name="about_us">About us</string>
     <string name="likeapp_clickrate">Like this app? Click to rate it</string>
     <string name="supportus_byrateapp">Please support us by quickly rating this app</string>
-    <string name="invite_frieng">Invite this app to friends</string>
-    <string name="your_friend">Your friends will love it too!</string>
     <string name="need_help">Need help?</string>
-    <string name="email_to">Email to: easylab.apps@gmail.com</string>
+    <string name="email_to">Email to: 3amsoft.studio@gmail.com</string>
     <string name="get_more_app">Get more great apps</string>
     <string name="checkout_recommended">Check out our recommended apps</string>
 
@@ -58,11 +57,11 @@
     <string name="competition">Competition</string>
     <string name="favorite">Favorites</string>
     <string name="tool">Tools</string>
-    <string name="shareapp">Share this app</string>
+    <string name="night_mode">Night mode</string>
     <string name="rateus">Rate us</string>
     <string name="otherapp">Other apps</string>
     <string name="setting">Setting</string>
-    <string name="version">Version 1.5.0</string>
+    <string name="version">Version 1.5.6</string>
 
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">

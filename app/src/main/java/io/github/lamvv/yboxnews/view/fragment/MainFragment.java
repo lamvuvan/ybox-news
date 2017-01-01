@@ -28,10 +28,10 @@ import io.github.lamvv.yboxnews.adapter.ArticleAdapter;
 import io.github.lamvv.yboxnews.iml.YboxService;
 import io.github.lamvv.yboxnews.model.Article;
 import io.github.lamvv.yboxnews.model.ArticleList;
+import io.github.lamvv.yboxnews.util.DeviceUtils;
+import io.github.lamvv.yboxnews.util.DividerItemDecoration;
 import io.github.lamvv.yboxnews.util.NetworkUtils;
 import io.github.lamvv.yboxnews.util.ServiceGenerator;
-import io.github.lamvv.yboxnews.util.DeviceUtils;
-import io.github.lamvv.yboxnews.util.VerticalLineDecorator;
 import io.github.lamvv.yboxnews.view.activity.MainActivity;
 import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
@@ -70,7 +70,6 @@ public class MainFragment extends Fragment {
 	String face;
 	@BindString(R.string.error_internet)
 	String errorInternet;
-
 
 	private List<Object> articles;
 	private ArticleAdapter adapter;
@@ -126,7 +125,7 @@ public class MainFragment extends Fragment {
 				Color.parseColor("#0000ff"), Color.parseColor("#f234ab"));
 		swipeRefreshLayout.setOnRefreshListener(onRefreshListener);
 		recyclerView.setHasFixedSize(true);
-		recyclerView.addItemDecoration(new VerticalLineDecorator(2));
+		recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
 
 		if (!DeviceUtils.isTablet(getActivity())) {
 			if(DeviceUtils.isPortrait(getActivity()))
@@ -135,7 +134,7 @@ public class MainFragment extends Fragment {
 				recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
 		} else {
 			double diagonalInches = DeviceUtils.getDiagonal(getActivity());
-			if (diagonalInches >= 9) {
+			if (diagonalInches > 9.5) {
 				recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
 			} else {
 				recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));

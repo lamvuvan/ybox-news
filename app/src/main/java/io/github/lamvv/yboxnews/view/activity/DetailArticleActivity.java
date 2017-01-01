@@ -24,6 +24,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.NativeExpressAdView;
@@ -41,9 +43,9 @@ import io.github.lamvv.yboxnews.iml.YboxService;
 import io.github.lamvv.yboxnews.model.Article;
 import io.github.lamvv.yboxnews.model.ArticleList;
 import io.github.lamvv.yboxnews.util.DeviceUtils;
+import io.github.lamvv.yboxnews.util.DividerItemDecoration;
 import io.github.lamvv.yboxnews.util.GetArticleDetailTask;
 import io.github.lamvv.yboxnews.util.ServiceGenerator;
-import io.github.lamvv.yboxnews.util.VerticalLineDecorator;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -62,10 +64,12 @@ public class DetailArticleActivity extends AppCompatActivity implements GetArtic
     ImageView ivImage;
     @BindView(R.id.title)
     TextView tvTitle;
+    @BindView(R.id.category)
+    TextView tvCategory;
     @BindView(R.id.view)
     TextView tvView;
-    @BindView(R.id.updatedAt)
-    TextView tvUpdatedAt;
+    @BindView(R.id.createdAt)
+    TextView tvCreatedAt;
     @BindView(R.id.content)
     WebView webView;
     @BindView(R.id.headerProgress)
@@ -152,7 +156,7 @@ public class DetailArticleActivity extends AppCompatActivity implements GetArtic
             load(1);
 
             recyclerView.setHasFixedSize(true);
-            recyclerView.addItemDecoration(new VerticalLineDecorator(2));
+            recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
             if (!DeviceUtils.isTablet(this)) {
                 if (DeviceUtils.isPortrait(this))
@@ -171,28 +175,6 @@ public class DetailArticleActivity extends AppCompatActivity implements GetArtic
             adapter = new RelatedArticleAdapter(rootLayout, this, articles);
             recyclerView.setAdapter(adapter);
 
-            //banner ads
-            AdView mAdView = (AdView) findViewById(R.id.adView);
-            AdRequest adRequest = new AdRequest.Builder()
-                    .addTestDevice("9E1B9BD30BDD0D71713E0611982A7D6C")
-                    .addTestDevice("5911C7ACA6D91588481831737229F467")
-                    .build();
-            mAdView.loadAd(adRequest);
-
-            //native ads
-            NativeExpressAdView nativeAdView = (NativeExpressAdView) findViewById(R.id.nativeAdView);
-            AdRequest request = new AdRequest.Builder()
-                    .addTestDevice("9E1B9BD30BDD0D71713E0611982A7D6C")
-                    .addTestDevice("5911C7ACA6D91588481831737229F467")
-                    .build();
-            nativeAdView.loadAd(request);
-
-            NativeExpressAdView nativeAdView2 = (NativeExpressAdView) findViewById(R.id.nativeAdView2);
-            AdRequest request2 = new AdRequest.Builder()
-                    .addTestDevice("9E1B9BD30BDD0D71713E0611982A7D6C")
-                    .addTestDevice("5911C7ACA6D91588481831737229F467")
-                    .build();
-            nativeAdView2.loadAd(request2);
         }
 
     }
@@ -211,16 +193,45 @@ public class DetailArticleActivity extends AppCompatActivity implements GetArtic
 
     @Override
     public void onGetDetailTaskComplete(String result) {
+        fab.setVisibility(View.VISIBLE);
+        YoYo.with(Techniques.RollIn).playOn(fab);
+
         tvTitle.setText(article.getTitle());
+        tvCategory.setText(article.getCategory() + " | ");
         tvView.setText(article.getStats().getView() + " " + getResources().getString(R.string.views) + " | ");
-        tvUpdatedAt.setText(article.getTimestamps().getUpdatedAt());
+        tvCreatedAt.setText(article.getTimestamps().getCreatedAt());
 
         webView.loadDataWithBaseURL(
                 "",
                 "<style>img {display: block; margin: auto; height: auto;max-width: 100%; }"
                         + " p {font-family:\"Tangerine\", \"Sans-serif\",  \"Serif\" font-size: 48px; text-align:justify}"
-                        + " iframe {display: block; margin: auto} </style>"
+                        + " iframe {display: block; margin: auto}"
+                        + " a {word-wrap: break-word}"
+                        + " </style>"
                         + result, "text/html", "UTF-8", "");
+
+        //banner ads
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder()
+//                    .addTestDevice("9E1B9BD30BDD0D71713E0611982A7D6C")
+//                    .addTestDevice("5911C7ACA6D91588481831737229F467")
+                .build();
+        mAdView.loadAd(adRequest);
+
+        //native ads
+        NativeExpressAdView nativeAdView = (NativeExpressAdView) findViewById(R.id.nativeAdView);
+        AdRequest request = new AdRequest.Builder()
+//                    .addTestDevice("9E1B9BD30BDD0D71713E0611982A7D6C")
+//                    .addTestDevice("5911C7ACA6D91588481831737229F467")
+                .build();
+        nativeAdView.loadAd(request);
+
+        NativeExpressAdView nativeAdView2 = (NativeExpressAdView) findViewById(R.id.nativeAdView2);
+        AdRequest request2 = new AdRequest.Builder()
+//                    .addTestDevice("9E1B9BD30BDD0D71713E0611982A7D6C")
+//                    .addTestDevice("5911C7ACA6D91588481831737229F467")
+                .build();
+        nativeAdView2.loadAd(request2);
     }
 
     private void launchGetDetailTask(String url){

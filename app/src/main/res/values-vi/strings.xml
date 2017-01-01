@@ -6,6 +6,7 @@
     <string name="native_ad_unit_id">ca-app-pub-2929884577019186/6549954355</string>
     <string name="native2_ad_unit_id">ca-app-pub-2929884577019186/4208702750</string>
     <string name="native3_ad_unit_id">ca-app-pub-2929884577019186/5766161156</string>
+    <string name="interstitial_ad_unit_id">ca-app-pub-2929884577019186/1440681954</string>
 
     <string name="startapp_dev_id">109770308</string>
     <string name="startapp_app_id">209953856</string>
@@ -28,10 +29,8 @@
     <string name="about_us">Về chúng tôi</string>
     <string name="likeapp_clickrate">Đánh giá ứng dụng</string>
     <string name="supportus_byrateapp">Cho chúng tôi biết mức độ hài lòng của bạn</string>
-    <string name="invite_frieng">Mời bạn bè của bạn sử dụng ứng dụng</string>
-    <string name="your_friend">Giới thiệu ứng dụng này cho bạn bè của bạn!</string>
     <string name="need_help">Nếu bạn cần chúng tôi trợ giúp?</string>
-    <string name="email_to">Email tới: easylab.apps@gmail.com</string>
+    <string name="email_to">Email tới: 3amsoft.studio@gmail.com</string>
     <string name="get_more_app">Các ứng dụng khác</string>
     <string name="checkout_recommended">Các ứng dụng khác của chúng tôi</string>
 
@@ -59,11 +58,11 @@
     <string name="competition">Cuộc thi</string>
     <string name="favorite">Danh sách yêu thích</string>
     <string name="tool">Công cụ</string>
-    <string name="shareapp">Chia sẻ</string>
-    <string name="rateus">Đánh giá</string>
+    <string name="night_mode">Chế độ ban đêm</string>
+    <string name="rateus">Đánh giá ứng dụng</string>
     <string name="otherapp">Ứng dụng khác</string>
     <string name="setting">Cài đặt</string>
-    <string name="version">Phiên bản 1.5.0</string>
+    <string name="version">Phiên bản 1.5.6</string>
 
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">

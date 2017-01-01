@@ -20,6 +20,8 @@ public class GetArticleDetailTask extends AsyncTask<String, Void, String> {
     private Context context;
     private GetArticleDetailTaskCompleteListener<String> callback;
 
+    private static final String TAG = "lamvv";
+
     public GetArticleDetailTask(Context context, GetArticleDetailTaskCompleteListener<String> callback){
         this.context = context;
         this.callback = callback;
@@ -36,26 +38,9 @@ public class GetArticleDetailTask extends AsyncTask<String, Void, String> {
         StringBuilder detail = new StringBuilder();
         try {
             Document doc = Jsoup.connect(params[0]).timeout(20000).get();
-//            Elements article = doc.select("div.article-detail div");
-//            Elements title = article.select("strong.text-title");
-//            Elements create = doc.select("div.col-md-11 span.create-at");
-//            String pubDate = create.attr("data-create");
-//            Elements thumb = doc.select("img.article-cover");
-//            String imgThumb = thumb.attr("src");
             Elements content = doc.select("div.text-content.ybox-article");
             String cont = content.html();
-//            Elements views = doc.select("div.col-md-12 div.col-md-8 span.article-vote");
-//            String viewCount = null;
-//            if(views.select("i") != null){
-//                viewCount = views.text();
-//            }
-
-//            detail.append("<h2 style = \" color: #111111 \">" + title.text() + "</h2>");
-//            detail.append("<font size=\" 2em \" style = \" color: #005500 \"><em>" + pubDate + ", " + viewCount + "</em></font>");
-//            detail.append("<img src = \"" + imgThumb + "\"" + "/>");
-//            detail.append("<p style = \" color: #111111 \"><b>" + "<font size=\" 4em \" >" + cont.toString() + "</font></b></p>");
             detail.append("<p>" + "<font size=\" 4em \" >" + cont + "</font></p>");
-
         } catch (IOException e) {
             e.printStackTrace();
         }

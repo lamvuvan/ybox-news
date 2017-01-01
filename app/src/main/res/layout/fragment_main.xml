@@ -47,6 +47,6 @@
             android:layout_gravity="bottom|right|end"
             android:background="@android:color/transparent"
             app:fabSize="mini"
-            app:layout_behavior="io.github.lamvv.yboxnews.widget.ScrollingFABBehavior" />
+            app:layout_behavior=".widget.ScrollingFABBehavior" />
     </android.support.design.widget.CoordinatorLayout>
 </RelativeLayout>

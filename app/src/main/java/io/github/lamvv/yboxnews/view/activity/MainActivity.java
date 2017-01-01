@@ -18,14 +18,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.squareup.picasso.Picasso;
 import com.startapp.android.publish.StartAppAd;
 import com.startapp.android.publish.StartAppSDK;
 
 import io.github.lamvv.yboxnews.R;
+import io.github.lamvv.yboxnews.util.CropCircleTransformation;
 import io.github.lamvv.yboxnews.view.fragment.FavoriteFragment;
 import io.github.lamvv.yboxnews.view.fragment.MainFragment;
 
@@ -36,14 +39,16 @@ import static io.github.lamvv.yboxnews.util.ShareUtils.PLAY_STORE_DEV_URL;
 
 public class MainActivity extends AppCompatActivity {
 
+    InterstitialAd mInterstitialAd;
     private StartAppAd startAppAd = new StartAppAd(this);
+    boolean requestAdFailed = false;
 
     private Toolbar toolbar;
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private View navHeader;
 
-    private ImageView imgNavHeaderBg;
+    private ImageView imgNavHeaderBg, imgProfile;
 
     // index to identify current nav menu item
     public static int navItemIndex = 0;
@@ -74,10 +79,28 @@ public class MainActivity extends AppCompatActivity {
         MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.admob_app_id));
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("9E1B9BD30BDD0D71713E0611982A7D6C")
-                .addTestDevice("5911C7ACA6D91588481831737229F467")
+//                .addTestDevice("9E1B9BD30BDD0D71713E0611982A7D6C")
+//                .addTestDevice("5911C7ACA6D91588481831737229F467")
                 .build();
         mAdView.loadAd(adRequest);
+
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getResources().getString(R.string.interstitial_ad_unit_id));
+        mInterstitialAd.setAdListener(new AdListener() {
+
+            @Override
+            public void onAdClosed() {
+                super.onAdClosed();
+                requestNewInterstitial();
+            }
+
+            @Override
+            public void onAdFailedToLoad(int i) {
+                super.onAdFailedToLoad(i);
+                requestAdFailed = true;
+            }
+        });
+        requestNewInterstitial();
 
         //init startapp ads
         StartAppSDK.init(this, getResources().getString(R.string.startapp_dev_id),
@@ -96,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
         // Navigation view header
         navHeader = navigationView.getHeaderView(0);
         imgNavHeaderBg = (ImageView) navHeader.findViewById(R.id.img_header_bg);
+        imgProfile = (ImageView) navHeader.findViewById(R.id.img_profile);
 
         // load toolbar titles from string resources
         activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
@@ -119,13 +143,30 @@ public class MainActivity extends AppCompatActivity {
 //        navigationView.setNavigationItemSelectedListener(this);
     }
 
+    private void requestNewInterstitial() {
+        AdRequest adRequest = new AdRequest.Builder()
+//                .addTestDevice("9E1B9BD30BDD0D71713E0611982A7D6C")
+//                .addTestDevice("5911C7ACA6D91588481831737229F467")
+                .build();
+        mInterstitialAd.loadAd(adRequest);
+    }
+
+    protected void displayInterstitial() {
+        if (mInterstitialAd != null && mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        }
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            startAppAd.onBackPressed(this);
+            if(requestAdFailed)
+                startAppAd.onBackPressed(this);
+            else
+                displayInterstitial();
             super.onBackPressed();
         }
     }
@@ -148,8 +189,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadNavHeader() {
         Picasso.with(this)
-                .load(R.drawable.header)
+                .load(R.drawable.header_bg)
                 .into(imgNavHeaderBg);
+        Picasso.with(this)
+                .load(R.drawable.ic_launcher_inner)
+                .transform(new CropCircleTransformation())
+                .into(imgProfile);
     }
 
     /***
@@ -286,10 +331,6 @@ public class MainActivity extends AppCompatActivity {
                         navItemIndex = 9;
                         CURRENT_TAG = TAG_FAVORITE;
                         break;
-                    case R.id.nav_shareapp:
-                        shareApp();
-                        drawer.closeDrawers();
-                        return true;
                     case R.id.nav_rateus:
                         try {
                             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + APP_PACKAGE_NAME)));
@@ -358,13 +399,6 @@ public class MainActivity extends AppCompatActivity {
 
         //calling sync state is necessary or else your hamburger icon wont show up
         actionBarDrawerToggle.syncState();
-    }
-
-    private void shareApp(){
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, PLAY_STORE_APP_URL + APP_PACKAGE_NAME);
-        startActivity(Intent.createChooser(intent, getResources().getString(R.string.shareapp)));
     }
 
 }

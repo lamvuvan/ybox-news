@@ -75,8 +75,8 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView tvTitle;
         @BindView(R.id.content)
         TextView tvContent;
-        @BindView(R.id.updatedAt)
-        TextView tvUpdatedAt;
+        @BindView(R.id.createdAt)
+        TextView tvCreatedAt;
         @BindView(R.id.favorite)
         ImageButton ibFavorite;
 
@@ -92,19 +92,20 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     .error(R.drawable.default_thumbnail)
                     .into(ivImage);
 
-            tvTitle.setText(article.getTitle().toString());
+            tvTitle.setText(article.getTitle());
+            tvCreatedAt.setText(article.getTimestamps().getCreatedAt());
 
             //Use Html.fromHtml(String) on API Level 23 and older devices, and Html.fromHtml(String, int) on API Level 24+ devices
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                tvContent.setText(Html.fromHtml(article.getContent().getRaw().toString(), Html.FROM_HTML_MODE_LEGACY));
+                tvContent.setText(Html.fromHtml(article.getContent().getRaw(), Html.FROM_HTML_MODE_LEGACY));
             } else {
-                tvContent.setText(Html.fromHtml(article.getContent().getRaw().toString()));
+                tvContent.setText(Html.fromHtml(article.getContent().getRaw()));
             }
-            tvUpdatedAt.setText(article.getTimestamps().getUpdatedAt().toString());
 
             ivImage.setOnClickListener(this);
             tvTitle.setOnClickListener(this);
             tvContent.setOnClickListener(this);
+            tvCreatedAt.setOnClickListener(this);
 
             ibFavorite.setImageResource(R.drawable.ic_fav_selected);
 
@@ -113,7 +114,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 public void onClick(View view) {
                     int position = getAdapterPosition();
                     favoriteArticles.remove(position);
-                    sharedPreference.removeFavorite(context, position);
+                    sharedPreference.removeFavorite(context, favoriteArticles.get(position));
                     notifyItemRemoved(position);
                     ibFavorite.setTag("deactive");
                     ibFavorite.setImageResource(R.drawable.ic_fav_normal);
@@ -129,7 +130,6 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             Article article = favoriteArticles.get(position);
             Intent intent = new Intent(context, DetailArticleActivity.class);
             intent.putExtra("article", article);
-            intent.putExtra("position", position);
             context.startActivity(intent);
         }
     }

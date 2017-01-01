@@ -18,7 +18,7 @@ import io.github.lamvv.yboxnews.model.Article;
 
 public class SharedPreferenceUtils {
 
-    private static final String PREFS_NAME = "favorite_articles";
+    private static final String PREFS_NAME = "ybox_favorite";
     private static final String FAVORITES = "favorite";
 
     public SharedPreferenceUtils() {
@@ -42,10 +42,10 @@ public class SharedPreferenceUtils {
         saveFavorites(context, favorites);
     }
 
-    public void removeFavorite(Context context, int position) {
+    public void removeFavorite(Context context, Article article) {
         List<Article> favorites = getFavorites(context);
         if (favorites != null) {
-            favorites.remove(position);
+            favorites.remove(article);
             saveFavorites(context, favorites);
         }
     }

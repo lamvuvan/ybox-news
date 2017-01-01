@@ -10,18 +10,13 @@ import java.io.Serializable;
 
 public class Timestamps implements Serializable {
 
-    @SerializedName("updatedAt")
-    private String updatedAt;
+    @SerializedName("createdAt")
+    private String createdAt;
 
     public Timestamps() {
     }
 
-    public Timestamps(String updatedAt) {
-        this.updatedAt = updatedAt;
+    public String getCreatedAt() {
+        return createdAt;
     }
-
-    public String getUpdatedAt() {
-        return updatedAt;
-    }
-
 }

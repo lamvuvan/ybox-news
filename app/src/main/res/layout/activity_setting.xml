@@ -68,16 +68,15 @@
                         android:textColor="@color/textColorPrimary"
                         android:textSize="@dimen/semi_normal_text_size" />
 
-                    <com.rey.material.widget.Switch
+                    <android.support.v7.widget.SwitchCompat
                         android:id="@+id/switchTheme"
-                        style="@style/Material.Widget.Switch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/mini_margin"
                         android:layout_marginBottom="@dimen/mini_margin"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="@dimen/mini_margin"
-                        android:gravity="center" />
+                        android:gravity="center"/>
                 </RelativeLayout>
 
                 <View
@@ -128,33 +127,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/supportus_byrateapp"
-                            android:textColor="@color/textColorSecondary"
-                            android:textSize="@dimen/small_text_size" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/very_tiny_margin"
-                            android:background="@color/colorView" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/invite"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/invite_frieng"
-                            android:textColor="@color/textColorPrimary"
-                            android:textSize="@dimen/small_text_size" />
-
-                        <TextView
-                            android:id="@+id/sendFriend"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/your_friend"
                             android:textColor="@color/textColorSecondary"
                             android:textSize="@dimen/small_text_size" />
 
