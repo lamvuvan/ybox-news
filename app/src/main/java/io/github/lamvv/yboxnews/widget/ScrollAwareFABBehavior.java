@@ -17,7 +17,6 @@
 package io.github.lamvv.yboxnews.widget;
 
 import android.content.Context;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewCompat;
@@ -32,11 +31,6 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
 
     public ScrollAwareFABBehavior(Context context, AttributeSet attrs) {
         super();
-    }
-
-    @Override
-    public boolean layoutDependsOn(CoordinatorLayout parent, FloatingActionButton fab, View dependency) {
-        return super.layoutDependsOn(parent, fab, dependency) || (dependency instanceof AppBarLayout);
     }
 
     @Override

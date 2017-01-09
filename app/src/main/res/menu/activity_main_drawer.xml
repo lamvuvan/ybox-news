@@ -47,6 +47,12 @@
     <item android:title="@string/tool">
         <menu>
             <item
+                android:id="@+id/nav_night_mode"
+                android:icon="@drawable/ic_brightness_2_white_24dp"
+                android:title="@string/night_mode"
+                app:actionLayout="@layout/drawer_switch"
+                app:showAsAction="always"/>
+            <item
                 android:id="@+id/nav_rateus"
                 android:icon="@drawable/ic_rate_review_white_24dp"
                 android:title="@string/rateus" />

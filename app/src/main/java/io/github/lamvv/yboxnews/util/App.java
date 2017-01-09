@@ -18,6 +18,8 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
+        sAppContext = this;
+
         SystemClock.sleep(TimeUnit.SECONDS.toMillis(3));
     }
 

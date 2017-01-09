@@ -2,14 +2,17 @@ package io.github.lamvv.yboxnews.view.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -46,6 +49,7 @@ import io.github.lamvv.yboxnews.util.DeviceUtils;
 import io.github.lamvv.yboxnews.util.DividerItemDecoration;
 import io.github.lamvv.yboxnews.util.GetArticleDetailTask;
 import io.github.lamvv.yboxnews.util.ServiceGenerator;
+import io.github.lamvv.yboxnews.util.SharedPreferenceUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -76,8 +80,12 @@ public class DetailArticleActivity extends AppCompatActivity implements GetArtic
     LinearLayout headerProgress;
     @BindView(R.id.article)
     LinearLayout linearLayoutArticle;
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
+    @BindView(R.id.related)
+    LinearLayout linearLayoutRelated;
+    @BindView(R.id.fabFavorite)
+    FloatingActionButton fabFavorite;
+    @BindView(R.id.fabShare)
+    FloatingActionButton fabShare;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     @BindView(R.id.rootLayout)
@@ -90,7 +98,7 @@ public class DetailArticleActivity extends AppCompatActivity implements GetArtic
     private Article article;
     private String category;
 
-    boolean loadSuccess = false;
+    private SharedPreferenceUtils sharedPreference;
 
     private static final String TAG = "lamvv";
 
@@ -101,6 +109,7 @@ public class DetailArticleActivity extends AppCompatActivity implements GetArtic
         ButterKnife.bind(this);
 
         articles = new ArrayList<>();
+        sharedPreference = new SharedPreferenceUtils();
 
         //get data send from fragments
         Bundle bundle = getIntent().getExtras();
@@ -111,12 +120,13 @@ public class DetailArticleActivity extends AppCompatActivity implements GetArtic
         String detail = article.getLinks().getDetail();
         if(detail != null) {
             launchGetDetailTask(detail);
-            loadSuccess = true;
         }
 
         collapsingToolbarLayout.setTitle(article.getTitle());
-        collapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(this, R.color.white));
+        collapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(this, R.color.colorAccent));
         collapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.white));
+
+        dynamicToolbarColor();
 
         Picasso.with(this).load(article.getImage()).into(ivImage);
 
@@ -141,7 +151,7 @@ public class DetailArticleActivity extends AppCompatActivity implements GetArtic
         webView.setBackgroundColor(Color.TRANSPARENT);
         webView.setWebViewClient(new MyWebViewClient());
 
-        fab.setOnClickListener(new View.OnClickListener() {
+        fabShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
@@ -151,64 +161,56 @@ public class DetailArticleActivity extends AppCompatActivity implements GetArtic
             }
         });
 
-        if(loadSuccess) {
-            api = ServiceGenerator.createService(YboxService.class);
-            load(1);
-
-            recyclerView.setHasFixedSize(true);
-            recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-
-            if (!DeviceUtils.isTablet(this)) {
-                if (DeviceUtils.isPortrait(this))
-                    recyclerView.setLayoutManager(new LinearLayoutManager(this));
-                else
-                    recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-            } else {
-                double diagonalInches = DeviceUtils.getDiagonal(this);
-                if (diagonalInches >= 9) {
-                    recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
-                } else {
-                    recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-                }
-            }
-
-            adapter = new RelatedArticleAdapter(rootLayout, this, articles);
-            recyclerView.setAdapter(adapter);
-
+        if(checkFavoriteItem(article)){
+            fabFavorite.setImageResource(R.drawable.ic_favorite_border_white_24dp);
+            fabFavorite.setTag("active");
+        }else{
+            fabFavorite.setImageResource(R.drawable.ic_favorite_white_24dp);
+            fabFavorite.setTag("deactive");
         }
 
-    }
+        fabFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tag = fabFavorite.getTag().toString();
+                if(tag.equalsIgnoreCase("deactive")){
+                    sharedPreference.addFavorite(DetailArticleActivity.this, article);
+                    fabFavorite.setTag("active");
+                    fabFavorite.setImageResource(R.drawable.ic_favorite_border_white_24dp);
+                    Snackbar.make(rootLayout, getResources().getString(R.string.add_favorite_message),
+                            Snackbar.LENGTH_SHORT).show();
+                }else{
+                    sharedPreference.removeFavorite(DetailArticleActivity.this, article);
+                    fabFavorite.setTag("deactive");
+                    fabFavorite.setImageResource(R.drawable.ic_favorite_white_24dp);
+                    Snackbar.make(rootLayout, getResources().getString(R.string.remove_favorite_message),
+                            Snackbar.LENGTH_SHORT).show();
+                }
+            }
+        });
 
-    @Override
-    public void showProgress() {
-        headerProgress.setVisibility(View.VISIBLE);
-        linearLayoutArticle.setVisibility(View.GONE);
-    }
+        api = ServiceGenerator.createService(YboxService.class);
+        load(1);
 
-    @Override
-    public void hideProgress() {
-        headerProgress.setVisibility(View.GONE);
-        linearLayoutArticle.setVisibility(View.VISIBLE);
-    }
+        recyclerView.setHasFixedSize(true);
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
-    @Override
-    public void onGetDetailTaskComplete(String result) {
-        fab.setVisibility(View.VISIBLE);
-        YoYo.with(Techniques.RollIn).playOn(fab);
+        if (!DeviceUtils.isTablet(this)) {
+            if (DeviceUtils.isPortrait(this))
+                recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            else
+                recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        } else {
+            double diagonalInches = DeviceUtils.getDiagonal(this);
+            if (diagonalInches >= 9) {
+                recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+            } else {
+                recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+            }
+        }
 
-        tvTitle.setText(article.getTitle());
-        tvCategory.setText(article.getCategory() + " | ");
-        tvView.setText(article.getStats().getView() + " " + getResources().getString(R.string.views) + " | ");
-        tvCreatedAt.setText(article.getTimestamps().getCreatedAt());
-
-        webView.loadDataWithBaseURL(
-                "",
-                "<style>img {display: block; margin: auto; height: auto;max-width: 100%; }"
-                        + " p {font-family:\"Tangerine\", \"Sans-serif\",  \"Serif\" font-size: 48px; text-align:justify}"
-                        + " iframe {display: block; margin: auto}"
-                        + " a {word-wrap: break-word}"
-                        + " </style>"
-                        + result, "text/html", "UTF-8", "");
+        adapter = new RelatedArticleAdapter(rootLayout, this, articles);
+        recyclerView.setAdapter(adapter);
 
         //banner ads
         AdView mAdView = (AdView) findViewById(R.id.adView);
@@ -226,12 +228,59 @@ public class DetailArticleActivity extends AppCompatActivity implements GetArtic
                 .build();
         nativeAdView.loadAd(request);
 
-        NativeExpressAdView nativeAdView2 = (NativeExpressAdView) findViewById(R.id.nativeAdView2);
-        AdRequest request2 = new AdRequest.Builder()
-//                    .addTestDevice("9E1B9BD30BDD0D71713E0611982A7D6C")
-//                    .addTestDevice("5911C7ACA6D91588481831737229F467")
-                .build();
-        nativeAdView2.loadAd(request2);
+        tvTitle.setText(article.getTitle());
+        tvCategory.setText(article.getCategory() + " | ");
+        tvView.setText(article.getStats().getView() + " " + getResources().getString(R.string.views) + " | ");
+        tvCreatedAt.setText(article.getTimestamps().getCreatedAt());
+
+    }
+
+    private void dynamicToolbarColor() {
+
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
+                R.drawable.ic_launcher_outer);
+        Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+
+            @Override
+            public void onGenerated(Palette palette) {
+                collapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(
+                        ContextCompat.getColor(DetailArticleActivity.this, R.color.colorPrimary)));
+                collapsingToolbarLayout.setStatusBarScrimColor(palette.getMutedColor(
+                        ContextCompat.getColor(DetailArticleActivity.this, R.color.colorPrimaryDark)));
+            }
+        });
+    }
+
+    @Override
+    public void showProgress() {
+        headerProgress.setVisibility(View.VISIBLE);
+        linearLayoutArticle.setVisibility(View.GONE);
+        linearLayoutRelated.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void hideProgress() {
+        headerProgress.setVisibility(View.GONE);
+        linearLayoutArticle.setVisibility(View.VISIBLE);
+        linearLayoutRelated.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onGetDetailTaskComplete(String result) {
+        fabShare.setVisibility(View.VISIBLE);
+        YoYo.with(Techniques.RollIn).playOn(fabShare);
+        fabFavorite.setVisibility(View.VISIBLE);
+        YoYo.with(Techniques.RollIn).playOn(fabFavorite);
+
+        webView.loadDataWithBaseURL(
+                "",
+                "<style>img {display: block; margin: auto; height: auto;max-width: 100%; }"
+                        + " p {font-family:\"Tangerine\", \"Sans-serif\",  \"Serif\" font-size: 48px; text-align:justify}"
+                        + " iframe {display: block; margin: auto}"
+                        + " a {word-wrap: break-word}"
+                        + " </style>"
+                        + result, "text/html", "UTF-8", "");
+
     }
 
     private void launchGetDetailTask(String url){
@@ -291,6 +340,20 @@ public class DetailArticleActivity extends AppCompatActivity implements GetArtic
             view.loadUrl(String.valueOf(request));
             return true;
         }
+    }
+
+    private boolean checkFavoriteItem(Article checkArticle) {
+        boolean check = false;
+        List<Article> favorites = sharedPreference.getFavorites(DetailArticleActivity.this);
+        if (favorites != null) {
+            for (Article article : favorites) {
+                if (article.equals(checkArticle)) {
+                    check = true;
+                    break;
+                }
+            }
+        }
+        return check;
     }
 
 }
