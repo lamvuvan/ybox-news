@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/rootLayout">
+    android:background="@color/colorBackground"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/emptyView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:visibility="gone"
-        android:textStyle="bold"
-        android:textSize="@dimen/normal_text_size"
+        android:text="@string/no_favorite_message"
         android:textColor="@color/textColorTitle"
-        android:text="@string/no_favorite_message"/>
+        android:textSize="@dimen/normal_text_size"
+        android:textStyle="bold"
+        android:visibility="gone" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"

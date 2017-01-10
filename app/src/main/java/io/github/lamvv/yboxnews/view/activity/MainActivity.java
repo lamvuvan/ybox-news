@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -41,7 +42,9 @@ import io.github.lamvv.yboxnews.view.fragment.FavoriteFragment;
 import io.github.lamvv.yboxnews.view.fragment.MainFragment;
 
 import static io.github.lamvv.yboxnews.util.ShareUtils.APP_PACKAGE_NAME;
+import static io.github.lamvv.yboxnews.util.ShareUtils.CC_EMAIL;
 import static io.github.lamvv.yboxnews.util.ShareUtils.DEV_STORE_ID;
+import static io.github.lamvv.yboxnews.util.ShareUtils.MAIN_EMAIL;
 import static io.github.lamvv.yboxnews.util.ShareUtils.PLAY_STORE_APP_URL;
 import static io.github.lamvv.yboxnews.util.ShareUtils.PLAY_STORE_DEV_URL;
 
@@ -155,7 +158,6 @@ public class MainActivity extends AppCompatActivity {
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-
         initNightModeSwitch();
 
 //        navigationView.setNavigationItemSelectedListener(this);
@@ -191,8 +193,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initNightModeSwitch() {
         MenuItem menuNightMode = navigationView.getMenu().findItem(R.id.nav_night_mode);
-        SwitchCompat dayNightSwitch = (SwitchCompat) MenuItemCompat
-                    .getActionView(menuNightMode);
+        SwitchCompat dayNightSwitch = (SwitchCompat) MenuItemCompat.getActionView(menuNightMode);
         setCheckedState(dayNightSwitch);
         setCheckedEvent(dayNightSwitch);
     }
@@ -227,24 +228,22 @@ public class MainActivity extends AppCompatActivity {
         if (MyUtils.isNightMode()) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 
-            initNightView();
-            mNightView.setBackgroundResource(R.color.night_mask);
+//            initNightView();
+//            mNightView.setBackgroundResource(R.color.night_mask);
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
     }
 
     public void changeToDay() {
-//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        mNightView.setBackgroundResource(android.R.color.transparent);
+//        mNightView.setBackgroundResource(android.R.color.transparent);
     }
 
     public void changeToNight() {
-//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        initNightView();
-        mNightView.setBackgroundResource(R.color.night_mask);
+//        initNightView();
+//        mNightView.setBackgroundResource(R.color.night_mask);
     }
 
     private void initNightView() {
@@ -257,13 +256,13 @@ public class MainActivity extends AppCompatActivity {
                 PixelFormat.TRANSPARENT);
         mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         mNightView = new View(this);
-        mWindowManager.addView(mNightView, nightViewParam);
+//        mWindowManager.addView(mNightView, nightViewParam);
         mIsAddedView = true;
     }
 
     private void removeNightModeMask() {
         if (mIsAddedView) {
-            mWindowManager.removeViewImmediate(mNightView);
+//            mWindowManager.removeViewImmediate(mNightView);
             mWindowManager = null;
             mNightView = null;
         }
@@ -272,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        removeNightModeMask();
+//        removeNightModeMask();
     }
 
     @Override
@@ -454,7 +453,17 @@ public class MainActivity extends AppCompatActivity {
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_setting:
-                        startActivity(new Intent(MainActivity.this, SettingActivity.class));
+                        Intent intentSendMail = new Intent(Intent.ACTION_SEND);
+                        intentSendMail.setType("text/plain");
+                        intentSendMail.putExtra(Intent.EXTRA_EMAIL, new String[]{MAIN_EMAIL});
+                        intentSendMail.putExtra(Intent.EXTRA_CC, new String[]{CC_EMAIL});
+                        intentSendMail.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.app_name));
+                        intentSendMail.putExtra(Intent.EXTRA_TEXT, "");
+                        try {
+                            startActivity(intentSendMail);
+                        } catch (ActivityNotFoundException ex) {
+                            Toast.makeText(MainActivity.this, getString(R.string.error_email), Toast.LENGTH_SHORT).show();
+                        }
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_version:

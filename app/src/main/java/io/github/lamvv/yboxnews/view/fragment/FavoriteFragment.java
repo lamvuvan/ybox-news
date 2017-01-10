@@ -78,6 +78,7 @@ public class FavoriteFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
         try {
             favoriteArticles = sharedPreference.getFavorites(getActivity());
             recyclerView.setHasFixedSize(true);
@@ -107,6 +108,7 @@ public class FavoriteFragment extends Fragment {
                 emptyView.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.GONE);
             }
+
         } catch (NullPointerException e) {
             e.printStackTrace();
             emptyView.setVisibility(View.VISIBLE);

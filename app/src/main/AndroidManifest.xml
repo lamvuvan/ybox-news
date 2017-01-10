@@ -25,7 +25,6 @@
         </activity>
         <activity android:name=".view.activity.MainActivity" />
         <activity android:name=".view.activity.DetailArticleActivity" />
-        <activity android:name=".view.activity.SettingActivity" />
 
         <!-- startapp ads -->
         <activity android:name="com.startapp.android.publish.list3d.List3DActivity"

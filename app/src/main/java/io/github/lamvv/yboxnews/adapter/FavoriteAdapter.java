@@ -37,6 +37,8 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private SharedPreferenceUtils sharedPreference;
     private LinearLayout rootLayout;
 
+    private static final String TAG = "lamvv";
+
     public FavoriteAdapter(LinearLayout rootLayout, Context context, List<Article> favoriteArticles){
         this.rootLayout = rootLayout;
         this.context = context;
@@ -85,7 +87,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             ButterKnife.bind(this, itemView);
         }
 
-        void bindData(final Article article) {
+        void bindData(Article article) {
             Picasso.with(context)
                     .load(article.getImage())
                     .placeholder(R.drawable.default_thumbnail)
@@ -113,8 +115,8 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();
-                    favoriteArticles.remove(position);
                     sharedPreference.removeFavorite(context, favoriteArticles.get(position));
+                    favoriteArticles.remove(favoriteArticles.get(position));
                     notifyItemRemoved(position);
                     ibFavorite.setTag("deactive");
                     ibFavorite.setImageResource(R.drawable.ic_fav_normal);
