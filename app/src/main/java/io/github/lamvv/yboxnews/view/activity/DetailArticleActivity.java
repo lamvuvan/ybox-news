@@ -127,7 +127,7 @@ public class DetailArticleActivity extends AppCompatActivity implements GetArtic
         collapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(this, R.color.colorAccent));
         collapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.white));
 
-        dynamicToolbarColor();
+//        dynamicToolbarColor();
 
         Picasso.with(this).load(article.getImage()).into(ivImage);
 
@@ -138,14 +138,13 @@ public class DetailArticleActivity extends AppCompatActivity implements GetArtic
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
         }
-//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                onBackPressed();
-//            }
-//        });
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         //webView
         WebSettings webSettings = webView.getSettings();
@@ -251,8 +250,7 @@ public class DetailArticleActivity extends AppCompatActivity implements GetArtic
 
     private void dynamicToolbarColor() {
 
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
-                R.drawable.ic_launcher_outer);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_outer);
         Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
 
             @Override
