@@ -93,7 +93,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemViewType(int position) {
-        if (position >= getItemCount() - 1) {
+        if (position >= getItemCount() -1) {
             return TYPE_LOAD;
         } else {
             return TYPE_ARTICLE;

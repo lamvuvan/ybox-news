@@ -1,4 +1,4 @@
-package io.github.lamvv.yboxnews.iml;
+package io.github.lamvv.yboxnews.interfaces;
 
 /**
  * Created by lamvu on 10/8/2016.

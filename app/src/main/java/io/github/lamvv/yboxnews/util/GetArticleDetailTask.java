@@ -9,7 +9,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 
-import io.github.lamvv.yboxnews.iml.GetArticleDetailTaskCompleteListener;
+import io.github.lamvv.yboxnews.interfaces.GetArticleDetailTaskCompleteListener;
 
 /**
  * Created by lamvu on 10/8/2016.

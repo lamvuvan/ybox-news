@@ -62,7 +62,7 @@
     <string name="rateus">Đánh giá ứng dụng</string>
     <string name="otherapp">Ứng dụng khác</string>
     <string name="setting">Trợ giúp và phản hồi</string>
-    <string name="version">Phiên bản 1.6.1</string>
+    <string name="version">Phiên bản 1.6.2</string>
 
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">

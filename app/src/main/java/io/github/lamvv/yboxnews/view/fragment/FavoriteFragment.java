@@ -26,8 +26,6 @@ import io.github.lamvv.yboxnews.util.DeviceUtils;
 import io.github.lamvv.yboxnews.util.DividerItemDecoration;
 import io.github.lamvv.yboxnews.util.NetworkUtils;
 import io.github.lamvv.yboxnews.util.SharedPreferenceUtils;
-import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
-import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 
 /**
  * Created by lamvu on 11/1/2016.
@@ -100,8 +98,7 @@ public class FavoriteFragment extends Fragment {
                 emptyView.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
                 favoriteAdapter = new FavoriteAdapter(rootLayout, getActivity(), favoriteArticles);
-                AlphaInAnimationAdapter alphaAdapter = new AlphaInAnimationAdapter(favoriteAdapter);
-                recyclerView.setAdapter(new ScaleInAnimationAdapter(alphaAdapter));
+                recyclerView.setAdapter(favoriteAdapter);
 
                 favoriteAdapter.notifyDataSetChanged();
             } else {

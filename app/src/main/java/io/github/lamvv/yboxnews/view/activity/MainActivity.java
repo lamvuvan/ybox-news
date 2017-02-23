@@ -51,7 +51,7 @@ import static io.github.lamvv.yboxnews.util.ShareUtils.PLAY_STORE_DEV_URL;
 public class MainActivity extends AppCompatActivity {
 
     InterstitialAd mInterstitialAd;
-    private StartAppAd startAppAd = new StartAppAd(this);
+    StartAppAd startAppAd = new StartAppAd(this);
     boolean requestAdFailed = false;
 
     private Toolbar toolbar;
@@ -68,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Handler handler;
 
-    private WindowManager mWindowManager = null;
-    private View mNightView = null;
+    WindowManager mWindowManager = null;
+    View mNightView = null;
     private boolean mIsAddedView;
 
     private boolean mIsChangeTheme;
@@ -97,8 +97,6 @@ public class MainActivity extends AppCompatActivity {
         MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.admob_app_id));
         AdView mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
-//                .addTestDevice("9E1B9BD30BDD0D71713E0611982A7D6C")
-//                .addTestDevice("5911C7ACA6D91588481831737229F467")
                 .build();
         mAdView.loadAd(adRequest);
 
@@ -160,13 +158,10 @@ public class MainActivity extends AppCompatActivity {
 
         initNightModeSwitch();
 
-//        navigationView.setNavigationItemSelectedListener(this);
     }
 
     private void requestNewInterstitial() {
         AdRequest adRequest = new AdRequest.Builder()
-//                .addTestDevice("9E1B9BD30BDD0D71713E0611982A7D6C")
-//                .addTestDevice("5911C7ACA6D91588481831737229F467")
                 .build();
         mInterstitialAd.loadAd(adRequest);
     }
@@ -276,16 +271,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
 //        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         return super.onOptionsItemSelected(item);
     }
 
@@ -307,7 +298,6 @@ public class MainActivity extends AppCompatActivity {
         // selecting appropriate nav menu item
         selectNavMenu();
 
-        // set toolbar title
         setToolbarTitle();
 
         // if user select the current navigation menu again, don't do anything

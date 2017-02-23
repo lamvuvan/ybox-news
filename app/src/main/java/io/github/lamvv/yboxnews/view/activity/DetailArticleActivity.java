@@ -2,7 +2,6 @@ package io.github.lamvv.yboxnews.view.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,7 +11,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -42,8 +40,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.adapter.RelatedArticleAdapter;
-import io.github.lamvv.yboxnews.iml.GetArticleDetailTaskCompleteListener;
-import io.github.lamvv.yboxnews.iml.YboxService;
+import io.github.lamvv.yboxnews.interfaces.GetArticleDetailTaskCompleteListener;
+import io.github.lamvv.yboxnews.interfaces.ServiceAPI;
 import io.github.lamvv.yboxnews.model.Article;
 import io.github.lamvv.yboxnews.model.ArticleList;
 import io.github.lamvv.yboxnews.util.DeviceUtils;
@@ -94,7 +92,7 @@ public class DetailArticleActivity extends AppCompatActivity implements GetArtic
 
     private List<Object> articles;
     private RelatedArticleAdapter adapter;
-    private YboxService api;
+    private ServiceAPI api;
 
     private Article article;
     private String category;
@@ -191,7 +189,7 @@ public class DetailArticleActivity extends AppCompatActivity implements GetArtic
             }
         });
 
-        api = ServiceGenerator.createService(YboxService.class);
+        api = ServiceGenerator.createService(ServiceAPI.class);
         load(1);
 
         recyclerView.setHasFixedSize(true);
@@ -246,21 +244,6 @@ public class DetailArticleActivity extends AppCompatActivity implements GetArtic
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private void dynamicToolbarColor() {
-
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_outer);
-        Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
-
-            @Override
-            public void onGenerated(Palette palette) {
-                collapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(
-                        ContextCompat.getColor(DetailArticleActivity.this, R.color.colorPrimary)));
-                collapsingToolbarLayout.setStatusBarScrimColor(palette.getMutedColor(
-                        ContextCompat.getColor(DetailArticleActivity.this, R.color.colorPrimaryDark)));
-            }
-        });
     }
 
     @Override

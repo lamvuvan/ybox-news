@@ -10,6 +10,7 @@ import java.io.Serializable;
 
 public class Article implements Serializable {
 
+    @SerializedName("id")
     private double id;
     @SerializedName("image")
     private String image;
@@ -25,6 +26,7 @@ public class Article implements Serializable {
     private Timestamps timestamps;
     @SerializedName("links")
     private Links links;
+    @SerializedName("type")
     private String type;
 
     public Article() {

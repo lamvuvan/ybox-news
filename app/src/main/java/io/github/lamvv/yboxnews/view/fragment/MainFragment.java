@@ -25,7 +25,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.adapter.ArticleAdapter;
-import io.github.lamvv.yboxnews.iml.YboxService;
+import io.github.lamvv.yboxnews.interfaces.ServiceAPI;
 import io.github.lamvv.yboxnews.model.Article;
 import io.github.lamvv.yboxnews.model.ArticleList;
 import io.github.lamvv.yboxnews.util.DeviceUtils;
@@ -33,8 +33,6 @@ import io.github.lamvv.yboxnews.util.DividerItemDecoration;
 import io.github.lamvv.yboxnews.util.NetworkUtils;
 import io.github.lamvv.yboxnews.util.ServiceGenerator;
 import io.github.lamvv.yboxnews.view.activity.MainActivity;
-import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
-import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -73,7 +71,7 @@ public class MainFragment extends Fragment {
 
 	private List<Object> articles;
 	private ArticleAdapter adapter;
-	private YboxService api;
+	private ServiceAPI api;
 	MainActivity mainActivity;
 
 	private static final String TEXT_FRAGMENT = "TEXT_FRAGMENT";
@@ -141,13 +139,12 @@ public class MainFragment extends Fragment {
 			}
 		}
 
-		api = ServiceGenerator.createService(YboxService.class);
+		api = ServiceGenerator.createService(ServiceAPI.class);
 		load(1);
 
 		try {
 			adapter = new ArticleAdapter(rootLayout, getActivity(), articles);
-			AlphaInAnimationAdapter alphaAdapter = new AlphaInAnimationAdapter(adapter);
-			recyclerView.setAdapter(new ScaleInAnimationAdapter(alphaAdapter));
+			recyclerView.setAdapter(adapter);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
