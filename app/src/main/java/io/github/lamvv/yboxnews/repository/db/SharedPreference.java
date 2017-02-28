@@ -1,4 +1,4 @@
-package io.github.lamvv.yboxnews.util;
+package io.github.lamvv.yboxnews.repository.db;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -16,12 +16,12 @@ import io.github.lamvv.yboxnews.model.Article;
  * Created by lamvu on 11/1/2016.
  */
 
-public class SharedPreferenceUtils {
+public class SharedPreference {
 
     private static final String PREFS_NAME = "ybox_favorite";
     private static final String FAVORITES = "favorite";
 
-    public SharedPreferenceUtils() {
+    public SharedPreference() {
         super();
     }
 

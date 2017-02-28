@@ -22,8 +22,8 @@ import butterknife.ButterKnife;
 import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.model.Article;
 import io.github.lamvv.yboxnews.util.DeviceUtils;
-import io.github.lamvv.yboxnews.util.SharedPreferenceUtils;
-import io.github.lamvv.yboxnews.view.activity.DetailArticleActivity;
+import io.github.lamvv.yboxnews.repository.db.SharedPreference;
+import io.github.lamvv.yboxnews.view.activity.DetailActivity;
 
 /**
  * Created by lamvu on 11/3/2016.
@@ -36,14 +36,14 @@ public class RelatedArticleAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private List<Object> list;
     private Context context;
 
-    private SharedPreferenceUtils sharedPreference;
+    private SharedPreference sharedPreference;
     private RelativeLayout rootLayout;
 
     public RelatedArticleAdapter(RelativeLayout rootLayout, Context context, List<Object> list){
         this.rootLayout = rootLayout;
         this.context = context;
         this.list = list;
-        sharedPreference = new SharedPreferenceUtils();
+        sharedPreference = new SharedPreference();
     }
 
     @Override
@@ -147,7 +147,7 @@ public class RelatedArticleAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public void onClick(View v) {
             int position = getAdapterPosition();
             Article article = (Article) list.get(position);
-            Intent intent = new Intent(context, DetailArticleActivity.class);
+            Intent intent = new Intent(context, DetailActivity.class);
             intent.putExtra("article", article);
             context.startActivity(intent);
         }

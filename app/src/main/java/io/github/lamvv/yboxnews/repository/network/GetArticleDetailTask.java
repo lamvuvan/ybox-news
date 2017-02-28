@@ -1,4 +1,4 @@
-package io.github.lamvv.yboxnews.util;
+package io.github.lamvv.yboxnews.repository.network;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -9,8 +9,6 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 
-import io.github.lamvv.yboxnews.interfaces.GetArticleDetailTaskCompleteListener;
-
 /**
  * Created by lamvu on 10/8/2016.
  */
@@ -18,11 +16,11 @@ import io.github.lamvv.yboxnews.interfaces.GetArticleDetailTaskCompleteListener;
 public class GetArticleDetailTask extends AsyncTask<String, Void, String> {
 
     private Context context;
-    private GetArticleDetailTaskCompleteListener<String> callback;
+    private OnGetDetailArticleListener<String> callback;
 
     private static final String TAG = "lamvv";
 
-    public GetArticleDetailTask(Context context, GetArticleDetailTaskCompleteListener<String> callback){
+    public GetArticleDetailTask(Context context, OnGetDetailArticleListener<String> callback){
         this.context = context;
         this.callback = callback;
     }

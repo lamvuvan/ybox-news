@@ -41,12 +41,12 @@ import io.github.lamvv.yboxnews.util.MyUtils;
 import io.github.lamvv.yboxnews.view.fragment.FavoriteFragment;
 import io.github.lamvv.yboxnews.view.fragment.MainFragment;
 
-import static io.github.lamvv.yboxnews.util.ShareUtils.APP_PACKAGE_NAME;
-import static io.github.lamvv.yboxnews.util.ShareUtils.CC_EMAIL;
-import static io.github.lamvv.yboxnews.util.ShareUtils.DEV_STORE_ID;
-import static io.github.lamvv.yboxnews.util.ShareUtils.MAIN_EMAIL;
-import static io.github.lamvv.yboxnews.util.ShareUtils.PLAY_STORE_APP_URL;
-import static io.github.lamvv.yboxnews.util.ShareUtils.PLAY_STORE_DEV_URL;
+import static io.github.lamvv.yboxnews.common.Constants.APP_PACKAGE_NAME;
+import static io.github.lamvv.yboxnews.common.Constants.CC_EMAIL;
+import static io.github.lamvv.yboxnews.common.Constants.DEV_STORE_ID;
+import static io.github.lamvv.yboxnews.common.Constants.MAIN_EMAIL;
+import static io.github.lamvv.yboxnews.common.Constants.PLAY_STORE_APP_URL;
+import static io.github.lamvv.yboxnews.common.Constants.PLAY_STORE_DEV_URL;
 
 public class MainActivity extends AppCompatActivity {
 

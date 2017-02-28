@@ -25,13 +25,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.adapter.ArticleAdapter;
-import io.github.lamvv.yboxnews.interfaces.ServiceAPI;
+import io.github.lamvv.yboxnews.repository.network.YboxService;
 import io.github.lamvv.yboxnews.model.Article;
 import io.github.lamvv.yboxnews.model.ArticleList;
 import io.github.lamvv.yboxnews.util.DeviceUtils;
 import io.github.lamvv.yboxnews.util.DividerItemDecoration;
 import io.github.lamvv.yboxnews.util.NetworkUtils;
-import io.github.lamvv.yboxnews.util.ServiceGenerator;
+import io.github.lamvv.yboxnews.repository.network.ServiceGenerator;
 import io.github.lamvv.yboxnews.view.activity.MainActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -71,7 +71,7 @@ public class MainFragment extends Fragment {
 
 	private List<Object> articles;
 	private ArticleAdapter adapter;
-	private ServiceAPI api;
+	private YboxService service;
 	MainActivity mainActivity;
 
 	private static final String TEXT_FRAGMENT = "TEXT_FRAGMENT";
@@ -139,7 +139,7 @@ public class MainFragment extends Fragment {
 			}
 		}
 
-		api = ServiceGenerator.createService(ServiceAPI.class);
+		service = ServiceGenerator.createService(YboxService.class);
 		load(1);
 
 		try {
@@ -177,23 +177,23 @@ public class MainFragment extends Fragment {
 	private void load(int page){
 		Call<ArticleList> call;
 		if(fragmentName.equals(home))
-			call = api.getArticle(page);
+			call = service.getArticle(page);
 		else if(fragmentName.equals(newest))
-			call = api.getNewestArticle(page);
+			call = service.getNewestArticle(page);
 		else if(fragmentName.equals(top))
-			call = api.getTopVoteArticle(page);
+			call = service.getTopVoteArticle(page);
 		else if(fragmentName.equals(recruitment))
-			call = api.getRecruitmentArticle(page);
+			call = service.getRecruitmentArticle(page);
 		else if(fragmentName.equals(scholarship))
-			call = api.getScholarshipArticle(page);
+			call = service.getScholarshipArticle(page);
 		else if(fragmentName.equals(event))
-			call = api.getEventArticle(page);
+			call = service.getEventArticle(page);
 		else if(fragmentName.equals(skill))
-			call = api.getSkillArticle(page);
+			call = service.getSkillArticle(page);
 		else if(fragmentName.equals(face))
-			call = api.getFaceArticle(page);
+			call = service.getFaceArticle(page);
 		else
-			call = api.getCompetitionArticle(page);
+			call = service.getCompetitionArticle(page);
 
 		call.enqueue(new Callback<ArticleList>() {
 			@Override
@@ -222,23 +222,23 @@ public class MainFragment extends Fragment {
 
 		Call<ArticleList> call;
 		if(fragmentName.equals(home))
-			call = api.getArticle(page);
+			call = service.getArticle(page);
 		else if(fragmentName.equals(newest))
-			call = api.getNewestArticle(page);
+			call = service.getNewestArticle(page);
 		else if(fragmentName.equals(top))
-			call = api.getTopVoteArticle(page);
+			call = service.getTopVoteArticle(page);
 		else if(fragmentName.equals(recruitment))
-			call = api.getRecruitmentArticle(page);
+			call = service.getRecruitmentArticle(page);
 		else if(fragmentName.equals(scholarship))
-			call = api.getScholarshipArticle(page);
+			call = service.getScholarshipArticle(page);
 		else if(fragmentName.equals(event))
-			call = api.getEventArticle(page);
+			call = service.getEventArticle(page);
 		else if(fragmentName.equals(skill))
-			call = api.getSkillArticle(page);
+			call = service.getSkillArticle(page);
 		else if(fragmentName.equals(face))
-			call = api.getFaceArticle(page);
+			call = service.getFaceArticle(page);
 		else
-			call = api.getCompetitionArticle(page);
+			call = service.getCompetitionArticle(page);
 
 		call.enqueue(new Callback<ArticleList>() {
 			@Override

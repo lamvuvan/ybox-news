@@ -25,7 +25,7 @@ import io.github.lamvv.yboxnews.model.Article;
 import io.github.lamvv.yboxnews.util.DeviceUtils;
 import io.github.lamvv.yboxnews.util.DividerItemDecoration;
 import io.github.lamvv.yboxnews.util.NetworkUtils;
-import io.github.lamvv.yboxnews.util.SharedPreferenceUtils;
+import io.github.lamvv.yboxnews.repository.db.SharedPreference;
 
 /**
  * Created by lamvu on 11/1/2016.
@@ -45,7 +45,7 @@ public class FavoriteFragment extends Fragment {
 
     private List<Article> favoriteArticles;
     private FavoriteAdapter favoriteAdapter;
-    private SharedPreferenceUtils sharedPreference;
+    private SharedPreference sharedPreference;
 
     public FavoriteFragment(){}
 
@@ -54,7 +54,7 @@ public class FavoriteFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         favoriteArticles = new ArrayList<>();
-        sharedPreference = new SharedPreferenceUtils();
+        sharedPreference = new SharedPreference();
     }
 
     @Override

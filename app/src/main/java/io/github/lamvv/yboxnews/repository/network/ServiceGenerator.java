@@ -1,8 +1,9 @@
-package io.github.lamvv.yboxnews.util;
+package io.github.lamvv.yboxnews.repository.network;
 
 import java.util.concurrent.TimeUnit;
 
-import io.github.lamvv.yboxnews.common.Constants;
+import io.github.lamvv.yboxnews.common.ApiConstants;
+import io.github.lamvv.yboxnews.util.App;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -21,9 +22,10 @@ public class ServiceGenerator {
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Constants.BASE_URL)
+                .baseUrl(ApiConstants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(httpClient).build();
+                .client(App.defaultOkHttpClient())
+                .build();
 
         return retrofit.create(serviceClass);
     }

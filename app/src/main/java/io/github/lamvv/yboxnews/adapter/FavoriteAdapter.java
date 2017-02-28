@@ -21,8 +21,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.model.Article;
-import io.github.lamvv.yboxnews.util.SharedPreferenceUtils;
-import io.github.lamvv.yboxnews.view.activity.DetailArticleActivity;
+import io.github.lamvv.yboxnews.repository.db.SharedPreference;
+import io.github.lamvv.yboxnews.view.activity.DetailActivity;
 
 /**
  * Created by lamvu on 11/2/2016.
@@ -34,7 +34,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private Context context;
     private List<Article> favoriteArticles;
-    private SharedPreferenceUtils sharedPreference;
+    private SharedPreference sharedPreference;
     private LinearLayout rootLayout;
 
     private static final String TAG = "lamvv";
@@ -43,7 +43,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.rootLayout = rootLayout;
         this.context = context;
         this.favoriteArticles = favoriteArticles;
-        sharedPreference = new SharedPreferenceUtils();
+        sharedPreference = new SharedPreference();
     }
 
     @Override
@@ -130,7 +130,7 @@ public class FavoriteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public void onClick(View v) {
             int position = getAdapterPosition();
             Article article = favoriteArticles.get(position);
-            Intent intent = new Intent(context, DetailArticleActivity.class);
+            Intent intent = new Intent(context, DetailActivity.class);
             intent.putExtra("article", article);
             context.startActivity(intent);
         }

@@ -40,15 +40,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.adapter.RelatedArticleAdapter;
-import io.github.lamvv.yboxnews.interfaces.GetArticleDetailTaskCompleteListener;
-import io.github.lamvv.yboxnews.interfaces.ServiceAPI;
+import io.github.lamvv.yboxnews.repository.network.OnGetDetailArticleListener;
+import io.github.lamvv.yboxnews.repository.network.YboxService;
 import io.github.lamvv.yboxnews.model.Article;
 import io.github.lamvv.yboxnews.model.ArticleList;
 import io.github.lamvv.yboxnews.util.DeviceUtils;
 import io.github.lamvv.yboxnews.util.DividerItemDecoration;
-import io.github.lamvv.yboxnews.util.GetArticleDetailTask;
-import io.github.lamvv.yboxnews.util.ServiceGenerator;
-import io.github.lamvv.yboxnews.util.SharedPreferenceUtils;
+import io.github.lamvv.yboxnews.repository.network.GetArticleDetailTask;
+import io.github.lamvv.yboxnews.repository.network.ServiceGenerator;
+import io.github.lamvv.yboxnews.repository.db.SharedPreference;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -57,7 +57,7 @@ import retrofit2.Response;
  * Created by lamvu on 10/12/2016.
  */
 
-public class DetailArticleActivity extends AppCompatActivity implements GetArticleDetailTaskCompleteListener<String> {
+public class DetailActivity extends AppCompatActivity implements OnGetDetailArticleListener<String> {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -92,12 +92,12 @@ public class DetailArticleActivity extends AppCompatActivity implements GetArtic
 
     private List<Object> articles;
     private RelatedArticleAdapter adapter;
-    private ServiceAPI api;
+    private YboxService service;
 
     private Article article;
     private String category;
 
-    private SharedPreferenceUtils sharedPreference;
+    private SharedPreference sharedPreference;
 
     private static final String TAG = "lamvv";
 
@@ -108,7 +108,7 @@ public class DetailArticleActivity extends AppCompatActivity implements GetArtic
         ButterKnife.bind(this);
 
         articles = new ArrayList<>();
-        sharedPreference = new SharedPreferenceUtils();
+        sharedPreference = new SharedPreference();
 
         //get data send from fragments
         Bundle bundle = getIntent().getExtras();
@@ -174,13 +174,13 @@ public class DetailArticleActivity extends AppCompatActivity implements GetArtic
             public void onClick(View v) {
                 String tag = fabFavorite.getTag().toString();
                 if(tag.equalsIgnoreCase("deactive")){
-                    sharedPreference.addFavorite(DetailArticleActivity.this, article);
+                    sharedPreference.addFavorite(DetailActivity.this, article);
                     fabFavorite.setTag("active");
                     fabFavorite.setImageResource(R.drawable.ic_favorite_border_white_24dp);
                     Snackbar.make(rootLayout, getResources().getString(R.string.add_favorite_message),
                             Snackbar.LENGTH_SHORT).show();
                 }else{
-                    sharedPreference.removeFavorite(DetailArticleActivity.this, article);
+                    sharedPreference.removeFavorite(DetailActivity.this, article);
                     fabFavorite.setTag("deactive");
                     fabFavorite.setImageResource(R.drawable.ic_favorite_white_24dp);
                     Snackbar.make(rootLayout, getResources().getString(R.string.remove_favorite_message),
@@ -189,7 +189,7 @@ public class DetailArticleActivity extends AppCompatActivity implements GetArtic
             }
         });
 
-        api = ServiceGenerator.createService(ServiceAPI.class);
+        service = ServiceGenerator.createService(YboxService.class);
         load(1);
 
         recyclerView.setHasFixedSize(true);
@@ -287,19 +287,19 @@ public class DetailArticleActivity extends AppCompatActivity implements GetArtic
         Call<ArticleList> call;
 
         if(category.equalsIgnoreCase("#Tuyển Dụng"))
-            call = api.getRecruitmentArticle(page);
+            call = service.getRecruitmentArticle(page);
         else if(category.equalsIgnoreCase("#Kỹ Năng"))
-            call = api.getSkillArticle(page);
+            call = service.getSkillArticle(page);
         else if(category.equalsIgnoreCase("#Sự Kiện"))
-            call = api.getEventArticle(page);
+            call = service.getEventArticle(page);
         else if(category.equalsIgnoreCase("#Học Bổng"))
-            call = api.getScholarshipArticle(page);
+            call = service.getScholarshipArticle(page);
         else if(category.equalsIgnoreCase("#Cuộc Thi"))
-            call = api.getCompetitionArticle(page);
+            call = service.getCompetitionArticle(page);
         else if(category.equalsIgnoreCase("#Gương Mặt"))
-            call = api.getFaceArticle(page);
+            call = service.getFaceArticle(page);
         else
-            call = api.getArticle(page);
+            call = service.getArticle(page);
 
         call.enqueue(new Callback<ArticleList>() {
             @Override
@@ -339,7 +339,7 @@ public class DetailArticleActivity extends AppCompatActivity implements GetArtic
 
     private boolean checkFavoriteItem(Article checkArticle) {
         boolean check = false;
-        List<Article> favorites = sharedPreference.getFavorites(DetailArticleActivity.this);
+        List<Article> favorites = sharedPreference.getFavorites(DetailActivity.this);
         if (favorites != null) {
             for (Article article : favorites) {
                 if (article.equals(checkArticle)) {
