@@ -2,12 +2,15 @@ package io.github.lamvv.yboxnews.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -23,6 +26,7 @@ import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.model.Article;
 import io.github.lamvv.yboxnews.repository.db.SharedPreference;
 import io.github.lamvv.yboxnews.util.DeviceUtils;
+import io.github.lamvv.yboxnews.util.ImageCache;
 import io.github.lamvv.yboxnews.view.activity.DetailActivity;
 
 /**
@@ -42,6 +46,8 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     private SharedPreference sharedPreference;
     private RelativeLayout rootLayout;
+
+    private int lastPosition = RecyclerView.NO_POSITION;
 
     private static final String TAG = "lamvv";
 
@@ -124,11 +130,18 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         void bindData(Article article){
-            Picasso.with(context)
-                    .load(article.getImage())
-                    .placeholder(R.drawable.default_thumbnail)
-                    .error(R.drawable.default_thumbnail)
-                    .into(ivImage);
+            int position = getAdapterPosition();
+            setAnimation(ivImage, position);
+            Bitmap bitmap = ImageCache.getBitmapFromCache(article.getImage());
+            if(bitmap == null) {
+                Picasso.with(context)
+                        .load(article.getImage())
+                        .placeholder(R.drawable.default_thumbnail)
+                        .error(R.drawable.default_thumbnail)
+                        .into(ivImage);
+            }else{
+                ivImage.setImageBitmap(bitmap);
+            }
 
             tvTitle.setText(article.getTitle());
             tvCreatedAt.setText(article.getTimestamps().getCreatedAt());
@@ -224,6 +237,22 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
         }
         return check;
+    }
+
+    private void setAnimation(ImageView viewToAnimate, int position){
+        if (position > lastPosition){
+            Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
+    }
+
+    private void setAnimation(View view, int position){
+        if(position > lastPosition){
+            Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
+            view.startAnimation(animation);
+            lastPosition = position;
+        }
     }
 
 }

@@ -177,7 +177,7 @@ public class MainFragment extends Fragment {
 	private void load(int page){
 		Call<ArticleList> call;
 		if(fragmentName.equals(home))
-			call = service.getArticle(page);
+			call = service.getNewestArticle(page);
 		else if(fragmentName.equals(newest))
 			call = service.getNewestArticle(page);
 		else if(fragmentName.equals(top))
@@ -222,7 +222,7 @@ public class MainFragment extends Fragment {
 
 		Call<ArticleList> call;
 		if(fragmentName.equals(home))
-			call = service.getArticle(page);
+			call = service.getNewestArticle(page);
 		else if(fragmentName.equals(newest))
 			call = service.getNewestArticle(page);
 		else if(fragmentName.equals(top))

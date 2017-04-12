@@ -22,10 +22,10 @@ import butterknife.ButterKnife;
 import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.adapter.FavoriteAdapter;
 import io.github.lamvv.yboxnews.model.Article;
+import io.github.lamvv.yboxnews.repository.db.SharedPreference;
 import io.github.lamvv.yboxnews.util.DeviceUtils;
 import io.github.lamvv.yboxnews.util.DividerItemDecoration;
 import io.github.lamvv.yboxnews.util.NetworkUtils;
-import io.github.lamvv.yboxnews.repository.db.SharedPreference;
 
 /**
  * Created by lamvu on 11/1/2016.
@@ -71,11 +71,6 @@ public class FavoriteFragment extends Fragment {
         if(!NetworkUtils.isConnectedInternet(getActivity())){
             Snackbar.make(rootLayout, errorInternet, Snackbar.LENGTH_LONG).show();
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
 
         try {
             favoriteArticles = sharedPreference.getFavorites(getActivity());
@@ -112,4 +107,5 @@ public class FavoriteFragment extends Fragment {
             recyclerView.setVisibility(View.GONE);
         }
     }
+
 }
