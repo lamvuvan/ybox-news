@@ -1,10 +1,7 @@
 package io.github.lamvv.yboxnews.view.activity;
 
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.PixelFormat;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
@@ -24,7 +21,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -37,16 +33,11 @@ import com.startapp.android.publish.StartAppSDK;
 
 import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.util.CropCircleTransformation;
+import io.github.lamvv.yboxnews.util.FeedbackUtils;
 import io.github.lamvv.yboxnews.util.MyUtils;
+import io.github.lamvv.yboxnews.util.StoreUtils;
 import io.github.lamvv.yboxnews.view.fragment.FavoriteFragment;
 import io.github.lamvv.yboxnews.view.fragment.MainFragment;
-
-import static io.github.lamvv.yboxnews.common.Constants.APP_PACKAGE_NAME;
-import static io.github.lamvv.yboxnews.common.Constants.CC_EMAIL;
-import static io.github.lamvv.yboxnews.common.Constants.DEV_STORE_ID;
-import static io.github.lamvv.yboxnews.common.Constants.MAIN_EMAIL;
-import static io.github.lamvv.yboxnews.common.Constants.PLAY_STORE_APP_URL;
-import static io.github.lamvv.yboxnews.common.Constants.PLAY_STORE_DEV_URL;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -427,41 +418,21 @@ public class MainActivity extends AppCompatActivity {
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_rateus:
-                        try {
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + APP_PACKAGE_NAME)));
-                        } catch (ActivityNotFoundException e) {
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(PLAY_STORE_APP_URL + APP_PACKAGE_NAME)));
-                        }
+                        StoreUtils.gotoAppOnMarket(MainActivity.this);
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_otherapp:
-                        try {
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://developer?id=" + DEV_STORE_ID)));
-                        } catch (ActivityNotFoundException e) {
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(PLAY_STORE_DEV_URL + DEV_STORE_ID)));
-                        }
+                        StoreUtils.gotoDevOnMarket(MainActivity.this);
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_setting:
-                        Intent intentSendMail = new Intent(Intent.ACTION_SEND);
-                        intentSendMail.setType("text/plain");
-                        intentSendMail.putExtra(Intent.EXTRA_EMAIL, new String[]{MAIN_EMAIL});
-                        intentSendMail.putExtra(Intent.EXTRA_CC, new String[]{CC_EMAIL});
-                        intentSendMail.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.app_name));
-                        intentSendMail.putExtra(Intent.EXTRA_TEXT, "");
-                        try {
-                            startActivity(intentSendMail);
-                        } catch (ActivityNotFoundException ex) {
-                            Toast.makeText(MainActivity.this, getString(R.string.error_email), Toast.LENGTH_SHORT).show();
-                        }
+                        FeedbackUtils.sendFeedback(MainActivity.this,
+                                getResources().getString(R.string.app_name),
+                                getString(R.string.error_email));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_version:
-                        try {
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + APP_PACKAGE_NAME)));
-                        } catch (ActivityNotFoundException e) {
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(PLAY_STORE_APP_URL + APP_PACKAGE_NAME)));
-                        }
+                        StoreUtils.gotoAppOnMarket(MainActivity.this);
                         drawer.closeDrawers();
                         return true;
                     default:
