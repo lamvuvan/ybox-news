@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,6 +42,8 @@ import io.github.lamvv.yboxnews.view.fragment.FavoriteFragment;
 import io.github.lamvv.yboxnews.view.fragment.MainFragment;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "MainActivity";
 
     InterstitialAd mInterstitialAd;
     StartAppAd startAppAd = new StartAppAd(this);
@@ -108,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
             public void onAdFailedToLoad(int i) {
                 super.onAdFailedToLoad(i);
                 requestAdFailed = true;
+                Log.i(TAG, "onAdFailedToLoad: " + requestAdFailed);
             }
         });
         requestNewInterstitial();

@@ -189,11 +189,11 @@ public class MainFragment extends Fragment {
 	private void load(String fragmentName, String category, int page){
 		Call<ArticleList> call;
 		if(fragmentName.equalsIgnoreCase(home))
-			call = mService.getNewestArticle(page);
+			call = mService.getArticle("fil", page);
 		else if(fragmentName.equalsIgnoreCase(newest) || fragmentName.equalsIgnoreCase(top))
 			call = mService.getTypeArticle(category, page);
 		else
-			call = mService.getCategoryArticle(category, page);
+			call = mService.getCategoryArticle("fil", category, page);
 		call.enqueue(getArticle);
 	}
 
@@ -222,11 +222,11 @@ public class MainFragment extends Fragment {
 
 		Call<ArticleList> call;
 		if(fragmentName.equalsIgnoreCase(home))
-			call = mService.getNewestArticle(page);
+			call = mService.getArticle("fil", page);
 		else if(fragmentName.equalsIgnoreCase(newest) || fragmentName.equalsIgnoreCase(top))
 			call = mService.getTypeArticle(category, page);
 		else
-			call = mService.getCategoryArticle(category, page);
+			call = mService.getCategoryArticle("fil", category, page);
 		call.enqueue(new Callback<ArticleList>() {
 			@Override
 			public void onResponse(Call<ArticleList> call, Response<ArticleList> response) {

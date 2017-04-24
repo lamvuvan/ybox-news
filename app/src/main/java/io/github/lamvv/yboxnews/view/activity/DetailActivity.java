@@ -36,7 +36,9 @@ import com.squareup.picasso.Picasso;
 import com.valuepotion.sdk.AdContainer;
 import com.valuepotion.sdk.AdDimension;
 import com.valuepotion.sdk.AdListener;
+import com.valuepotion.sdk.VPAdView;
 import com.valuepotion.sdk.ValuePotion;
+import com.valuepotion.sdk.ad.AdRequestOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +60,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.valuepotion.sdk.AdDimension.NATIVE_BANNER;
+import static com.valuepotion.sdk.AdDimension.BANNER;
 
 /**
  * Created by lamvu on 10/12/2016.
@@ -66,7 +68,9 @@ import static com.valuepotion.sdk.AdDimension.NATIVE_BANNER;
 
 public class DetailActivity extends AppCompatActivity implements OnGetDetailArticleListener<String> {
 
-    private static final String TAG = "lamvv";
+    private static final String TAG = "DetailActivity";
+
+    public static final AdDimension adDimension = BANNER;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -98,13 +102,15 @@ public class DetailActivity extends AppCompatActivity implements OnGetDetailArti
     RecyclerView recyclerView;
     @BindView(R.id.rootLayout)
     RelativeLayout rootLayout;
+    @BindView(R.id.adParentView)
+    RelativeLayout adParentView;
 
     private List<Object> articles;
     private RelatedArticleAdapter adapter;
     private YboxService service;
 
-    private Article article;
-    private String category;
+    private Article mArticle;
+    private String mCategory;
 
     private SharedPreference sharedPreference;
 
@@ -114,47 +120,43 @@ public class DetailActivity extends AppCompatActivity implements OnGetDetailArti
         setContentView(R.layout.activity_detail_article);
         ButterKnife.bind(this);
 
-        AdDimension adDimension = NATIVE_BANNER;
-        AdListener adListener = new AdListener() {
+        AdRequestOptions options = new AdRequestOptions.Builder(DetailActivity.this, "activity_detail_banner",
+                adDimension, new AdListener() {
             @Override
             public void adPrepared(AdContainer adContainer) {
-
+                VPAdView vpAdView = new VPAdView(DetailActivity.this);
+                adParentView.addView(vpAdView);
+                vpAdView.load(adContainer.popAd());
             }
 
             @Override
             public void adNotFound() {
-
             }
-        };
+        }).build();
+        ValuePotion.getInstance().requestAd(options);
 
-        ValuePotion.getInstance().setInterstitialPlacement(DetailActivity.this, "activity_detail_article");
-
-//        AdRequestOptions options = new AdRequestOptions.Builder(DetailActivity.this, adDimension, adListener)
-//                .numberToRequest(1)
-//                .callbackBeforeCachingAssets(true)
-//                .build();
 
         articles = new ArrayList<>();
         sharedPreference = new SharedPreference();
 
         //get data send from fragments
         Bundle bundle = getIntent().getExtras();
-        article = (Article) bundle.getSerializable("article");
-        category = article.getCategory();
+        mArticle = (Article) bundle.getSerializable("article");
+        mCategory = mArticle.getCategory();
 
         //launch task get detail article
-        String detail = article.getLinks().getDetail();
+        String detail = mArticle.getLinks().getDetail();
         if(detail != null) {
             launchGetDetailTask(detail);
         }
 
-        collapsingToolbarLayout.setTitle(article.getTitle());
+        collapsingToolbarLayout.setTitle(mArticle.getTitle());
         collapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(this, R.color.colorAccent));
         collapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.white));
 
 //        dynamicToolbarColor();
 
-        Picasso.with(this).load(article.getImage()).into(ivImage);
+        Picasso.with(this).load(mArticle.getImage()).into(ivImage);
 
         //toolbar
         setSupportActionBar(toolbar);
@@ -183,12 +185,12 @@ public class DetailActivity extends AppCompatActivity implements OnGetDetailArti
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_TEXT, article.getLinks().getDetail());
+                intent.putExtra(Intent.EXTRA_TEXT, mArticle.getLinks().getDetail());
                 startActivity(Intent.createChooser(intent, getResources().getString(R.string.share_content)));
             }
         });
 
-        if(checkFavoriteItem(article)){
+        if(checkFavoriteItem(mArticle)){
             fabFavorite.setImageResource(R.drawable.ic_favorite_border_white_24dp);
             fabFavorite.setTag("active");
         }else{
@@ -201,13 +203,13 @@ public class DetailActivity extends AppCompatActivity implements OnGetDetailArti
             public void onClick(View v) {
                 String tag = fabFavorite.getTag().toString();
                 if(tag.equalsIgnoreCase("deactive")){
-                    sharedPreference.addFavorite(DetailActivity.this, article);
+                    sharedPreference.addFavorite(DetailActivity.this, mArticle);
                     fabFavorite.setTag("active");
                     fabFavorite.setImageResource(R.drawable.ic_favorite_border_white_24dp);
                     Snackbar.make(rootLayout, getResources().getString(R.string.add_favorite_message),
                             Snackbar.LENGTH_SHORT).show();
                 }else{
-                    sharedPreference.removeFavorite(DetailActivity.this, article);
+                    sharedPreference.removeFavorite(DetailActivity.this, mArticle);
                     fabFavorite.setTag("deactive");
                     fabFavorite.setImageResource(R.drawable.ic_favorite_white_24dp);
                     Snackbar.make(rootLayout, getResources().getString(R.string.remove_favorite_message),
@@ -217,7 +219,7 @@ public class DetailActivity extends AppCompatActivity implements OnGetDetailArti
         });
 
         service = ServiceGenerator.createService(YboxService.class);
-        load(1);
+        load(mCategory, 1);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
@@ -240,12 +242,12 @@ public class DetailActivity extends AppCompatActivity implements OnGetDetailArti
         recyclerView.setAdapter(adapter);
 
         //banner ads
-        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdView adView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder()
 //                    .addTestDevice("9E1B9BD30BDD0D71713E0611982A7D6C")
 //                    .addTestDevice("5911C7ACA6D91588481831737229F467")
                 .build();
-        mAdView.loadAd(adRequest);
+//        adView.loadAd(adRequest);
 
         //native ads
         NativeExpressAdView nativeAdView = (NativeExpressAdView) findViewById(R.id.nativeAdView);
@@ -255,10 +257,10 @@ public class DetailActivity extends AppCompatActivity implements OnGetDetailArti
                 .build();
         nativeAdView.loadAd(request);
 
-        tvTitle.setText(article.getTitle());
-        tvCategory.setText(article.getCategory() + " | ");
-        tvView.setText(article.getStats().getView() + " " + getResources().getString(R.string.views) + " | ");
-        tvCreatedAt.setText(article.getTimestamps().getCreatedAt());
+        tvTitle.setText(mArticle.getTitle());
+        tvCategory.setText(mArticle.getCategory() + " | ");
+        tvView.setText(mArticle.getStats().getView() + " " + getResources().getString(R.string.views) + " | ");
+        tvCreatedAt.setText(mArticle.getTimestamps().getCreatedAt());
 
     }
 
@@ -310,22 +312,22 @@ public class DetailActivity extends AppCompatActivity implements OnGetDetailArti
         getArticleDetailTask.execute(url);
     }
 
-    private void load(int page){
+    private void load(String category, int page){
         Call<ArticleList> call;
         if(category.equalsIgnoreCase("tuyen-dung"))
-            call = service.getCategoryArticle("recruitment", page);
+            call = service.getCategoryArticle("fil", "recruitment", page);
         else if(category.equalsIgnoreCase("ky-nang"))
-            call = service.getCategoryArticle("skill", page);
+            call = service.getCategoryArticle("fil", "skill", page);
         else if(category.equalsIgnoreCase("su-kien"))
-            call = service.getCategoryArticle("event", page);
+            call = service.getCategoryArticle("fil", "event", page);
         else if(category.equalsIgnoreCase("hoc-bong"))
-            call = service.getCategoryArticle("scholarship", page);
+            call = service.getCategoryArticle("fil", "scholarship", page);
         else if(category.equalsIgnoreCase("cuoc-thi"))
-            call = service.getCategoryArticle("competition", page);
+            call = service.getCategoryArticle("fil", "competition", page);
         else if(category.equalsIgnoreCase("guong-mat"))
-            call = service.getCategoryArticle("face", page);
+            call = service.getCategoryArticle("fil", "face", page);
         else
-            call = service.getArticle(page);
+            call = service.getArticle("fil", page);
 
         call.enqueue(new Callback<ArticleList>() {
             @Override

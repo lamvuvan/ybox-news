@@ -22,7 +22,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.activity.MainActivity" />
-        <activity android:name=".view.activity.DetailActivity" />
+        <activity android:name=".view.activity.DetailActivity"
+            android:configChanges="screenSize|orientation"/>
 
         <!-- startapp ads -->
         <activity android:name="com.startapp.android.publish.list3d.List3DActivity"

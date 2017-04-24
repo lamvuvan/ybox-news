@@ -13,19 +13,16 @@ import retrofit2.http.Query;
 public interface YboxService {
 
     @Headers("Cache-Control: public, max-age=60")
-    @GET("search?")
-    Call<ArticleList> getArticle(@Query("page") int page);
+    @GET("search?title=&days=3000&countPage=1")
+    Call<ArticleList> getArticle(@Query("article_type") String articleType, @Query("page") int page);
 
     @Headers("Cache-Control: public, max-age=60")
-    @GET("search?")
-    Call<ArticleList> getCategoryArticle(@Query("category") String category, @Query("page") int page);
+    @GET("search?title=&days=3000&countPage=1")
+    Call<ArticleList> getCategoryArticle(@Query("article_type") String articleType,
+                                         @Query("category") String category, @Query("page") int page);
 
     @Headers("Cache-Control: public, max-age=60")
-    @GET("search?")
+    @GET("search?title=&days=3000&countPage=1")
     Call<ArticleList> getTypeArticle(@Query("article_type") String articleType, @Query("page") int page);
-
-    @Headers("Cache-Control: public, max-age=60")
-    @GET("search?article_type=new&page")
-    Call<ArticleList> getNewestArticle(@Query("page") int page);
 
 }
