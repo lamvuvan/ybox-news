@@ -38,6 +38,28 @@
         <meta-data android:name="com.startapp.android.APP_ID" android:value="@string/startapp_app_id"/>
         <!-- end startapp ads -->
 
+        <!-- Valuepotion Components -->
+        <!-- for interstital ad interface -->
+        <activity
+            android:name="com.valuepotion.sdk.VPInterstitialActivity"
+            android:theme="@android:style/Theme.Translucent" >
+        </activity>
+
+        <!-- for video interstitial ad -->
+        <activity
+            android:name="com.valuepotion.sdk.VPVideoActivity"
+            android:theme="@android:style/Theme.Translucent">
+        </activity>
+
+        <!-- for CPI tracking -->
+        <receiver
+            android:name="com.valuepotion.sdk.VPInstallReceiver"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

@@ -5,16 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
-import static io.github.lamvv.yboxnews.common.Constants.APP_PACKAGE_NAME;
-import static io.github.lamvv.yboxnews.common.Constants.DEV_STORE_ID;
-import static io.github.lamvv.yboxnews.common.Constants.PLAY_STORE_APP_URL;
-import static io.github.lamvv.yboxnews.common.Constants.PLAY_STORE_DEV_URL;
-
 /**
  * Created by lamvu on 4/15/2017.
  */
 
 public class StoreUtils {
+
+    private static final String PLAY_STORE_APP_URL = "https://play.google.com/store/apps/details?id=";
+    private static final String PLAY_STORE_DEV_URL = "https://play.google.com/store/apps/developer?id=";
+    private static final String APP_PACKAGE_NAME = "io.github.lamvv.yboxnews";
+    private static final String DEV_STORE_ID = "3AM+Studio";
 
     public static void gotoAppOnMarket(Context context){
         try {

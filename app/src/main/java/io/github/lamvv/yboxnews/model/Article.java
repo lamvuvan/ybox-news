@@ -14,7 +14,7 @@ public class Article implements Serializable {
     private double id;
     @SerializedName("image")
     private String image;
-    @SerializedName("category")
+    @SerializedName("categoryLink")
     private String category;
     @SerializedName("title")
     private String title;

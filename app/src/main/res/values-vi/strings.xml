@@ -4,9 +4,10 @@
     <string name="banner_ad_unit_id">ca-app-pub-2929884577019186/5227998354</string>
     <string name="banner2_ad_unit_id">ca-app-pub-2929884577019186/7081443957</string>
     <string name="native_ad_unit_id">ca-app-pub-2929884577019186/6549954355</string>
-    <string name="native2_ad_unit_id">ca-app-pub-2929884577019186/4208702750</string>
-    <string name="native3_ad_unit_id">ca-app-pub-2929884577019186/5766161156</string>
     <string name="interstitial_ad_unit_id">ca-app-pub-2929884577019186/1440681954</string>
+
+    <string name="client_id_vp">9fbf176b72c76886d727a54c4432529a</string>
+    <string name="secret_key_vp">dd0e09a8795a7264</string>
 
     <string name="startapp_dev_id">109770308</string>
     <string name="startapp_app_id">209953856</string>
@@ -62,7 +63,7 @@
     <string name="rateus">Đánh giá ứng dụng</string>
     <string name="otherapp">Ứng dụng khác</string>
     <string name="setting">Trợ giúp và phản hồi</string>
-    <string name="version">Phiên bản 1.6.5</string>
+    <string name="version">Phiên bản 1.6.6</string>
 
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">

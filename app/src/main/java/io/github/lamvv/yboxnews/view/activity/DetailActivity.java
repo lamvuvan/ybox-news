@@ -15,6 +15,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebResourceRequest;
@@ -32,6 +33,10 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.NativeExpressAdView;
 import com.squareup.picasso.Picasso;
+import com.valuepotion.sdk.AdContainer;
+import com.valuepotion.sdk.AdDimension;
+import com.valuepotion.sdk.AdListener;
+import com.valuepotion.sdk.ValuePotion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,24 +45,28 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.adapter.RelatedArticleAdapter;
-import io.github.lamvv.yboxnews.repository.network.OnGetDetailArticleListener;
-import io.github.lamvv.yboxnews.repository.network.YboxService;
 import io.github.lamvv.yboxnews.model.Article;
 import io.github.lamvv.yboxnews.model.ArticleList;
+import io.github.lamvv.yboxnews.repository.db.SharedPreference;
+import io.github.lamvv.yboxnews.repository.network.GetArticleDetailTask;
+import io.github.lamvv.yboxnews.repository.network.OnGetDetailArticleListener;
+import io.github.lamvv.yboxnews.repository.network.ServiceGenerator;
+import io.github.lamvv.yboxnews.repository.network.YboxService;
 import io.github.lamvv.yboxnews.util.DeviceUtils;
 import io.github.lamvv.yboxnews.util.DividerItemDecoration;
-import io.github.lamvv.yboxnews.repository.network.GetArticleDetailTask;
-import io.github.lamvv.yboxnews.repository.network.ServiceGenerator;
-import io.github.lamvv.yboxnews.repository.db.SharedPreference;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.valuepotion.sdk.AdDimension.NATIVE_BANNER;
 
 /**
  * Created by lamvu on 10/12/2016.
  */
 
 public class DetailActivity extends AppCompatActivity implements OnGetDetailArticleListener<String> {
+
+    private static final String TAG = "lamvv";
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -99,13 +108,31 @@ public class DetailActivity extends AppCompatActivity implements OnGetDetailArti
 
     private SharedPreference sharedPreference;
 
-    private static final String TAG = "lamvv";
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_article);
         ButterKnife.bind(this);
+
+        AdDimension adDimension = NATIVE_BANNER;
+        AdListener adListener = new AdListener() {
+            @Override
+            public void adPrepared(AdContainer adContainer) {
+
+            }
+
+            @Override
+            public void adNotFound() {
+
+            }
+        };
+
+        ValuePotion.getInstance().setInterstitialPlacement(DetailActivity.this, "activity_detail_article");
+
+//        AdRequestOptions options = new AdRequestOptions.Builder(DetailActivity.this, adDimension, adListener)
+//                .numberToRequest(1)
+//                .callbackBeforeCachingAssets(true)
+//                .build();
 
         articles = new ArrayList<>();
         sharedPreference = new SharedPreference();
@@ -285,19 +312,18 @@ public class DetailActivity extends AppCompatActivity implements OnGetDetailArti
 
     private void load(int page){
         Call<ArticleList> call;
-
-        if(category.equalsIgnoreCase("#Tuyển Dụng"))
-            call = service.getRecruitmentArticle(page);
-        else if(category.equalsIgnoreCase("#Kỹ Năng"))
-            call = service.getSkillArticle(page);
-        else if(category.equalsIgnoreCase("#Sự Kiện"))
-            call = service.getEventArticle(page);
-        else if(category.equalsIgnoreCase("#Học Bổng"))
-            call = service.getScholarshipArticle(page);
-        else if(category.equalsIgnoreCase("#Cuộc Thi"))
-            call = service.getCompetitionArticle(page);
-        else if(category.equalsIgnoreCase("#Gương Mặt"))
-            call = service.getFaceArticle(page);
+        if(category.equalsIgnoreCase("tuyen-dung"))
+            call = service.getCategoryArticle("recruitment", page);
+        else if(category.equalsIgnoreCase("ky-nang"))
+            call = service.getCategoryArticle("skill", page);
+        else if(category.equalsIgnoreCase("su-kien"))
+            call = service.getCategoryArticle("event", page);
+        else if(category.equalsIgnoreCase("hoc-bong"))
+            call = service.getCategoryArticle("scholarship", page);
+        else if(category.equalsIgnoreCase("cuoc-thi"))
+            call = service.getCategoryArticle("competition", page);
+        else if(category.equalsIgnoreCase("guong-mat"))
+            call = service.getCategoryArticle("face", page);
         else
             call = service.getArticle(page);
 
@@ -308,13 +334,13 @@ public class DetailActivity extends AppCompatActivity implements OnGetDetailArti
                     articles.addAll(response.body().articles);
                     adapter.notifyDataChanged();
                 }else{
-//					Log.e("lamvv"," Response Error "+String.valueOf(response.code()));
+					Log.e(TAG, "Response Error " + String.valueOf(response.code()));
                 }
             }
 
             @Override
             public void onFailure(Call<ArticleList> call, Throwable t) {
-//				Log.e("lamvv"," Response Error "+t.getMessage());
+				Log.e(TAG, "Response Error " + t.getMessage());
             }
         });
     }

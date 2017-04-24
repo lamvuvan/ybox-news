@@ -11,6 +11,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,19 +26,25 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.adapter.ArticleAdapter;
-import io.github.lamvv.yboxnews.repository.network.YboxService;
 import io.github.lamvv.yboxnews.model.Article;
 import io.github.lamvv.yboxnews.model.ArticleList;
+import io.github.lamvv.yboxnews.repository.network.ServiceGenerator;
+import io.github.lamvv.yboxnews.repository.network.YboxService;
 import io.github.lamvv.yboxnews.util.DeviceUtils;
 import io.github.lamvv.yboxnews.util.DividerItemDecoration;
 import io.github.lamvv.yboxnews.util.NetworkUtils;
-import io.github.lamvv.yboxnews.repository.network.ServiceGenerator;
 import io.github.lamvv.yboxnews.view.activity.MainActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainFragment extends Fragment {
+
+	private static final String TEXT_FRAGMENT = "TEXT_FRAGMENT";
+
+	private static final String TEXT_CATEGORY = "TEXT_CATEGORY";
+
+	private static final String TAG = "MainFragment";
 
 	@BindView(R.id.recyclerView)
 	RecyclerView recyclerView;
@@ -69,18 +76,19 @@ public class MainFragment extends Fragment {
 	@BindString(R.string.error_internet)
 	String errorInternet;
 
-	private List<Object> articles;
-	private ArticleAdapter adapter;
-	private YboxService service;
-	MainActivity mainActivity;
+	private List<Object> mArticles;
+	private ArticleAdapter mAdapter;
+	private YboxService mService;
+	MainActivity mMainActivity;
 
-	private static final String TEXT_FRAGMENT = "TEXT_FRAGMENT";
-	private String fragmentName;
+	private String mFragmentName;
+	private String mCategory;
 
-	public static MainFragment newInstance(String text) {
+	public static MainFragment newInstance(String text, String category) {
 		MainFragment mFragment = new MainFragment();
 		Bundle mBundle = new Bundle();
 		mBundle.putString(TEXT_FRAGMENT, text);
+		mBundle.putString(TEXT_CATEGORY, category);
 		mFragment.setArguments(mBundle);
 		return mFragment;
 	}
@@ -89,15 +97,17 @@ public class MainFragment extends Fragment {
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		articles = new ArrayList<>();
-		fragmentName = getArguments().getString(TEXT_FRAGMENT);
+		mArticles = new ArrayList<>();
+		mFragmentName = getArguments().getString(TEXT_FRAGMENT);
+		mCategory = getArguments().getString(TEXT_CATEGORY);
+		Log.i(TAG, "onCreate: " + mCategory);
 	}
 
 	@Override
 	public void onAttach(Context context) {
 		super.onAttach(context);
 		if (context instanceof MainActivity) {
-			this.mainActivity = (MainActivity) context;
+			this.mMainActivity = (MainActivity) context;
 		}
 	}
 
@@ -139,26 +149,28 @@ public class MainFragment extends Fragment {
 			}
 		}
 
-		service = ServiceGenerator.createService(YboxService.class);
-		load(1);
+		mService = ServiceGenerator.createService(YboxService.class);
+		mFragmentName = mFragmentName.toLowerCase();
+
+		load(mFragmentName, mCategory, 1);
 
 		try {
-			adapter = new ArticleAdapter(rootLayout, getActivity(), articles);
-			recyclerView.setAdapter(adapter);
+			mAdapter = new ArticleAdapter(rootLayout, getActivity(), mArticles);
+			recyclerView.setAdapter(mAdapter);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		//onLoadMore
-		adapter.setLoadMoreListener(new ArticleAdapter.OnLoadMoreListener() {
+		mAdapter.setLoadMoreListener(new ArticleAdapter.OnLoadMoreListener() {
 			@Override
 			public void onLoadMore() {
 				recyclerView.post(new Runnable() {
 					@Override
 					public void run() {
-						int page = articles.size() / 10;
+						int page = mArticles.size() / 10;
 						page += 1;
-						loadMore(page);
+						loadMore(mFragmentName, mCategory, page);
 					}
 				});
 			}
@@ -174,98 +186,73 @@ public class MainFragment extends Fragment {
 
 	}
 
-	private void load(int page){
+	private void load(String fragmentName, String category, int page){
 		Call<ArticleList> call;
-		if(fragmentName.equals(home))
-			call = service.getNewestArticle(page);
-		else if(fragmentName.equals(newest))
-			call = service.getNewestArticle(page);
-		else if(fragmentName.equals(top))
-			call = service.getTopVoteArticle(page);
-		else if(fragmentName.equals(recruitment))
-			call = service.getRecruitmentArticle(page);
-		else if(fragmentName.equals(scholarship))
-			call = service.getScholarshipArticle(page);
-		else if(fragmentName.equals(event))
-			call = service.getEventArticle(page);
-		else if(fragmentName.equals(skill))
-			call = service.getSkillArticle(page);
-		else if(fragmentName.equals(face))
-			call = service.getFaceArticle(page);
+		if(fragmentName.equalsIgnoreCase(home))
+			call = mService.getNewestArticle(page);
+		else if(fragmentName.equalsIgnoreCase(newest) || fragmentName.equalsIgnoreCase(top))
+			call = mService.getTypeArticle(category, page);
 		else
-			call = service.getCompetitionArticle(page);
-
-		call.enqueue(new Callback<ArticleList>() {
-			@Override
-			public void onResponse(Call<ArticleList> call, Response<ArticleList> response) {
-				if(response.isSuccessful()){
-					headerProgress.setVisibility(View.GONE);
-					articles.addAll(response.body().articles);
-					adapter.notifyDataChanged();
-				}else{
-//					Log.e("lamvv"," Response Error "+String.valueOf(response.code()));
-				}
-			}
-
-			@Override
-			public void onFailure(Call<ArticleList> call, Throwable t) {
-//				Log.e("lamvv"," Response Error "+t.getMessage());
-			}
-		});
+			call = mService.getCategoryArticle(category, page);
+		call.enqueue(getArticle);
 	}
 
-	private void loadMore(int page){
+	Callback<ArticleList> getArticle = new Callback<ArticleList>() {
+		@Override
+		public void onResponse(Call<ArticleList> call, Response<ArticleList> response) {
+			if(response.isSuccessful()){
+				headerProgress.setVisibility(View.GONE);
+				mArticles.addAll(response.body().articles);
+				mAdapter.notifyDataChanged();
+			}else{
+				Log.e(TAG, "Response Error " + String.valueOf(response.code()));
+			}
+		}
 
+		@Override
+		public void onFailure(Call call, Throwable t) {
+			Log.e(TAG, "Response Error " + t.getMessage());
+		}
+	};
+
+	private void loadMore(String fragmentName, String category, int page){
 		//add loading progress view
-		articles.add(new Article("load"));
-		adapter.notifyItemInserted(articles.size()-1);
+		mArticles.add(new Article("load"));
+		mAdapter.notifyItemInserted(mArticles.size()-1);
 
 		Call<ArticleList> call;
-		if(fragmentName.equals(home))
-			call = service.getNewestArticle(page);
-		else if(fragmentName.equals(newest))
-			call = service.getNewestArticle(page);
-		else if(fragmentName.equals(top))
-			call = service.getTopVoteArticle(page);
-		else if(fragmentName.equals(recruitment))
-			call = service.getRecruitmentArticle(page);
-		else if(fragmentName.equals(scholarship))
-			call = service.getScholarshipArticle(page);
-		else if(fragmentName.equals(event))
-			call = service.getEventArticle(page);
-		else if(fragmentName.equals(skill))
-			call = service.getSkillArticle(page);
-		else if(fragmentName.equals(face))
-			call = service.getFaceArticle(page);
+		if(fragmentName.equalsIgnoreCase(home))
+			call = mService.getNewestArticle(page);
+		else if(fragmentName.equalsIgnoreCase(newest) || fragmentName.equalsIgnoreCase(top))
+			call = mService.getTypeArticle(category, page);
 		else
-			call = service.getCompetitionArticle(page);
-
+			call = mService.getCategoryArticle(category, page);
 		call.enqueue(new Callback<ArticleList>() {
 			@Override
 			public void onResponse(Call<ArticleList> call, Response<ArticleList> response) {
 				if(response.isSuccessful()){
 					//remove loading view
-					articles.remove(articles.size()-1);
+					mArticles.remove(mArticles.size()-1);
 
 					List<Article> result = response.body().articles;
 					if(result.size()>0){
 						//add loaded data
-						articles.addAll(result);
+						mArticles.addAll(result);
 					}else{//result size 0 means there is no more data available at server
-						adapter.setMoreDataAvailable(false);
+						mAdapter.setMoreDataAvailable(false);
 						//telling adapter to stop calling load more as no more server data available
 //						Toast.makeText(mContext,"No More Data Available",Toast.LENGTH_LONG).show();
 					}
-					adapter.notifyDataChanged();
+					mAdapter.notifyDataChanged();
 					//should call the custom method adapter.notifyDataChanged here to get the correct loading status
 				}else{
-//					Log.e("lamvv"," Load More Response Error "+String.valueOf(response.code()));
+					Log.e(TAG, "Load More Response Error " + String.valueOf(response.code()));
 				}
 			}
 
 			@Override
 			public void onFailure(Call<ArticleList> call, Throwable t) {
-//				Log.e("lamvv"," Load More Response Error "+t.getMessage());
+				Log.e(TAG, "Load More Response Error " + t.getMessage());
 			}
 		});
 	}
@@ -280,7 +267,7 @@ public class MainFragment extends Fragment {
 				@Override
 				public void run() {
 					swipeRefreshLayout.setRefreshing(false);
-					load(1);
+					load(mFragmentName, mCategory, 1);
 				}
 			}, 1000);
 		}

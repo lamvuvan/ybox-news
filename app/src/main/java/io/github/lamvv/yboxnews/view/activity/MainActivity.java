@@ -30,6 +30,7 @@ import com.google.android.gms.ads.MobileAds;
 import com.squareup.picasso.Picasso;
 import com.startapp.android.publish.StartAppAd;
 import com.startapp.android.publish.StartAppSDK;
+import com.valuepotion.sdk.ValuePotion;
 
 import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.util.CropCircleTransformation;
@@ -83,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setNightOrDayMode();
         setContentView(R.layout.activity_main);
+
+        ValuePotion.init(this, getString(R.string.client_id_vp), getString(R.string.secret_key_vp));
 
         //admob ads
         MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.admob_app_id));
@@ -317,9 +320,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         // If mPendingRunnable is not null, then add to the message queue
-        if (mPendingRunnable != null) {
-            handler.post(mPendingRunnable);
-        }
+        handler.post(mPendingRunnable);
 
         //Closing drawer on item click
         drawer.closeDrawers();
@@ -331,27 +332,27 @@ public class MainActivity extends AppCompatActivity {
     private Fragment getHomeFragment() {
         switch (navItemIndex) {
             case 0:
-                return MainFragment.newInstance(getResources().getString(R.string.home));
+                return MainFragment.newInstance(getResources().getString(R.string.home), "home");
             case 1:
-                return MainFragment.newInstance(getResources().getString(R.string.newest));
+                return MainFragment.newInstance(getResources().getString(R.string.newest), "new");
             case 2:
-                return MainFragment.newInstance(getResources().getString(R.string.top));
+                return MainFragment.newInstance(getResources().getString(R.string.top), "top");
             case 3:
-                return MainFragment.newInstance(getResources().getString(R.string.recruitment));
+                return MainFragment.newInstance(getResources().getString(R.string.recruitment), "recruitment");
             case 4:
-                return MainFragment.newInstance(getResources().getString(R.string.scholarship));
+                return MainFragment.newInstance(getResources().getString(R.string.scholarship), "scholarship");
             case 5:
-                return MainFragment.newInstance(getResources().getString(R.string.event));
+                return MainFragment.newInstance(getResources().getString(R.string.event), "event");
             case 6:
-                return MainFragment.newInstance(getResources().getString(R.string.skill));
+                return MainFragment.newInstance(getResources().getString(R.string.skill), "skill");
             case 7:
-                return MainFragment.newInstance(getResources().getString(R.string.face));
+                return MainFragment.newInstance(getResources().getString(R.string.face), "face");
             case 8:
-                return MainFragment.newInstance(getResources().getString(R.string.competition));
+                return MainFragment.newInstance(getResources().getString(R.string.competition), "competition");
             case 9:
                 return new FavoriteFragment();
             default:
-                return MainFragment.newInstance(getResources().getString(R.string.home));
+                return MainFragment.newInstance(getResources().getString(R.string.home), "home");
         }
     }
 
@@ -478,7 +479,18 @@ public class MainActivity extends AppCompatActivity {
         drawer.addDrawerListener(actionBarDrawerToggle);
         //calling sync state is necessary or else your hamburger icon wont show up
         actionBarDrawerToggle.syncState();
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        ValuePotion.getInstance().onStart(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        ValuePotion.getInstance().onStop(this);
     }
 
 }
