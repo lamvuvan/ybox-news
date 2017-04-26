@@ -72,38 +72,22 @@ public class DetailActivity extends AppCompatActivity implements OnGetDetailArti
 
     public static final AdDimension adDimension = BANNER;
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.collapsingToolbar)
-    CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.image)
-    ImageView ivImage;
-    @BindView(R.id.title)
-    TextView tvTitle;
-    @BindView(R.id.category)
-    TextView tvCategory;
-    @BindView(R.id.view)
-    TextView tvView;
-    @BindView(R.id.createdAt)
-    TextView tvCreatedAt;
-    @BindView(R.id.content)
-    WebView webView;
-    @BindView(R.id.headerProgress)
-    LinearLayout headerProgress;
-    @BindView(R.id.article)
-    LinearLayout linearLayoutArticle;
-    @BindView(R.id.related)
-    LinearLayout linearLayoutRelated;
-    @BindView(R.id.fabFavorite)
-    FloatingActionButton fabFavorite;
-    @BindView(R.id.fabShare)
-    FloatingActionButton fabShare;
-    @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
-    @BindView(R.id.rootLayout)
-    RelativeLayout rootLayout;
-    @BindView(R.id.adParentView)
-    RelativeLayout adParentView;
+    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.collapsingToolbar) CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.image) ImageView ivImage;
+    @BindView(R.id.title) TextView tvTitle;
+    @BindView(R.id.category) TextView tvCategory;
+    @BindView(R.id.view) TextView tvView;
+    @BindView(R.id.createdAt) TextView tvCreatedAt;
+    @BindView(R.id.content) WebView webView;
+    @BindView(R.id.headerProgress) LinearLayout headerProgress;
+    @BindView(R.id.article) LinearLayout linearLayoutArticle;
+    @BindView(R.id.related) LinearLayout linearLayoutRelated;
+    @BindView(R.id.fabFavorite) FloatingActionButton fabFavorite;
+    @BindView(R.id.fabShare) FloatingActionButton fabShare;
+    @BindView(R.id.recyclerView) RecyclerView recyclerView;
+    @BindView(R.id.rootLayout) RelativeLayout rootLayout;
+    @BindView(R.id.adParentView) RelativeLayout adParentView;
 
     private List<Object> articles;
     private RelatedArticleAdapter adapter;
