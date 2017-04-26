@@ -111,6 +111,7 @@ public class DetailActivity extends AppCompatActivity implements OnGetDetailArti
 
     private Article mArticle;
     private String mCategory;
+    private String mDetail;
 
     private SharedPreference sharedPreference;
 
@@ -135,19 +136,20 @@ public class DetailActivity extends AppCompatActivity implements OnGetDetailArti
         }).build();
         ValuePotion.getInstance().requestAd(options);
 
-
         articles = new ArrayList<>();
         sharedPreference = new SharedPreference();
 
         //get data send from fragments
         Bundle bundle = getIntent().getExtras();
         mArticle = (Article) bundle.getSerializable("article");
-        mCategory = mArticle.getCategory();
+        if(mArticle != null) {
+            mCategory = mArticle.getCategory();
+            mDetail = mArticle.getLinks().getDetail();
+        }
 
         //launch task get detail article
-        String detail = mArticle.getLinks().getDetail();
-        if(detail != null) {
-            launchGetDetailTask(detail);
+        if(mDetail != null) {
+            launchGetDetailTask(mDetail);
         }
 
         collapsingToolbarLayout.setTitle(mArticle.getTitle());
@@ -170,6 +172,7 @@ public class DetailActivity extends AppCompatActivity implements OnGetDetailArti
             @Override
             public void onClick(View v) {
                 onBackPressed();
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         });
 
@@ -243,25 +246,18 @@ public class DetailActivity extends AppCompatActivity implements OnGetDetailArti
 
         //banner ads
         AdView adView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
-//                    .addTestDevice("9E1B9BD30BDD0D71713E0611982A7D6C")
-//                    .addTestDevice("5911C7ACA6D91588481831737229F467")
-                .build();
+        AdRequest adRequest = new AdRequest.Builder().build();
 //        adView.loadAd(adRequest);
 
         //native ads
         NativeExpressAdView nativeAdView = (NativeExpressAdView) findViewById(R.id.nativeAdView);
-        AdRequest request = new AdRequest.Builder()
-//                    .addTestDevice("9E1B9BD30BDD0D71713E0611982A7D6C")
-//                    .addTestDevice("5911C7ACA6D91588481831737229F467")
-                .build();
+        AdRequest request = new AdRequest.Builder().build();
         nativeAdView.loadAd(request);
 
         tvTitle.setText(mArticle.getTitle());
         tvCategory.setText(mArticle.getCategory() + " | ");
         tvView.setText(mArticle.getStats().getView() + " " + getResources().getString(R.string.views) + " | ");
         tvCreatedAt.setText(mArticle.getTimestamps().getCreatedAt());
-
     }
 
     @Override
@@ -273,6 +269,12 @@ public class DetailActivity extends AppCompatActivity implements OnGetDetailArti
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
     }
 
     @Override

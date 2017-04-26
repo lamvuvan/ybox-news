@@ -1,5 +1,6 @@
 package io.github.lamvv.yboxnews.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -195,6 +196,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             Intent intent = new Intent(context, DetailActivity.class);
             intent.putExtra("article", article);
             context.startActivity(intent);
+            ((Activity)context).overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         }
     }
 

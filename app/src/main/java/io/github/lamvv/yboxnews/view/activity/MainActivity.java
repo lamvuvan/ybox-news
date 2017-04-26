@@ -35,9 +35,8 @@ import com.valuepotion.sdk.ValuePotion;
 
 import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.util.CropCircleTransformation;
-import io.github.lamvv.yboxnews.util.FeedbackUtils;
 import io.github.lamvv.yboxnews.util.MyUtils;
-import io.github.lamvv.yboxnews.util.StoreUtils;
+import io.github.lamvv.yboxnews.util.MyAppUtils;
 import io.github.lamvv.yboxnews.view.fragment.FavoriteFragment;
 import io.github.lamvv.yboxnews.view.fragment.MainFragment;
 
@@ -155,7 +154,6 @@ public class MainActivity extends AppCompatActivity {
         toggle.syncState();
 
         initNightModeSwitch();
-
     }
 
     private void requestNewInterstitial() {
@@ -423,21 +421,21 @@ public class MainActivity extends AppCompatActivity {
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_rateus:
-                        StoreUtils.gotoAppOnMarket(MainActivity.this);
+                        MyAppUtils.gotoAppOnMarket(MainActivity.this);
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_otherapp:
-                        StoreUtils.gotoDevOnMarket(MainActivity.this);
+                        MyAppUtils.gotoDevOnMarket(MainActivity.this);
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_setting:
-                        FeedbackUtils.sendFeedback(MainActivity.this,
+                        MyAppUtils.sendFeedback(MainActivity.this,
                                 getResources().getString(R.string.app_name),
                                 getString(R.string.error_email));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_version:
-                        StoreUtils.gotoAppOnMarket(MainActivity.this);
+                        MyAppUtils.gotoAppOnMarket(MainActivity.this);
                         drawer.closeDrawers();
                         return true;
                     default:
