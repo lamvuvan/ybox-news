@@ -33,12 +33,6 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.NativeExpressAdView;
 import com.squareup.picasso.Picasso;
-import com.valuepotion.sdk.AdContainer;
-import com.valuepotion.sdk.AdDimension;
-import com.valuepotion.sdk.AdListener;
-import com.valuepotion.sdk.VPAdView;
-import com.valuepotion.sdk.ValuePotion;
-import com.valuepotion.sdk.ad.AdRequestOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,8 +54,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.valuepotion.sdk.AdDimension.BANNER;
-
 /**
  * Created by lamvu on 10/12/2016.
  */
@@ -70,24 +62,36 @@ public class DetailActivity extends AppCompatActivity implements OnGetDetailArti
 
     private static final String TAG = "DetailActivity";
 
-    public static final AdDimension adDimension = BANNER;
-
-    @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.collapsingToolbar) CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.image) ImageView ivImage;
-    @BindView(R.id.title) TextView tvTitle;
-    @BindView(R.id.category) TextView tvCategory;
-    @BindView(R.id.view) TextView tvView;
-    @BindView(R.id.createdAt) TextView tvCreatedAt;
-    @BindView(R.id.content) WebView webView;
-    @BindView(R.id.headerProgress) LinearLayout headerProgress;
-    @BindView(R.id.article) LinearLayout linearLayoutArticle;
-    @BindView(R.id.related) LinearLayout linearLayoutRelated;
-    @BindView(R.id.fabFavorite) FloatingActionButton fabFavorite;
-    @BindView(R.id.fabShare) FloatingActionButton fabShare;
-    @BindView(R.id.recyclerView) RecyclerView recyclerView;
-    @BindView(R.id.rootLayout) RelativeLayout rootLayout;
-    @BindView(R.id.adParentView) RelativeLayout adParentView;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.collapsingToolbar)
+    CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.image)
+    ImageView ivImage;
+    @BindView(R.id.title)
+    TextView tvTitle;
+    @BindView(R.id.category)
+    TextView tvCategory;
+    @BindView(R.id.view)
+    TextView tvView;
+    @BindView(R.id.createdAt)
+    TextView tvCreatedAt;
+    @BindView(R.id.content)
+    WebView webView;
+    @BindView(R.id.headerProgress)
+    LinearLayout headerProgress;
+    @BindView(R.id.article)
+    LinearLayout linearLayoutArticle;
+    @BindView(R.id.related)
+    LinearLayout linearLayoutRelated;
+    @BindView(R.id.fabFavorite)
+    FloatingActionButton fabFavorite;
+    @BindView(R.id.fabShare)
+    FloatingActionButton fabShare;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+    @BindView(R.id.rootLayout)
+    RelativeLayout rootLayout;
 
     private List<Object> articles;
     private RelatedArticleAdapter adapter;
@@ -104,21 +108,6 @@ public class DetailActivity extends AppCompatActivity implements OnGetDetailArti
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_article);
         ButterKnife.bind(this);
-
-        AdRequestOptions options = new AdRequestOptions.Builder(DetailActivity.this, "activity_detail_banner",
-                adDimension, new AdListener() {
-            @Override
-            public void adPrepared(AdContainer adContainer) {
-                VPAdView vpAdView = new VPAdView(DetailActivity.this);
-                adParentView.addView(vpAdView);
-                vpAdView.load(adContainer.popAd());
-            }
-
-            @Override
-            public void adNotFound() {
-            }
-        }).build();
-        ValuePotion.getInstance().requestAd(options);
 
         articles = new ArrayList<>();
         sharedPreference = new SharedPreference();
@@ -231,7 +220,7 @@ public class DetailActivity extends AppCompatActivity implements OnGetDetailArti
         //banner ads
         AdView adView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
-//        adView.loadAd(adRequest);
+        adView.loadAd(adRequest);
 
         //native ads
         NativeExpressAdView nativeAdView = (NativeExpressAdView) findViewById(R.id.nativeAdView);

@@ -36,21 +36,22 @@ import io.github.lamvv.yboxnews.view.activity.DetailActivity;
 
 public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private static final String TAG = "ArticleAdapter";
+
     private static final int TYPE_LOAD = 0;
+
     private static final int TYPE_ARTICLE = 1;
-
     private List<Object> list;
+
     private Context context;
-
     public OnLoadMoreListener loadMoreListener;
-    boolean isLoading = false, isMoreDataAvailable = true;
 
+    boolean isLoading = false, isMoreDataAvailable = true;
     private SharedPreference sharedPreference;
+
     private RelativeLayout rootLayout;
 
     private int lastPosition = RecyclerView.NO_POSITION;
-
-    private static final String TAG = "lamvv";
 
     public ArticleAdapter(RelativeLayout rootLayout, Context context, List<Object> list){
         this.rootLayout = rootLayout;

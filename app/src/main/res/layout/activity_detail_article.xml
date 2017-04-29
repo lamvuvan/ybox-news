@@ -214,11 +214,11 @@
         ads:adSize="SMART_BANNER"
         ads:adUnitId="@string/banner2_ad_unit_id" />
 
-    <RelativeLayout
-        android:id="@+id/adParentView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true">
-    </RelativeLayout>
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/adParentView"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_centerHorizontal="true">-->
+    <!--</RelativeLayout>-->
 </RelativeLayout>

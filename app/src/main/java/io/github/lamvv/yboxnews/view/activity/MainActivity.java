@@ -87,8 +87,6 @@ public class MainActivity extends AppCompatActivity {
         setNightOrDayMode();
         setContentView(R.layout.activity_main);
 
-        ValuePotion.init(this, getString(R.string.client_id_vp), getString(R.string.secret_key_vp));
-
         //admob ads
         MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.admob_app_id));
         AdView mAdView = (AdView) findViewById(R.id.adView);
