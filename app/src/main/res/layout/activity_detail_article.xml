@@ -13,8 +13,7 @@
         android:id="@+id/coordinator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        android:layout_above="@+id/adView">
+        android:fitsSystemWindows="true">
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appBarLayout"
@@ -132,14 +131,6 @@
                             android:layout_height="wrap_content"
                             android:background="@color/colorBackgroundWebview"/>
 
-                        <com.google.android.gms.ads.NativeExpressAdView
-                            android:id="@+id/nativeAdView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            ads:adSize="320x150"
-                            ads:adUnitId="@string/native_ad_unit_id"/>
-
                     </LinearLayout>
 
                     <LinearLayout
@@ -205,20 +196,4 @@
 
     </android.support.design.widget.CoordinatorLayout>
 
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        ads:adSize="SMART_BANNER"
-        ads:adUnitId="@string/banner2_ad_unit_id" />
-
-    <!--<RelativeLayout-->
-        <!--android:id="@+id/adParentView"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_centerHorizontal="true">-->
-    <!--</RelativeLayout>-->
 </RelativeLayout>

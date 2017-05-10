@@ -52,7 +52,7 @@
                 android:title="@string/night_mode"
                 app:actionLayout="@layout/drawer_switch"
                 app:showAsAction="always"/>
-            <item
+            <!--<item
                 android:id="@+id/nav_rateus"
                 android:icon="@drawable/ic_rate_review_white_24dp"
                 android:title="@string/rateus" />
@@ -67,7 +67,7 @@
             <item
                 android:id="@+id/nav_version"
                 android:icon="@drawable/ic_info_white_24dp"
-                android:title="@string/version"/>
+                android:title="@string/version"/>-->
         </menu>
     </item>
 </menu>

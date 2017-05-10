@@ -29,9 +29,6 @@ import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.NativeExpressAdView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -129,8 +126,6 @@ public class DetailActivity extends AppCompatActivity implements OnGetDetailArti
         collapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(this, R.color.colorAccent));
         collapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(this, R.color.white));
 
-//        dynamicToolbarColor();
-
         Picasso.with(this).load(mArticle.getImage()).into(ivImage);
 
         //toolbar
@@ -216,16 +211,6 @@ public class DetailActivity extends AppCompatActivity implements OnGetDetailArti
 
         adapter = new RelatedArticleAdapter(rootLayout, this, articles);
         recyclerView.setAdapter(adapter);
-
-        //banner ads
-        AdView adView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
-
-        //native ads
-        NativeExpressAdView nativeAdView = (NativeExpressAdView) findViewById(R.id.nativeAdView);
-        AdRequest request = new AdRequest.Builder().build();
-        nativeAdView.loadAd(request);
 
         tvTitle.setText(mArticle.getTitle());
         tvCategory.setText(mArticle.getCategory() + " | ");

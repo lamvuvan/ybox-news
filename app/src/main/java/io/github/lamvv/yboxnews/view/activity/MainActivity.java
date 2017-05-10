@@ -15,7 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,30 +22,17 @@ import android.view.WindowManager;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.MobileAds;
 import com.squareup.picasso.Picasso;
-import com.startapp.android.publish.StartAppAd;
-import com.startapp.android.publish.StartAppSDK;
-import com.valuepotion.sdk.ValuePotion;
 
 import io.github.lamvv.yboxnews.R;
 import io.github.lamvv.yboxnews.util.CropCircleTransformation;
 import io.github.lamvv.yboxnews.util.MyUtils;
-import io.github.lamvv.yboxnews.util.MyAppUtils;
 import io.github.lamvv.yboxnews.view.fragment.FavoriteFragment;
 import io.github.lamvv.yboxnews.view.fragment.MainFragment;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-
-    InterstitialAd mInterstitialAd;
-    StartAppAd startAppAd = new StartAppAd(this);
-    boolean requestAdFailed = false;
 
     private Toolbar toolbar;
     private DrawerLayout drawer;
@@ -87,38 +73,6 @@ public class MainActivity extends AppCompatActivity {
         setNightOrDayMode();
         setContentView(R.layout.activity_main);
 
-        //admob ads
-        MobileAds.initialize(getApplicationContext(), getResources().getString(R.string.admob_app_id));
-        AdView mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder()
-                .build();
-        mAdView.loadAd(adRequest);
-
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId(getResources().getString(R.string.interstitial_ad_unit_id));
-        mInterstitialAd.setAdListener(new AdListener() {
-
-            @Override
-            public void onAdClosed() {
-                super.onAdClosed();
-                requestNewInterstitial();
-            }
-
-            @Override
-            public void onAdFailedToLoad(int i) {
-                super.onAdFailedToLoad(i);
-                requestAdFailed = true;
-                Log.i(TAG, "onAdFailedToLoad: " + requestAdFailed);
-            }
-        });
-        requestNewInterstitial();
-
-        //init startapp ads
-        StartAppSDK.init(this, getResources().getString(R.string.startapp_dev_id),
-                getResources().getString(R.string.startapp_app_id), false);
-        startAppAd.loadAd(StartAppAd.AdMode.AUTOMATIC);
-        startAppAd.disableSplash();
-
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -154,28 +108,12 @@ public class MainActivity extends AppCompatActivity {
         initNightModeSwitch();
     }
 
-    private void requestNewInterstitial() {
-        AdRequest adRequest = new AdRequest.Builder()
-                .build();
-        mInterstitialAd.loadAd(adRequest);
-    }
-
-    protected void displayInterstitial() {
-        if (mInterstitialAd != null && mInterstitialAd.isLoaded()) {
-            mInterstitialAd.show();
-        }
-    }
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            if(requestAdFailed)
-                startAppAd.onBackPressed(this);
-            else
-                displayInterstitial();
             super.onBackPressed();
         }
     }
@@ -216,7 +154,6 @@ public class MainActivity extends AppCompatActivity {
     private void setNightOrDayMode() {
         if (MyUtils.isNightMode()) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-
 //            initNightView();
 //            mNightView.setBackgroundResource(R.color.night_mask);
         } else {
@@ -418,7 +355,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_night_mode:
                         drawer.closeDrawers();
                         return true;
-                    case R.id.nav_rateus:
+                    /*case R.id.nav_rateus:
                         MyAppUtils.gotoAppOnMarket(MainActivity.this);
                         drawer.closeDrawers();
                         return true;
@@ -435,7 +372,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_version:
                         MyAppUtils.gotoAppOnMarket(MainActivity.this);
                         drawer.closeDrawers();
-                        return true;
+                        return true;*/
                     default:
                         navItemIndex = 0;
                 }
@@ -479,18 +416,6 @@ public class MainActivity extends AppCompatActivity {
         drawer.addDrawerListener(actionBarDrawerToggle);
         //calling sync state is necessary or else your hamburger icon wont show up
         actionBarDrawerToggle.syncState();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        ValuePotion.getInstance().onStart(this);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        ValuePotion.getInstance().onStop(this);
     }
 
 }

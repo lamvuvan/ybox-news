@@ -93,14 +93,6 @@
                     android:layout_height="wrap_content"
                     android:background="@color/colorBackgroundWebview"/>
 
-                <com.google.android.gms.ads.NativeExpressAdView
-                    android:id="@+id/nativeAdView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    ads:adSize="320x150"
-                    ads:adUnitId="@string/native_ad_unit_id"/>
-
                 <TextView
                     android:id="@+id/sameCategory"
                     android:layout_width="match_parent"
